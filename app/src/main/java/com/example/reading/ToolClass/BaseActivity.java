@@ -1,16 +1,12 @@
-package com.example.reading.Activity;
+package com.example.reading.ToolClass;
 
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-
 import com.example.reading.ScreenAdaptation.DisplayCutoutDemo;
 import com.example.reading.util.ScreenAdapterUtil;
 

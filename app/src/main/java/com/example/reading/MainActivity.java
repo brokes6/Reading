@@ -1,16 +1,13 @@
 package com.example.reading;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
 import android.os.Bundle;
 import android.util.Log;
-
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
-import com.example.reading.Activity.BaseActivity;
+import com.example.reading.ToolClass.BaseActivity;
 import com.example.reading.Fragment.CommunityFragment;
 import com.example.reading.Fragment.HomeFragment;
 import com.example.reading.Fragment.MyFragment;
