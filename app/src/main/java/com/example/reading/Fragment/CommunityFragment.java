@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import com.example.reading.R;
 
+import me.jessyan.autosize.AutoSizeConfig;
+
 public class CommunityFragment extends Fragment {
     private View view;
     public static CommunityFragment newInstance(String param1) {
@@ -23,6 +25,7 @@ public class CommunityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         if(view==null){
+        AutoSizeConfig.getInstance().setCustomFragment(true);
         view = inflater.inflate(R.layout.communityfragment, container, false);
         initData();
         initView();

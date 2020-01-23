@@ -11,9 +11,16 @@ import android.widget.Button;
 import com.example.reading.MainActivity;
 import com.example.reading.R;
 
-public class LoginActivity extends AppCompatActivity {
+import me.jessyan.autosize.internal.CustomAdapt;
+/**
+ * CustomAdapt 设置
+ */
+public class LoginActivity extends AppCompatActivity implements CustomAdapt {
     private Button login;
-
+    /**
+     * 关于屏幕适配，需要适配的屏幕就继承CustomAdapt，然后实现两个接口就ok了
+     * 不需要的则继承CancelAdapt
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,15 +37,18 @@ public class LoginActivity extends AppCompatActivity {
         initData();
     }
     private void init(){
-        login = findViewById(R.id.login);
+//
     }
     private void initData(){
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
+
+    }
+    //需要改变适配尺寸的时候，在重写这两个方法
+    @Override
+    public boolean isBaseOnWidth() {
+        return false;
+    }
+    @Override
+    public float getSizeInDp() {
+        return 640;
     }
 }
