@@ -9,6 +9,9 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        dataBinding{
+            enabled true
+        }
     }
     buildTypes {
         release {
@@ -30,6 +33,12 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    //轮播图
+    implementation 'com.youth.banner:banner:1.4.10'
     //屏幕适配
     implementation 'me.jessyan:autosize:1.1.2'
+    //Glide
+    compile group: 'com.github.bumptech.glide', name: 'glide', version: '4.8.0'
+    //圆形图片
+    implementation 'de.hdodenhof:circleimageview:2.1.0'
 }

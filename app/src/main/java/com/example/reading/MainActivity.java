@@ -12,7 +12,9 @@ import com.example.reading.Fragment.CommunityFragment;
 import com.example.reading.Fragment.HomeFragment;
 import com.example.reading.Fragment.MyFragment;
 
-public class MainActivity extends BaseActivity implements BottomNavigationBar.OnTabSelectedListener{
+import me.jessyan.autosize.internal.CustomAdapt;
+
+public class MainActivity extends BaseActivity implements BottomNavigationBar.OnTabSelectedListener,CustomAdapt {
     private static final String TAG = "MainActivity";
     private BottomNavigationBar bottomNavigationBar;
     int lastSelectedPosition = 0;
@@ -142,5 +144,14 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     private void inData(){
 
 
+    }
+    //需要改变适配尺寸的时候，在重写这两个方法
+    @Override
+    public boolean isBaseOnWidth() {
+        return false;
+    }
+    @Override
+    public float getSizeInDp() {
+        return 640;
     }
 }

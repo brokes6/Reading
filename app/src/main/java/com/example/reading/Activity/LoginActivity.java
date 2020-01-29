@@ -1,6 +1,7 @@
 package com.example.reading.Activity;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 
 import android.content.Intent;
 import android.os.Build;
@@ -10,13 +11,14 @@ import android.widget.Button;
 
 import com.example.reading.MainActivity;
 import com.example.reading.R;
+import com.example.reading.databinding.LoginBinding;
 
 import me.jessyan.autosize.internal.CustomAdapt;
 /**
  * CustomAdapt 设置
  */
 public class LoginActivity extends AppCompatActivity implements CustomAdapt {
-    private Button login;
+    LoginBinding binding;
     /**
      * 关于屏幕适配，需要适配的屏幕就继承CustomAdapt，然后实现两个接口就ok了
      * 不需要的则继承CancelAdapt
@@ -24,7 +26,7 @@ public class LoginActivity extends AppCompatActivity implements CustomAdapt {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
+        binding = DataBindingUtil.setContentView(this,R.layout.login);
         ActionBar actionbar = getSupportActionBar();
         if (actionbar != null) {
             actionbar.hide();
@@ -37,10 +39,8 @@ public class LoginActivity extends AppCompatActivity implements CustomAdapt {
         initData();
     }
     private void init(){
-//
     }
     private void initData(){
-
     }
     //需要改变适配尺寸的时候，在重写这两个方法
     @Override
@@ -51,4 +51,9 @@ public class LoginActivity extends AppCompatActivity implements CustomAdapt {
     public float getSizeInDp() {
         return 640;
     }
+    public void goMainActivity(View v){
+        Intent intent = new Intent(this,MainActivity.class);
+        startActivity(intent);
+    }
 }
+
