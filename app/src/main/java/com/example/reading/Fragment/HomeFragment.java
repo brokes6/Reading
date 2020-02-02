@@ -3,6 +3,7 @@ package com.example.reading.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,22 +14,28 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.example.reading.MainActivity;
 import com.example.reading.R;
 import com.example.reading.databinding.HomefragmentBinding;
-import com.youth.banner.Banner;
+import com.example.reading.util.BarHigh;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
 import com.youth.banner.listener.OnBannerListener;
 import com.youth.banner.loader.ImageLoader;
 
+
 import java.util.ArrayList;
+import java.util.List;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
+
 
 public class HomeFragment extends Fragment {
     HomefragmentBinding binding;
+    private int phoneHeight=-1;
+    private MyImageLoader mMyImageLoader;
     private ArrayList<Integer> imagePath;
     private ArrayList<String> imageTitle;
-    private MyImageLoader mMyImageLoader;
-    private int phoneHeight=-1;
     public static HomeFragment newInstance() {
         HomeFragment fragment=new HomeFragment();
         Bundle args = new Bundle();
@@ -42,8 +49,8 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater,R.layout.homefragment,container,false);
-            initData();
-            initView();
+        initData();
+        initView();
         return binding.getRoot();
     }
     private void initView(){
@@ -86,6 +93,7 @@ public class HomeFragment extends Fragment {
         imageTitle.add("测试图片2");
         imageTitle.add("测试图片3");
         imageTitle.add("测试图片4");
+
     }
     private class MyImageLoader extends ImageLoader {
         @Override
@@ -95,4 +103,5 @@ public class HomeFragment extends Fragment {
                     .into(imageView);
         }
     }
+
 }

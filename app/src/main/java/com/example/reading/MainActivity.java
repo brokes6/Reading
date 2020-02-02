@@ -5,12 +5,15 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ViewTreeObserver;
+
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.example.reading.ToolClass.BaseActivity;
 import com.example.reading.Fragment.CommunityFragment;
 import com.example.reading.Fragment.HomeFragment;
 import com.example.reading.Fragment.MyFragment;
+import com.example.reading.util.BarHigh;
 
 import me.jessyan.autosize.internal.CustomAdapt;
 
@@ -23,7 +26,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     private CommunityFragment communityFragment;
     private long homeExitTime=0;
     int num = 0;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,11 +34,13 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         if (actionbar != null) {
             actionbar.hide();
         }
+
         init();
         inData();
         /**
          * bottomNavigation 设置
          */
+
         bottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom_navigation_bar);
         /** 导航基础设置 包括按钮选中效果 导航栏背景色等 */
         bottomNavigationBar
@@ -70,6 +74,18 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                 .initialise(); //initialise 一定要放在 所有设置的最后一项
 
         setDefaultFragment();//设置默认导航栏
+        final BarHigh high = new BarHigh();
+        bottomNavigationBar.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                // TODO Auto-generated method stub
+                bottomNavigationBar.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+//                high.setHeight(bottomNavigationBar.getMeasuredHeight());
+                high.setH(bottomNavigationBar.getMeasuredHeight());
+                Log.d(TAG, "高为---------------------------------------"+high.getH());
+                Log.d("测试：", bottomNavigationBar.getMeasuredHeight()+","+bottomNavigationBar.getMeasuredWidth());
+            }
+        });
     }
     /**
      * 设置默认导航栏
