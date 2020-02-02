@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -8,10 +9,179 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-            <TextView
-                android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="#F3F3F3">
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="111"/>
+                android:background="@drawable/fillet_background"
+                android:orientation="vertical">
+                    <RelativeLayout
+                        android:padding="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.example.reading.util.RoundImageView
+                            android:id="@+id/author_bookimg"
+                            android:layout_width="95dp"
+                            android:layout_height="110dp"
+                            android:layout_marginRight="15dp"
+                            android:src="@drawable/book_text"
+                            app:type="round" />
+
+                        <TextView
+                            android:id="@+id/author_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#222222"
+                            android:textSize="16sp"
+                            android:layout_toRightOf="@id/author_bookimg"
+                            android:text="测试书名" />
+
+                        <TextView
+                            android:id="@+id/author"
+                            android:layout_marginTop="15dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@id/author_bookimg"
+                            android:padding="7dp"
+                            android:textSize="14sp"
+                            android:textColor="#8F8F8F"
+                            android:layout_below="@id/author_name"
+                            android:background="@drawable/fillet_background_half"
+                            android:text="作者信息" />
+                        <LinearLayout
+                            android:id="@+id/progress_bar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/author_bookimg"
+                            android:orientation="horizontal"
+                            android:paddingTop="30dp"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp">
+                            //设置“当前歌曲时间”
+                            <TextView
+                                android:id="@+id/listen_current_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="00:00" />
+                            //设置“进度条”
+                            <SeekBar
+                                android:id="@+id/listen_jindutiao_sb"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+                            //设置“歌曲总时长”
+                            <TextView
+                                android:id="@+id/listen_length_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="02:30" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_below="@+id/progress_bar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:paddingTop="10dp"
+                            android:paddingBottom="10dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <de.hdodenhof.circleimageview.CircleImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/playlist" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:textColor="#8F8F8F"
+                                    android:textSize="12sp"
+                                    android:text="播放列表" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <de.hdodenhof.circleimageview.CircleImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/timing" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:textColor="#8F8F8F"
+                                    android:textSize="12sp"
+                                    android:text="定时" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <de.hdodenhof.circleimageview.CircleImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/double_speed" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:textColor="#8F8F8F"
+                                    android:textSize="12sp"
+                                    android:text="倍速" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <de.hdodenhof.circleimageview.CircleImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/download" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:textColor="#8F8F8F"
+                                    android:textSize="12sp"
+                                    android:text="下载" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </RelativeLayout>
+            </LinearLayout>
+        //播放界面结束
+    <LinearLayout
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/fillet_background"
+        android:orientation="vertical">
+
+    </LinearLayout>
     </LinearLayout>
 </layout>

@@ -24,7 +24,7 @@ import java.util.List;
 public class ReadActivity extends AppCompatActivity {
     ReadbookBinding binding;
     static final int NUM_ITEMS = 2;
-    private String[] strings = new String[]{"音频","视频"};
+    private String[] strings = new String[]{"音 频","视 频"};
     private List<Fragment> fragmentList = new ArrayList<Fragment>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -68,7 +68,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         /** 添加导航按钮 */
         bottomNavigationBar
                 .addItem(new BottomNavigationItem(R.mipmap.home, "首页"))
-                .addItem(new BottomNavigationItem(R.mipmap.community, "分类"))
+                .addItem(new BottomNavigationItem(R.mipmap.community, "社区"))
                 .addItem(new BottomNavigationItem(R.mipmap.personal, "个人设置"))
                 .setFirstSelectedPosition(lastSelectedPosition)
                 .initialise(); //initialise 一定要放在 所有设置的最后一项

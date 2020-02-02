@@ -11,13 +11,27 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+<!--        <LinearLayout-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:layout_marginLeft="15dp"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="#fff"-->
+<!--            android:orientation="horizontal">-->
+<!--                <ImageView-->
+<!--                    android:layout_gravity="center|right"-->
+<!--                    android:layout_width="18dp"-->
+<!--                    android:layout_height="18dp"-->
+<!--                    android:src="@drawable/back"/>-->
+<!--        </LinearLayout>-->
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabMode"
+            android:layout_marginLeft="15dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:tabIndicatorColor="#F44336"
-            app:tabSelectedTextColor="#00BCD4"
-            app:tabTextColor="#FF5722"
+            app:tabIndicatorColor="#FF5722"
+            app:tabSelectedTextColor="#000000"
+            app:tabTextColor="#A3A3A3"
             app:tabIndicatorFullWidth="false"
             />
         <androidx.viewpager.widget.ViewPager
