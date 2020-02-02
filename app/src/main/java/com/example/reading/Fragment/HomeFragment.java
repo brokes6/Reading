@@ -1,6 +1,7 @@
 package com.example.reading.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -14,6 +15,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.example.reading.Activity.ReadActivity;
 import com.example.reading.MainActivity;
 import com.example.reading.R;
 import com.example.reading.databinding.HomefragmentBinding;
@@ -93,7 +95,13 @@ public class HomeFragment extends Fragment {
         imageTitle.add("测试图片2");
         imageTitle.add("测试图片3");
         imageTitle.add("测试图片4");
-
+        binding.moonBookImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ReadActivity.class);
+                startActivity(intent);
+            }
+        });
     }
     private class MyImageLoader extends ImageLoader {
         @Override

@@ -39,4 +39,6 @@ dependencies {
     implementation group: 'com.github.bumptech.glide', name: 'glide', version: '4.8.0'
     //圆形图片
     implementation 'de.hdodenhof:circleimageview:2.1.0'
+    //Tab
+    implementation "com.google.android.material:material:1.0.0"
 }
