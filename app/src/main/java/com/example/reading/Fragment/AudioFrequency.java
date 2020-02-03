@@ -1,6 +1,9 @@
 package com.example.reading.Fragment;
 
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
+import android.media.PlaybackParams;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,9 +15,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
+import com.example.reading.MainActivity;
 import com.example.reading.R;
 import com.example.reading.databinding.AudioBinding;
 
@@ -24,16 +29,19 @@ import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static android.content.Context.MODE_PRIVATE;
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
 /**
  * 阅读书籍页面
  */
 public class AudioFrequency extends Fragment {
+    private AlertDialog alertDialog2;
     private Timer timer;//定时器
     AudioBinding binding;
     private MediaPlayer mediaPlayer;
     private boolean isSeekbarChaning;//互斥变量，防止进度条和定时器冲突。
+    int current = 0;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +98,12 @@ public class AudioFrequency extends Fragment {
                 binding.tvStart.setText(calculateTime(mediaPlayer.getCurrentPosition() / 1000));
             }
         });
+        binding.doubleSpeed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSingleAlertDialog(getView());
+            }
+        });
     }
     public void initData(){
     }
@@ -121,7 +135,7 @@ public class AudioFrequency extends Fragment {
             Toast.makeText(getContext(),"开始播放",Toast.LENGTH_SHORT).show();
         }
     }
-    //计算播放时间
+    //计算播放时间（将数值转换为时间）
     public String calculateTime(int time){
         int minute;
         int second;
@@ -153,6 +167,45 @@ public class AudioFrequency extends Fragment {
             }
         }
         return null;
+    }
+    public void showSingleAlertDialog(View view){
+        final String[] items = {"0.75", "1.0", "1.25", "1.5"};
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getContext());
+        alertBuilder.setTitle("选择倍速");
+        alertBuilder.setSingleChoiceItems(items, current, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                current = i;
+                binding.doubleSpeedNum.setText(items[i]);
+                setPlayerSpeed(Float.parseFloat(items[i]));
+                Log.d(TAG, "onClick: -----------------------"+items[i]);
+            }
+        });
+
+        alertBuilder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                alertDialog2.dismiss();
+            }
+        });
+
+        alertBuilder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                alertDialog2.dismiss();
+            }
+        });
+
+        alertDialog2 = alertBuilder.create();
+        alertDialog2.show();
+    }
+    private void setPlayerSpeed(float speed){
+        if (android.os.Build.VERSION.SDK_INT >=
+                android.os.Build.VERSION_CODES.M) {
+            PlaybackParams playbackParams = mediaPlayer.getPlaybackParams();
+            playbackParams .setSpeed(speed);
+            mediaPlayer.setPlaybackParams(playbackParams);
+        }
     }
 
 

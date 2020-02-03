@@ -131,6 +131,7 @@
                                     android:text="定时" />
                             </LinearLayout>
                             <LinearLayout
+                                android:id="@+id/double_speed"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
@@ -143,6 +144,7 @@
                                     android:src="@drawable/double_speed" />
 
                                 <TextView
+                                    android:id="@+id/double_speed_num"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="5dp"
