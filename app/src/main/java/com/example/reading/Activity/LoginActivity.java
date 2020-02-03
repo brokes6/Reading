@@ -11,13 +11,14 @@ import android.widget.Button;
 
 import com.example.reading.MainActivity;
 import com.example.reading.R;
+import com.example.reading.ToolClass.BaseActivity;
 import com.example.reading.databinding.LoginBinding;
 
 import me.jessyan.autosize.internal.CustomAdapt;
 /**
  * CustomAdapt 设置
  */
-public class LoginActivity extends AppCompatActivity implements CustomAdapt {
+public class LoginActivity extends BaseActivity implements CustomAdapt {
     LoginBinding binding;
     /**
      * 关于屏幕适配，需要适配的屏幕就继承CustomAdapt，然后实现两个接口就ok了

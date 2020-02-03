@@ -8,11 +8,14 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 
 import com.example.reading.Fragment.AudioFrequency;
 import com.example.reading.Fragment.VideoFragment;
 import com.example.reading.R;
+import com.example.reading.ToolClass.BaseActivity;
 import com.example.reading.databinding.ReadbookBinding;
 
 import java.util.ArrayList;
@@ -21,7 +24,7 @@ import java.util.List;
 /**
  * 阅读书籍页面
  */
-public class ReadActivity extends AppCompatActivity {
+public class ReadActivity extends BaseActivity {
     ReadbookBinding binding;
     static final int NUM_ITEMS = 2;
     private String[] strings = new String[]{"音 频","视 频"};
@@ -33,6 +36,10 @@ public class ReadActivity extends AppCompatActivity {
         ActionBar actionbar = getSupportActionBar();
         if (actionbar != null) {
             actionbar.hide();
+        }
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            //修改为深色，因为我们把状态栏的背景色修改为主题色白色，默认的文字及图标颜色为白色，导致看不到了。
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
         fragmentList.add(new AudioFrequency());
         fragmentList.add(new VideoFragment());

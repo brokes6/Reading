@@ -9,6 +9,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.reading.ScreenAdaptation.DisplayCutoutDemo;
 import com.example.reading.util.ScreenAdapterUtil;
+import com.sdx.statusbar.statusbar.StatusBarUtil;
 
 /**
  * 创建于2019/10/30 16:35🐎
@@ -28,7 +29,15 @@ public class BaseActivity extends AppCompatActivity {
             //修改为深色，因为我们把状态栏的背景色修改为主题色白色，默认的文字及图标颜色为白色，导致看不到了。
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
-
+        /**
+         * 设置沉浸式
+         * @param activity    上下文
+         * @param isPadding   是否添加状态栏
+         * @param isTextColor 状态栏字体颜色切换(true为浅色,false为深色)
+         * @param colorId     状态栏背景色设置(设置为1会默认白色)
+         */
+        StatusBarUtil.setStutatusBar(this, true, true, 1);
+        StatusBarUtil.setImageStutatusBar(this, false);
     }
     public int getStatusBarHeight(Context context) {
         int result = 0;
