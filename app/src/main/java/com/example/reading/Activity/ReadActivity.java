@@ -22,6 +22,9 @@ import com.example.reading.util.FragmentBackHandler;
 import java.util.ArrayList;
 import java.util.List;
 
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
+
+
 /**
  * 阅读书籍页面
  */
@@ -78,11 +81,19 @@ public class ReadActivity extends BaseActivity {
             return strings[position];
         }
     }
+//    @Override
+//    public void onBackPressed() {
+//        if (!BackHandlerHelper.handleBackPress(this)) {
+//            super.onBackPressed();
+//        }
+//    }
     @Override
     public void onBackPressed() {
-        if (!BackHandlerHelper.handleBackPress(this)) {
-            super.onBackPressed();
+        if (JCVideoPlayer.backPress()){
+            return;
         }
+        super.onBackPressed();
     }
+
 
 }

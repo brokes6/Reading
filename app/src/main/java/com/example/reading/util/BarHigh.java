@@ -2,6 +2,7 @@ package com.example.reading.util;
 
 public class BarHigh {
     private int h = 0;
+    private boolean key;
 
     public int getH() {
         return h;
@@ -9,5 +10,13 @@ public class BarHigh {
 
     public void setH(int h) {
         this.h = h;
+    }
+
+    public boolean isKey() {
+        return key;
+    }
+
+    public void setKey(boolean key) {
+        this.key = key;
     }
 }

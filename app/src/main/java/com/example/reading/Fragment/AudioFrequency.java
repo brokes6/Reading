@@ -31,7 +31,7 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 /**
  * 阅读书籍页面
  */
-public class AudioFrequency extends Fragment implements FragmentBackHandler{
+public class AudioFrequency extends Fragment{
     private AlertDialog alertDialog2;
     private Timer timer;//定时器
     AudioBinding binding;
@@ -44,12 +44,25 @@ public class AudioFrequency extends Fragment implements FragmentBackHandler{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+
+
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.audio,container,false);
+        //默认加载
+//        binding.loadingLayout.setStatus(LoadingLayout.Loading);
+        initView();
+        initData();
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 mediaPlayer = new MediaPlayer();
                 try {
-                    mediaPlayer.setDataSource("https://nx01-sycdn.kuwo.cn/2407d3392cd9d618e7493384086d694f/5e3933d0/resource/n2/36/44/1478416719.mp3");
+                    mediaPlayer.setDataSource("https://sharefs.yun.kugou.com/202002041847/7699ffa3e00895db46b1a3cb33bab4a5/G008/M0A/08/1D/SA0DAFUJqaiAPe4nAD0g7lyrfw4875.mp3");
                     mediaPlayer.prepareAsync();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -66,34 +79,7 @@ public class AudioFrequency extends Fragment implements FragmentBackHandler{
             }
         });
         thread.start();
-    }
-
-
-
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.audio,container,false);
-        //默认加载
-//        binding.loadingLayout.setStatus(LoadingLayout.Loading);
-        initView();
-        initData();
-        initMediaPlayer();
         return binding.getRoot();
-    }
-    // 初始化MediaPlayer
-    private void initMediaPlayer() {
-//        try {
-//            mediaPlayer.setDataSource("https://sharefs.yun.kugou.com/202002031427/2411990b134976aad043ebeeca1e08a6/G007/M04/0B/09/Rw0DAFT-lo-AAOn_AD8-rKeN46k913.mp3");
-//            mediaPlayer.prepare();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        int duration2 = mediaPlayer.getDuration() / 1000;
-//        int position = mediaPlayer.getCurrentPosition();
-//        binding.tvStart.setText(calculateTime(position / 1000));
-//        binding.tvEnd.setText(calculateTime(duration2));
     }
     public void initView(){
         binding.authorBookimg.setOnClickListener(new View.OnClickListener() {
@@ -133,11 +119,13 @@ public class AudioFrequency extends Fragment implements FragmentBackHandler{
     }
     @Override
     public void onDestroy() {
-        super.onDestroy();
+        if(timer!=null)
+            timer.cancel();
         if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.release();
         }
+        super.onDestroy();
     }
     public void play(){
         if (mediaPlayer.isPlaying()){
@@ -224,16 +212,10 @@ public class AudioFrequency extends Fragment implements FragmentBackHandler{
         alertDialog2.show();
     }
     private void setPlayerSpeed(float speed){
-        if (android.os.Build.VERSION.SDK_INT >=
-                android.os.Build.VERSION_CODES.M) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             PlaybackParams playbackParams = mediaPlayer.getPlaybackParams();
             playbackParams .setSpeed(speed);
             mediaPlayer.setPlaybackParams(playbackParams);
         }
-    }
-    @Override
-    public boolean onBackPressed() {
-        mediaPlayer.stop();
-        return BackHandlerHelper.handleBackPress(this);
     }
 }

@@ -1,17 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
     </data>
 
-    <LinearLayout
+    <com.weavey.loading.lib.LoadingLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="222"/>
-    </LinearLayout>
+        android:layout_height="match_parent"
+        app:isFirstVisible="true"
+        android:background="#F3F3F3">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@drawable/fillet_background">
+                <fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard
+                    android:id="@+id/player_list_video"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+    </com.weavey.loading.lib.LoadingLayout>
 </layout>
