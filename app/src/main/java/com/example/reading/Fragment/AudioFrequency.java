@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment;
 import com.example.reading.MainActivity;
 import com.example.reading.R;
 import com.example.reading.databinding.AudioBinding;
+import com.weavey.loading.lib.LoadingLayout;
 
 import java.io.IOException;
 import java.util.Timer;
@@ -42,15 +43,27 @@ public class AudioFrequency extends Fragment {
     private MediaPlayer mediaPlayer;
     private boolean isSeekbarChaning;//互斥变量，防止进度条和定时器冲突。
     int current = 0;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//            }
+//        });
+//        thread.start();
     }
+
+
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.audio,container,false);
+        //默认加载
+//        binding.loadingLayout.setStatus(LoadingLayout.Loading);
         initView();
         initData();
         initMediaPlayer();
@@ -207,7 +220,5 @@ public class AudioFrequency extends Fragment {
             mediaPlayer.setPlaybackParams(playbackParams);
         }
     }
-
-
 
 }
