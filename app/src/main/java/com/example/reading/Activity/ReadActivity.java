@@ -2,7 +2,6 @@ package com.example.reading.Activity;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -17,6 +16,8 @@ import com.example.reading.Fragment.VideoFragment;
 import com.example.reading.R;
 import com.example.reading.ToolClass.BaseActivity;
 import com.example.reading.databinding.ReadbookBinding;
+import com.example.reading.util.BackHandlerHelper;
+import com.example.reading.util.FragmentBackHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ import java.util.List;
  * 阅读书籍页面
  */
 public class ReadActivity extends BaseActivity {
+    Fragment fragment1;
     ReadbookBinding binding;
     static final int NUM_ITEMS = 2;
     private String[] strings = new String[]{"音 频","视 频"};
@@ -76,4 +78,11 @@ public class ReadActivity extends BaseActivity {
             return strings[position];
         }
     }
+    @Override
+    public void onBackPressed() {
+        if (!BackHandlerHelper.handleBackPress(this)) {
+            super.onBackPressed();
+        }
+    }
+
 }

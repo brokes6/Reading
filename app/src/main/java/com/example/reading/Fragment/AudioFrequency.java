@@ -1,10 +1,8 @@
 package com.example.reading.Fragment;
 
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.media.PlaybackParams;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,40 +17,55 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
-import com.example.reading.MainActivity;
 import com.example.reading.R;
 import com.example.reading.databinding.AudioBinding;
-import com.weavey.loading.lib.LoadingLayout;
+import com.example.reading.util.BackHandlerHelper;
+import com.example.reading.util.FragmentBackHandler;
 
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-import static android.content.Context.MODE_PRIVATE;
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
 /**
  * 阅读书籍页面
  */
-public class AudioFrequency extends Fragment {
+public class AudioFrequency extends Fragment implements FragmentBackHandler{
     private AlertDialog alertDialog2;
     private Timer timer;//定时器
     AudioBinding binding;
     private MediaPlayer mediaPlayer;
     private boolean isSeekbarChaning;//互斥变量，防止进度条和定时器冲突。
+    private int duration2;
+    private int position;
     int current = 0;
-
+    private FragmentBackHandler backInterface;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        Thread thread = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//            }
-//        });
-//        thread.start();
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                mediaPlayer = new MediaPlayer();
+                try {
+                    mediaPlayer.setDataSource("https://nx01-sycdn.kuwo.cn/2407d3392cd9d618e7493384086d694f/5e3933d0/resource/n2/36/44/1478416719.mp3");
+                    mediaPlayer.prepareAsync();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                duration2 = mediaPlayer.getDuration() / 1000;
+                position = mediaPlayer.getCurrentPosition();
+                binding.tvStart.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.tvStart.setText(calculateTime(position / 1000));
+                        binding.tvEnd.setText(calculateTime(duration2));
+                    }
+                });
+            }
+        });
+        thread.start();
     }
 
 
@@ -71,20 +84,18 @@ public class AudioFrequency extends Fragment {
     }
     // 初始化MediaPlayer
     private void initMediaPlayer() {
-        try {
-            mediaPlayer.setDataSource("https://sharefs.yun.kugou.com/202002031427/2411990b134976aad043ebeeca1e08a6/G007/M04/0B/09/Rw0DAFT-lo-AAOn_AD8-rKeN46k913.mp3");
-            mediaPlayer.prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        int duration2 = mediaPlayer.getDuration() / 1000;
-        int position = mediaPlayer.getCurrentPosition();
-        binding.tvStart.setText(calculateTime(position / 1000));
-        binding.tvEnd.setText(calculateTime(duration2));
-
+//        try {
+//            mediaPlayer.setDataSource("https://sharefs.yun.kugou.com/202002031427/2411990b134976aad043ebeeca1e08a6/G007/M04/0B/09/Rw0DAFT-lo-AAOn_AD8-rKeN46k913.mp3");
+//            mediaPlayer.prepare();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        int duration2 = mediaPlayer.getDuration() / 1000;
+//        int position = mediaPlayer.getCurrentPosition();
+//        binding.tvStart.setText(calculateTime(position / 1000));
+//        binding.tvEnd.setText(calculateTime(duration2));
     }
     public void initView(){
-        mediaPlayer = new MediaPlayer();
         binding.authorBookimg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -220,5 +231,9 @@ public class AudioFrequency extends Fragment {
             mediaPlayer.setPlaybackParams(playbackParams);
         }
     }
-
+    @Override
+    public boolean onBackPressed() {
+        mediaPlayer.stop();
+        return BackHandlerHelper.handleBackPress(this);
+    }
 }
