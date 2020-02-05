@@ -216,6 +216,7 @@ public class AudioFrequency extends Fragment{
             PlaybackParams playbackParams = mediaPlayer.getPlaybackParams();
             playbackParams .setSpeed(speed);
             mediaPlayer.setPlaybackParams(playbackParams);
+            play();
         }
     }
 }

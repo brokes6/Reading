@@ -15,6 +15,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.example.reading.Activity.AllBooks;
 import com.example.reading.Activity.ReadActivity;
 import com.example.reading.MainActivity;
 import com.example.reading.R;
@@ -102,6 +103,13 @@ public class HomeFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        binding.AllBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), AllBooks.class);
+                startActivity(intent);
+            }
+        });
     }
     private class MyImageLoader extends ImageLoader {
         @Override
@@ -111,5 +119,4 @@ public class HomeFragment extends Fragment {
                     .into(imageView);
         }
     }
-
 }
