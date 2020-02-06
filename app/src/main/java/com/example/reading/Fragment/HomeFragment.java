@@ -26,12 +26,7 @@ import com.youth.banner.Transformer;
 import com.youth.banner.listener.OnBannerListener;
 import com.youth.banner.loader.ImageLoader;
 
-
 import java.util.ArrayList;
-import java.util.List;
-
-import static androidx.constraintlayout.widget.Constraints.TAG;
-
 
 public class HomeFragment extends Fragment {
     HomefragmentBinding binding;

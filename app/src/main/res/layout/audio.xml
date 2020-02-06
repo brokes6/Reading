@@ -12,6 +12,9 @@
         android:layout_height="match_parent"
         app:isFirstVisible="true"
         android:background="#F3F3F3">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -36,7 +39,7 @@
                                 app:type="round" />
 
                             <TextView
-                                android:id="@+id/author_name"
+                                android:id="@+id/Book_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="#222222"
@@ -53,14 +56,19 @@
                                 android:padding="7dp"
                                 android:textSize="14sp"
                                 android:textColor="#8F8F8F"
-                                android:layout_below="@id/author_name"
+                                android:layout_below="@id/Book_name"
                                 android:background="@drawable/fillet_background_half"
                                 android:text="作者信息" />
+                            <LinearLayout
+                                android:id="@+id/Playback_operation"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/author_bookimg"
+                                android:orientation="vertical">
                             <LinearLayout
                                 android:id="@+id/progress_bar"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_below="@id/author_bookimg"
                                 android:orientation="horizontal"
                                 android:paddingTop="30dp"
                                 android:paddingLeft="10dp"
@@ -180,6 +188,7 @@
                                         android:text="下载" />
                                 </LinearLayout>
                             </LinearLayout>
+                            </LinearLayout>
                         </RelativeLayout>
                 </LinearLayout>
             //播放界面结束
@@ -206,69 +215,89 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="#F3F3F3"/>
+                //评论
             </LinearLayout>
-            <LinearLayout
-                android:layout_gravity="bottom"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="12dp"
-                android:paddingBottom="12dp"
-                android:orientation="horizontal">
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/comments" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="#8F8F8F"
-                        android:textSize="14sp"
-                        android:paddingLeft="5dp"
-                        android:text="评论数" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-                    <ImageView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        android:src="@drawable/likes" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="#8F8F8F"
-                        android:textSize="14sp"
-                        android:paddingLeft="5dp"
-                        android:text="点赞数" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/favorites" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="#8F8F8F"
-                        android:textSize="14sp"
-                        android:paddingLeft="5dp"
-                        android:text="收藏数" />
-                </LinearLayout>
-            </LinearLayout>
+            <!--输入框组件-->
         </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:layout_alignParentBottom="true"
+                android:background="@android:color/white"
+                android:elevation="2dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <TextView
+                    android:id="@+id/detail_page_do_comment"
+                    android:layout_width="0dp"
+                    android:layout_height="34dp"
+                    android:layout_weight="1"
+                    android:textColor="#B6B6B6"
+                    android:textSize="12sp"
+                    android:text="说点什么吧..."
+                    android:background="@drawable/comment_bt_selector"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="22dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="18dp"/>
+                <LinearLayout
+                    android:id="@+id/loveLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/loveNum"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/thumbs_up_white"/>
+                    <TextView
+                        android:id="@+id/loveNumStr"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#9A9A9A"
+                        android:textSize="14sp"
+                        android:layout_marginLeft="10dp"
+                        android:text="0"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/collectionLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/collection"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/shocang_text"
+                        android:layout_marginLeft="20dp" />
+                    <TextView
+                        android:id="@+id/collectionStr"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#9A9A9A"
+                        android:textSize="14sp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="14dp"
+                        android:text="未收藏"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginRight="10dp"
+                    android:id="@+id/comment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/comment_picture"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/comment_white"/>
+                    <TextView
+                        android:id="@+id/commentStr"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#9A9A9A"
+                        android:textSize="14sp"
+                        android:layout_marginLeft="10dp"
+                        android:text="0"/>
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
     </com.weavey.loading.lib.LoadingLayout>
 </layout>

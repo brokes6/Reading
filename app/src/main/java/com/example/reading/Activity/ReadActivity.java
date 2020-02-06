@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -30,6 +31,7 @@ import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
  */
 public class ReadActivity extends BaseActivity {
     Fragment fragment1;
+    private String Vurl;
     ReadbookBinding binding;
     static final int NUM_ITEMS = 2;
     private String[] strings = new String[]{"音 频","视 频"};
@@ -95,5 +97,20 @@ public class ReadActivity extends BaseActivity {
         super.onBackPressed();
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        ActionBar actionbar = getSupportActionBar();
+        if (actionbar != null) {
+            actionbar.hide();
+        }
+        super.onConfigurationChanged(newConfig);
+    }
 
+    public String getVurl() {
+        return Vurl;
+    }
+
+    public void setVurl(String vurl) {
+        Vurl = vurl;
+    }
 }

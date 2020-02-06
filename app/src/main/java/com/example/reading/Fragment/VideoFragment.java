@@ -2,16 +2,26 @@ package com.example.reading.Fragment;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,9 +29,14 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.example.reading.Activity.ReadActivity;
 import com.example.reading.R;
+import com.example.reading.ToolClass.BookComment;
 import com.example.reading.databinding.VideoBinding;
 import com.example.reading.util.JzViewOutlineProvider;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+
 
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
@@ -33,9 +48,11 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
  * 观看视频页面
  */
 public class VideoFragment extends Fragment {
+    private BottomSheetDialog dialog;
     VideoBinding binding;
     SensorManager sensorManager;
-    String s1="http://2449.vod.myqcloud.com/2449_22ca37a6ea9011e5acaaf51d105342e3.f20.mp4";
+    BookComment bookComment = new BookComment();
+    String Vurl;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,12 +74,20 @@ public class VideoFragment extends Fragment {
          * 参数2：播放器类型
          * 参数3：视频标题  可为空
          */
-        binding.playerListVideo.setUp("http://jzvd.nathen.cn/342a5f7ef6124a4a8faf00e738b8bee4/cf6d9db0bd4d41f59d09ea0a81e918fd-5287d2089db37e62345123a1be272f8b.mp4", JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "黑色毛衣");
+        Vurl=((ReadActivity)getActivity()).getVurl();
+        Log.d(TAG, "initView: 11111111111111111111112312312"+((ReadActivity)getActivity()).getVurl());
+        Log.d(TAG, "handleMessage: --------------------"+Vurl);
+        binding.playerListVideo.setUp(Vurl, JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "黑色毛衣");
         binding.playerListVideo.thumbImageView.setScaleType(ImageView.ScaleType.FIT_XY);
         Glide.with(getActivity()).load("https://gss2.bdstatic.com/-fo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=0c5a25bad1ca7bcb6976cf7ddf600006/6d81800a19d8bc3ecf611ab3848ba61ea8d34559.jpg").into(binding.playerListVideo.thumbImageView);
     }
     public void initData(){
-
+        binding.detailPageDoComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCommentDialog();
+            }
+        });
     }
     @Override
     public void onPause() {
@@ -93,8 +118,58 @@ public class VideoFragment extends Fragment {
             Log.d(TAG, "isFmActive: 播放？----------------------------");
          return false;
      }
-        Log.d(TAG, "isFmActive: 不不不不不播放？----------------------------");
+        Log.d(TAG, "isFmActive: 不播放----------------------------");
         return true;
+    }
+
+
+    /**
+     *2019/10/16
+     * 方法：弹出评论框
+     */
+    private void showCommentDialog(){
+        dialog = new BottomSheetDialog(getContext(),R.style.BottomSheetEdit);
+        final View commentView = LayoutInflater.from(getContext()).inflate(R.layout.comment_dialog_layout,null);
+        final EditText commentText = (EditText) commentView.findViewById(R.id.dialog_comment_et);
+        final Button bt_comment = (Button) commentView.findViewById(R.id.dialog_comment_bt);
+        dialog.setContentView(commentView);
+        View parent = (View) commentView.getParent();
+        BottomSheetBehavior behavior = BottomSheetBehavior.from(parent);
+        commentView.measure(0,0);
+        behavior.setPeekHeight(commentView.getMeasuredHeight());
+        bt_comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String commentContent = commentText.getText().toString().trim();
+                //后期需要检查token的值 查看是否被更改了喔
+                if(!TextUtils.isEmpty(commentContent)){
+                    //
+                    dialog.dismiss();
+                }else {
+                    Toast.makeText(getActivity(),"评论内容不能为空",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        commentText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(!TextUtils.isEmpty(charSequence) && charSequence.length()>2){
+                    bt_comment.setBackgroundColor(Color.parseColor("#FFB568"));
+                }else {
+                    bt_comment.setBackgroundColor(Color.parseColor("#D8D8D8"));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        dialog.show();
     }
 
 

@@ -3,6 +3,7 @@ package com.example.reading.util;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -11,11 +12,23 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Message;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.reading.R;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import static com.example.reading.Picture.MyImageView.GET_DATA_SUCCESS;
+import static com.example.reading.Picture.MyImageView.NETWORK_ERROR;
+import static com.example.reading.Picture.MyImageView.SERVER_ERROR;
 
 public class RoundImageView extends ImageView {
     /**
@@ -36,12 +49,15 @@ public class RoundImageView extends ImageView {
      * 圆角半径
      */
     private int currRound = dp2px(10);
+    private Bitmap bitmap;
 
     public RoundImageView(Context context) {
         super(context);
         initViews();
     }
-
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
+    }
     public RoundImageView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
@@ -122,6 +138,68 @@ public class RoundImageView extends ImageView {
             }
             canvas.restoreToCount(saveCount);
         }
+    }
+
+
+    //子线程不能操作UI，通过Handler设置图片
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case GET_DATA_SUCCESS:
+                    Bitmap bitmap = (Bitmap) msg.obj;
+                    setBitmap(bitmap);
+                    setImageBitmap(bitmap);
+                    System.out.println("图片设置好了啊");
+                    break;
+                case NETWORK_ERROR:
+                    Toast.makeText(getContext(),"网络连接失败", Toast.LENGTH_SHORT).show();
+                    break;
+                case SERVER_ERROR:
+                    Toast.makeText(getContext(),"服务器发生错误", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    };
+
+    //设置网络图片
+    public void setImageURL(final String path) {
+        //开启一个线程用于联网
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    //把传过来的路径转成URL
+                    URL url = new URL(path);
+                    //获取连接
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    //使用GET方法访问网络
+                    connection.setRequestMethod("GET");
+                    //超时时间为10秒
+                    connection.setConnectTimeout(10000);
+                    //获取返回码
+                    int code = connection.getResponseCode();
+                    if (code == 200) {
+                        InputStream inputStream = connection.getInputStream();
+                        //使用工厂把网络的输入流生产Bitmap
+                        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                        //利用Message把图片发给Handler
+                        Message msg = Message.obtain();
+                        msg.obj = bitmap;
+                        msg.what = GET_DATA_SUCCESS;
+                        handler.sendMessage(msg);
+                        inputStream.close();
+                    }else {
+                        //服务启发生错误
+                        handler.sendEmptyMessage(SERVER_ERROR);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    //网络连接错误
+                    handler.sendEmptyMessage(NETWORK_ERROR);
+                }
+            }
+        }.start();
     }
 
     /**
