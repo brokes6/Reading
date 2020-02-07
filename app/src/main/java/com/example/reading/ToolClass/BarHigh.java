@@ -1,4 +1,4 @@
-package com.example.reading.util;
+package com.example.reading.ToolClass;
 
 public class BarHigh {
     private int h = 0;

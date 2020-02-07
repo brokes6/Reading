@@ -7,6 +7,7 @@ import android.media.MediaPlayer;
 import android.media.PlaybackParams;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.Message;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -30,11 +31,14 @@ import androidx.fragment.app.Fragment;
 import com.example.reading.Activity.ReadActivity;
 import com.example.reading.R;
 import com.example.reading.ToolClass.BookComment;
+import com.example.reading.ToolClass.Video;
 import com.example.reading.databinding.AudioBinding;
 import com.example.reading.util.FragmentBackHandler;
+import com.example.reading.util.RequestStatus;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -75,22 +79,19 @@ public class AudioFrequency extends Fragment{
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
-                case 1:
+                case RequestStatus.SUCCESS:
                     binding.BookName.setText(bookComment.getBname());
                     binding.author.setText(bookComment.getAuthor());
                     binding.authorBookimg.setImageURL(bookComment.getBimg());
                     break;
-                case 2:
+                case RequestStatus.FAILURE:
                     break;
-                case 3:
+                case RequestStatus.AUDIO:
                     break;
-                case 4:
+                case RequestStatus.VIDEO:
+                    EventBus.getDefault().post(new Video(video));//ssj,szq是我定义的两个string类型变量
                     binding.PlaybackOperation.setVisibility(View.GONE);
                     Toast.makeText(getContext(),"该书籍暂无音频",Toast.LENGTH_SHORT).show();
-                    break;
-                case 5:
-                    ((ReadActivity)getActivity()).setVurl(bookComment.getVideo_path());
-                    Log.d(TAG, "handleMessage: 555555555555555555"+((ReadActivity)getActivity()).getVurl());
                     break;
             }
         }
@@ -311,15 +312,15 @@ public class AudioFrequency extends Fragment{
                 if (code==1) {
                     JSONObject array = object.getJSONObject("data");
                     type = array.getInt("type");
-                    if (type ==0){
+                    if (type !=1){
                         Message mes=new Message();
-                        mes.what=4;
+                        mes.what= RequestStatus.AUDIO;
                         handler.sendMessage(mes);
                     }else{
                         video = array.getString("rurl");
                         bookComment.setVideo_path(video);
                         Message mes=new Message();
-                        mes.what=5;
+                        mes.what=RequestStatus.VIDEO;
                         handler.sendMessage(mes);
                     }
                         String bookname=array.getString("bname");
@@ -336,12 +337,12 @@ public class AudioFrequency extends Fragment{
 //                        map.put("type",type);
 //                        list.add(map);
                         Message mes=new Message();
-                        mes.what=1;
+                        mes.what=RequestStatus.SUCCESS;
                         handler.sendMessage(mes);
 
                 }
                 Message mes=new Message();
-                mes.what=2;
+                mes.what=RequestStatus.FAILURE;
                 handler.sendMessage(mes);
             }catch (JSONException e){
                 e.printStackTrace();

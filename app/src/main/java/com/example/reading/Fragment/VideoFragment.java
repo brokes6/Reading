@@ -32,11 +32,17 @@ import com.bumptech.glide.Glide;
 import com.example.reading.Activity.ReadActivity;
 import com.example.reading.R;
 import com.example.reading.ToolClass.BookComment;
+import com.example.reading.ToolClass.Video;
 import com.example.reading.databinding.VideoBinding;
 import com.example.reading.util.JzViewOutlineProvider;
+import com.example.reading.util.RequestStatus;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
@@ -62,6 +68,7 @@ public class VideoFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.video,container,false);
+        EventBus.getDefault().register(this);
         initView();
         initData();
         return binding.getRoot();
@@ -69,17 +76,7 @@ public class VideoFragment extends Fragment {
     public void initView(){
         JCVideoPlayerStandard.FULLSCREEN_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
         JCVideoPlayerStandard.NORMAL_ORIENTATION = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-        /**
-         * 参数1：视频路径
-         * 参数2：播放器类型
-         * 参数3：视频标题  可为空
-         */
-        Vurl=((ReadActivity)getActivity()).getVurl();
-        Log.d(TAG, "initView: 11111111111111111111112312312"+((ReadActivity)getActivity()).getVurl());
-        Log.d(TAG, "handleMessage: --------------------"+Vurl);
-        binding.playerListVideo.setUp(Vurl, JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "黑色毛衣");
-        binding.playerListVideo.thumbImageView.setScaleType(ImageView.ScaleType.FIT_XY);
-        Glide.with(getActivity()).load("https://gss2.bdstatic.com/-fo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=0c5a25bad1ca7bcb6976cf7ddf600006/6d81800a19d8bc3ecf611ab3848ba61ea8d34559.jpg").into(binding.playerListVideo.thumbImageView);
+
     }
     public void initData(){
         binding.detailPageDoComment.setOnClickListener(new View.OnClickListener() {
@@ -88,12 +85,27 @@ public class VideoFragment extends Fragment {
                 showCommentDialog();
             }
         });
+
     }
     @Override
     public void onPause() {
         super.onPause();
         JCVideoPlayer.releaseAllVideos();
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMainThread(Video data) {
+        Vurl=data.getVideo_path();
+        /**
+         * 参数1：视频路径
+         * 参数2：播放器类型
+         * 参数3：视频标题  可为空
+         */
+        binding.playerListVideo.setUp(Vurl, JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "黑色毛衣");
+        binding.playerListVideo.thumbImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        Glide.with(getActivity()).load("https://gss2.bdstatic.com/-fo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=0c5a25bad1ca7bcb6976cf7ddf600006/6d81800a19d8bc3ecf611ab3848ba61ea8d34559.jpg").into(binding.playerListVideo.thumbImageView);
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -170,6 +182,11 @@ public class VideoFragment extends Fragment {
             }
         });
         dialog.show();
+    }
+    @Override
+        public void onDestroy() {
+            super.onDestroy();
+            EventBus.getDefault().unregister(this);
     }
 
 

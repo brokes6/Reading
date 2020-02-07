@@ -17,7 +17,7 @@ import com.example.reading.ToolClass.BaseActivity;
 import com.example.reading.Fragment.CommunityFragment;
 import com.example.reading.Fragment.HomeFragment;
 import com.example.reading.Fragment.MyFragment;
-import com.example.reading.util.BarHigh;
+import com.example.reading.ToolClass.BarHigh;
 
 import me.jessyan.autosize.internal.CustomAdapt;
 
