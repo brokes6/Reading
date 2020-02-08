@@ -74,6 +74,7 @@ public class AudioFrequency extends Fragment{
     String url;
     private FragmentBackHandler backInterface;
     BookComment bookComment = new BookComment();
+    String music_path = "https://sharefs.yun.kugou.com/202002081817/3813c40ebddcde982ec510e16f3c57b3/G004/M08/16/03/pIYBAFS-a_aAcZRBAEGtSN5wixs886.mp3";
     public ArrayList<Map<String, Object>> list = new ArrayList<>();
     private Handler handler=new Handler(){
         @Override
@@ -119,7 +120,7 @@ public class AudioFrequency extends Fragment{
             public void run() {
                 mediaPlayer = new MediaPlayer();
                 try {
-                    mediaPlayer.setDataSource("http://m10.music.126.net/20200206132139/786330a3068ccd5e8fd61f3b847080ce/ymusic/8b53/b4e9/b60f/85a5b4d07d6e64e9fdf029148f9e71ca.mp3");
+                    mediaPlayer.setDataSource(music_path);
                     mediaPlayer.prepareAsync();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -191,6 +192,7 @@ public class AudioFrequency extends Fragment{
         super.onDestroy();
     }
     public void play(){
+        if (bookComment.getMusic_path()==null){ }
         if (mediaPlayer.isPlaying()){
             mediaPlayer.pause();
             Toast.makeText(getContext(),"停止播放",Toast.LENGTH_SHORT).show();
@@ -313,6 +315,7 @@ public class AudioFrequency extends Fragment{
                     JSONObject array = object.getJSONObject("data");
                     type = array.getInt("type");
                     if (type !=1){
+                        music_path=array.getString("rurl");
                         Message mes=new Message();
                         mes.what= RequestStatus.AUDIO;
                         handler.sendMessage(mes);

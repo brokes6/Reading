@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/Whole"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.example.reading.util.RoundImageView
+            android:id="@+id/book1_img"
+            android:layout_marginRight="5dp"
+            android:layout_centerVertical="true"
+            android:layout_width="75dp"
+            android:layout_height="90dp"
+            app:type="round"
+            android:src="@drawable/book_text" />
+
+        <TextView
+            android:id="@+id/book1_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#222222"
+            android:layout_toRightOf="@id/book1_img"
+            android:text="测试书名" />
+
+        <TextView
+            android:id="@+id/number_of_visitors"
+            android:layout_marginTop="15dp"
+            android:padding="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/book1_img"
+            android:textSize="12sp"
+            android:textColor="#8F8F8F"
+            android:layout_below="@id/book1_name"
+            android:background="@drawable/fillet_background_half"
+            android:text="测试观看量" />
+    </RelativeLayout>
+</LinearLayout>

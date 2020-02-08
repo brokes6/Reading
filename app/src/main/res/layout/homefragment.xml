@@ -97,7 +97,7 @@
                 android:layout_marginLeft="2dp"
                 android:id="@+id/banner"
                 android:layout_width="match_parent"
-                android:layout_height="130dp"
+                android:layout_height="145dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -283,159 +283,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="#CACACA"/>
-
-            <LinearLayout
-                android:layout_marginTop="10dp"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycleview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <com.example.reading.util.RoundImageView
-                            android:id="@+id/book1_img"
-                            android:layout_marginRight="5dp"
-                            android:layout_centerVertical="true"
-                            android:layout_width="75dp"
-                            android:layout_height="90dp"
-                            app:type="round"
-                            android:src="@drawable/book_text" />
-
-                        <TextView
-                            android:id="@+id/book1_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="#222222"
-                            android:layout_toRightOf="@id/book1_img"
-                            android:text="测试书名" />
-
-                        <TextView
-                            android:layout_marginTop="15dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_toRightOf="@id/book1_img"
-                            android:textSize="12sp"
-                            android:textColor="#8F8F8F"
-                            android:layout_below="@id/book1_name"
-                            android:text="测试观看量" />
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <com.example.reading.util.RoundImageView
-                            android:id="@+id/book2_img"
-                            android:layout_marginRight="5dp"
-                            android:layout_centerVertical="true"
-                            android:layout_width="75dp"
-                            android:layout_height="90dp"
-                            app:type="round"
-                            android:src="@drawable/book_text" />
-
-                        <TextView
-                            android:id="@+id/book2_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="#222222"
-                            android:layout_toRightOf="@id/book2_img"
-                            android:text="测试书名" />
-
-                        <TextView
-                            android:layout_marginTop="15dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_toRightOf="@id/book2_img"
-                            android:textSize="12sp"
-                            android:textColor="#8F8F8F"
-                            android:layout_below="@id/book2_name"
-                            android:text="测试观看量" />
-                    </RelativeLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <com.example.reading.util.RoundImageView
-                            android:id="@+id/book3_img"
-                            android:layout_marginRight="5dp"
-                            android:layout_centerVertical="true"
-                            android:layout_width="75dp"
-                            android:layout_height="90dp"
-                            app:type="round"
-                            android:src="@drawable/book_text" />
-
-                        <TextView
-                            android:id="@+id/book3_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="#222222"
-                            android:layout_toRightOf="@id/book3_img"
-                            android:text="测试书名" />
-
-                        <TextView
-                            android:layout_marginTop="15dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_toRightOf="@id/book3_img"
-                            android:textSize="12sp"
-                            android:textColor="#8F8F8F"
-                            android:layout_below="@id/book3_name"
-                            android:text="测试观看量" />
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <com.example.reading.util.RoundImageView
-                            android:id="@+id/book4_img"
-                            android:layout_marginRight="5dp"
-                            android:layout_centerVertical="true"
-                            android:layout_width="75dp"
-                            android:layout_height="90dp"
-                            app:type="round"
-                            android:src="@drawable/book_text" />
-
-                        <TextView
-                            android:id="@+id/book4_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="#222222"
-                            android:layout_toRightOf="@id/book4_img"
-                            android:text="测试书名" />
-
-                        <TextView
-                            android:layout_marginTop="15dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_toRightOf="@id/book4_img"
-                            android:textSize="12sp"
-                            android:textColor="#8F8F8F"
-                            android:layout_below="@id/book4_name"
-                            android:text="测试观看量" />
-                    </RelativeLayout>
-                </LinearLayout>
-            </LinearLayout>
+                android:layout_height="wrap_content">
+            </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
         //推荐书籍结束
         //每月必读
