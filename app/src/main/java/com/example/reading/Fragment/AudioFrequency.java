@@ -192,7 +192,9 @@ public class AudioFrequency extends Fragment{
         super.onDestroy();
     }
     public void play(){
-        if (bookComment.getMusic_path()==null){ }
+        if (bookComment.getMusic_path()==null){
+
+        }
         if (mediaPlayer.isPlaying()){
             mediaPlayer.pause();
             Toast.makeText(getContext(),"停止播放",Toast.LENGTH_SHORT).show();
@@ -253,7 +255,7 @@ public class AudioFrequency extends Fragment{
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 current = i;
-                binding.doubleSpeedNum.setText(items[i]);
+                binding.doubleSpeedNum.setText(items[i]+"倍速");
                 setPlayerSpeed(Float.parseFloat(items[i]));
                 Log.d(TAG, "onClick: -----------------------"+items[i]);
             }

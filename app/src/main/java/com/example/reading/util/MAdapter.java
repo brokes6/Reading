@@ -93,7 +93,6 @@ class MyViewHolder extends RecyclerView.ViewHolder{
         whole = itemView.findViewById(R.id.Whole);
         bookname = itemView.findViewById(R.id.book1_name);
         bookimg = itemView.findViewById(R.id.book1_img);
-        number_of_visitors = itemView.findViewById(R.id.number_of_visitors);
 
     }
 }
