@@ -19,6 +19,8 @@ import com.example.reading.Fragment.HomeFragment;
 import com.example.reading.Fragment.MyFragment;
 import com.example.reading.ToolClass.BarHigh;
 
+import java.util.Calendar;
+
 import me.jessyan.autosize.internal.CustomAdapt;
 
 public class MainActivity extends BaseActivity implements BottomNavigationBar.OnTabSelectedListener,CustomAdapt {
@@ -44,6 +46,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
             //修改为深色，因为我们把状态栏的背景色修改为主题色白色，默认的文字及图标颜色为白色，导致看不到了。
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
+//        Log.d(TAG, "onCreate: timetimetime"+Calendar.getInstance().getTimeInMillis());
         init();
         inData();
         /**

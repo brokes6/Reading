@@ -9,8 +9,8 @@ public class BookDetails {
     private String loveNum;
     private String forwardNum;
     private String description;
-    private String music_path;
-    private String video_path;
+    private String rurl;
+    private String vurl;
 
     public String getBname() {
         return bname;
@@ -76,19 +76,19 @@ public class BookDetails {
         this.description = description;
     }
 
-    public String getMusic_path() {
-        return music_path;
+    public String getRurl() {
+        return rurl;
     }
 
-    public void setMusic_path(String music_path) {
-        this.music_path = music_path;
+    public void setRurl(String rurl) {
+        this.rurl = rurl;
     }
 
-    public String getVideo_path() {
-        return video_path;
+    public String getVurl() {
+        return vurl;
     }
 
-    public void setVideo_path(String video_path) {
-        this.video_path = video_path;
+    public void setVurl(String vurl) {
+        this.vurl = vurl;
     }
 }

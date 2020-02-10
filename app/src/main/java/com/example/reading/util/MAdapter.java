@@ -1,6 +1,7 @@
 package com.example.reading.util;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +14,9 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.reading.Activity.AllBooks;
+import com.example.reading.Activity.ReadActivity;
+import com.example.reading.Fragment.AudioFrequency;
 import com.example.reading.R;
 import com.example.reading.ToolClass.BookDetails;
 
@@ -58,21 +62,22 @@ public class MAdapter extends RecyclerView.Adapter<MyViewHolder>{
         holder.bookname.setText(bookDetails1.getBname());
 //        holder.bookimg.setImageURI(uri);
         Glide.with(mContext).load(uri).into(holder.bookimg);
-    /*    holder.whole.setOnClickListener(new View.OnClickListener() {
+        holder.whole.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(mContext, BookTest.class);
-                intent.putExtra("type",bookDetails1.getAuthor());
-                intent.putExtra("type",bookDetails1.getBookimg());
-                intent.putExtra("type",bookDetails1.getBookintroduce());
+                Intent intent=new Intent(mContext, ReadActivity.class);
+                intent.putExtra("author",bookDetails1.getAuthor());
+                intent.putExtra("img",bookDetails1.getBimg());
+                intent.putExtra("name",bookDetails1.getBname());
                 intent.putExtra("type",bookDetails1.getType());
-                intent.putExtra("vurl",bookDetails1.getVideo_path());
-                intent.putExtra("murl",bookDetails1.getMusic_path());
+                intent.putExtra("vurl",bookDetails1.getVurl());
+                intent.putExtra("murl",bookDetails1.getRurl());
+                Log.d(TAG, "onClick: 888888888888888888888888888888888888888888888"+"传值完成"+bookDetails1.getType());
                 mContext.startActivity(intent);
             }
         });
-    }*/
     }
+
 
     @Override
     public int getItemCount() {

@@ -101,7 +101,7 @@ public class VideoFragment extends Fragment {
          * 参数2：播放器类型
          * 参数3：视频标题  可为空
          */
-        binding.playerListVideo.setUp(Vurl, JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "黑色毛衣");
+        binding.playerListVideo.setUp(Vurl, JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "标题");
         binding.playerListVideo.thumbImageView.setScaleType(ImageView.ScaleType.FIT_XY);
         Glide.with(getActivity()).load("https://gss2.bdstatic.com/-fo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=0c5a25bad1ca7bcb6976cf7ddf600006/6d81800a19d8bc3ecf611ab3848ba61ea8d34559.jpg").into(binding.playerListVideo.thumbImageView);
     }

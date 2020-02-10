@@ -7,18 +7,25 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.View;
 
 import com.example.reading.Fragment.AudioFrequency;
 import com.example.reading.Fragment.VideoFragment;
 import com.example.reading.R;
 import com.example.reading.ToolClass.BaseActivity;
+import com.example.reading.ToolClass.BookComment;
 import com.example.reading.databinding.ReadbookBinding;
 import com.example.reading.util.BackHandlerHelper;
 import com.example.reading.util.FragmentBackHandler;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,12 +37,14 @@ import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
  * 阅读书籍页面
  */
 public class ReadActivity extends BaseActivity {
+    private static final String TAG = "ReadActivity";
     Fragment fragment1;
-    private String Vurl;
+    AudioFrequency audioFrequency =new AudioFrequency();
     ReadbookBinding binding;
     static final int NUM_ITEMS = 2;
     private String[] strings = new String[]{"音 频","视 频"};
     private List<Fragment> fragmentList = new ArrayList<Fragment>();
+    BookComment bookComment = new BookComment();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +63,7 @@ public class ReadActivity extends BaseActivity {
         initData();
 
     }
+
     public void initView(){
         MyAdapter fragmentAdater = new  MyAdapter(getSupportFragmentManager());
         binding.viewpager.setAdapter(fragmentAdater);
@@ -61,7 +71,36 @@ public class ReadActivity extends BaseActivity {
     }
     public void initData(){
 
+        EventBus.getDefault().post(bookComment);
+        Log.d(TAG, "initData: 1111111111111111111111111111111111111"+"Bundle发送数据");
     }
+
+    public String getDataName(){
+        Intent intent = getIntent();
+        return intent.getStringExtra("name");
+    }
+    public String getDataAuthor(){
+        Intent intent = getIntent();
+        return intent.getStringExtra("author");
+    }
+    public int getDataType(){
+        Intent intent = getIntent();
+        return intent.getIntExtra("type",2);
+    }
+    public String getDataImg(){
+        Intent intent = getIntent();
+        return intent.getStringExtra("img");
+    }
+    public String getDataMurl(){
+        Intent intent = getIntent();
+        return intent.getStringExtra("murl");
+    }
+    public String getDataVurl(){
+        Intent intent = getIntent();
+        return intent.getStringExtra("vurl");
+    }
+
+
     public class MyAdapter extends FragmentPagerAdapter {
         public MyAdapter(FragmentManager fm) {
             super(fm);
@@ -106,11 +145,4 @@ public class ReadActivity extends BaseActivity {
         super.onConfigurationChanged(newConfig);
     }
 
-    public String getVurl() {
-        return Vurl;
-    }
-
-    public void setVurl(String vurl) {
-        Vurl = vurl;
-    }
 }

@@ -1,5 +1,7 @@
 package com.example.reading.Fragment;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -39,11 +41,14 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -57,7 +62,7 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
  * 阅读书籍页面
  */
 public class AudioFrequency extends Fragment{
-    int type;
+    int  type;
     int code;
     private ProgressBar progressBar;
     private BottomSheetDialog dialog;
@@ -72,8 +77,13 @@ public class AudioFrequency extends Fragment{
     int current = 0;
     String date1;
     String url;
+    String name;
+    String author;
+    String video_path;
+    String bimg;
     private FragmentBackHandler backInterface;
     BookComment bookComment = new BookComment();
+    ReadActivity activity;
     String music_path = "https://sharefs.yun.kugou.com/202002081817/3813c40ebddcde982ec510e16f3c57b3/G004/M08/16/03/pIYBAFS-a_aAcZRBAEGtSN5wixs886.mp3";
     public ArrayList<Map<String, Object>> list = new ArrayList<>();
     private Handler handler=new Handler(){
@@ -81,16 +91,17 @@ public class AudioFrequency extends Fragment{
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case RequestStatus.SUCCESS:
-                    binding.BookName.setText(bookComment.getBname());
-                    binding.author.setText(bookComment.getAuthor());
-                    binding.authorBookimg.setImageURL(bookComment.getBimg());
+                    binding.BookName.setText(name);
+                    binding.author.setText(author);
+                    binding.authorBookimg.setImageURL(bimg);
+                    Log.d(TAG, "handleMessage: ----------3---------3-----33---------3----3--------3------3--------"+"设置完成");
                     break;
                 case RequestStatus.FAILURE:
                     break;
                 case RequestStatus.AUDIO:
                     break;
                 case RequestStatus.VIDEO:
-                    EventBus.getDefault().post(new Video(video));//ssj,szq是我定义的两个string类型变量
+                    EventBus.getDefault().post(new Video(video_path));//ssj,szq是我定义的两个string类型变量
                     binding.PlaybackOperation.setVisibility(View.GONE);
                     Toast.makeText(getContext(),"该书籍暂无音频",Toast.LENGTH_SHORT).show();
                     break;
@@ -114,7 +125,8 @@ public class AudioFrequency extends Fragment{
 //        binding.loadingLayout.setStatus(LoadingLayout.Loading);
         initView();
         initData();
-        Getsongs();
+//        Getsongs();
+
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -181,6 +193,12 @@ public class AudioFrequency extends Fragment{
             }
         });
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Hhhh(BookComment bookComment) {
+
+    }
+
     @Override
     public void onDestroy() {
         if(timer!=null)
@@ -286,79 +304,79 @@ public class AudioFrequency extends Fragment{
             play();
         }
     }
-    private void Getsongs(){
-        list.clear();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                OkHttpClient okHttpClient=new OkHttpClient();
-                Request request=new Request.Builder()
-                        .url("http://117.48.205.198/xiaoyoudushu/findBookById?id=5")
-                        .build();
-                try {
-                    Response response = okHttpClient.newCall(request).execute();
-                    date1 = response.body().string();
-                    Log.d(TAG, " -----------------------------"+date1);
-                    JsonJX(date1);
+//    private void Getsongs(){
+//        list.clear();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                OkHttpClient okHttpClient=new OkHttpClient();
+//                Request request=new Request.Builder()
+//                        .url("http://117.48.205.198/xiaoyoudushu/findBookById?id=5")
+//                        .build();
+//                try {
+//                    Response response = okHttpClient.newCall(request).execute();
+//                    date1 = response.body().string();
+//                    Log.d(TAG, " -----------------------------"+date1);
+//                    JsonJX(date1);
+//
+//                }catch (IOException e){
+//                    e.printStackTrace();
+//                }
+//            }
+//        }).start();
+//    }
 
-                }catch (IOException e){
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
-
-    public void JsonJX(String Data) {
-        if(Data !=null){
-            try{
-                JSONObject object = new JSONObject(Data);
-                code = object.getInt("code");
-                if (code==1) {
-                    JSONObject array = object.getJSONObject("data");
-                    type = array.getInt("type");
-                    if (type !=1){
-                        music_path=array.getString("rurl");
-                        Message mes=new Message();
-                        mes.what= RequestStatus.AUDIO;
-                        handler.sendMessage(mes);
-                    }else{
-                        video = array.getString("rurl");
-                        bookComment.setVideo_path(video);
-                        Message mes=new Message();
-                        mes.what=RequestStatus.VIDEO;
-                        handler.sendMessage(mes);
-                    }
-                        String bookname=array.getString("bname");
-                        String bookauthor=array.getString("author");
-                        String bookimg=array.getString("bimg");
-                        bookComment.setAuthor(bookauthor);
-                        bookComment.setBimg(bookimg);
-                        bookComment.setBname(bookname);
-
-//                        Map<String,Object> map=new HashMap<>();
-//                        map.put("name",bookname);
-//                        map.put("author",bookauthor);
-//                        map.put("pic",bookimg);
-//                        map.put("type",type);
-//                        list.add(map);
-                        Message mes=new Message();
-                        mes.what=RequestStatus.SUCCESS;
-                        handler.sendMessage(mes);
-
-                }
-                Message mes=new Message();
-                mes.what=RequestStatus.FAILURE;
-                handler.sendMessage(mes);
-            }catch (JSONException e){
-                e.printStackTrace();
-            }
-        }else{
-            Message mes=new Message();
-            mes.what=3;
-            handler.sendMessage(mes);
-        }
-
-    }
+//    public void JsonJX(String Data) {
+//        if(Data !=null){
+//            try{
+//                JSONObject object = new JSONObject(Data);
+//                code = object.getInt("code");
+//                if (code==1) {
+//                    JSONObject array = object.getJSONObject("data");
+//                    type = array.getInt("type");
+//                    if (type !=1){
+//                        music_path=array.getString("rurl");
+//                        Message mes=new Message();
+//                        mes.what= RequestStatus.AUDIO;
+//                        handler.sendMessage(mes);
+//                    }else{
+//                        video = array.getString("rurl");
+//                        bookComment.setVideo_path(video);
+//                        Message mes=new Message();
+//                        mes.what=RequestStatus.VIDEO;
+//                        handler.sendMessage(mes);
+//                    }
+//                        String bookname=array.getString("bname");
+//                        String bookauthor=array.getString("author");
+//                        String bookimg=array.getString("bimg");
+//                        bookComment.setAuthor(bookauthor);
+//                        bookComment.setBimg(bookimg);
+//                        bookComment.setBname(bookname);
+//
+////                        Map<String,Object> map=new HashMap<>();
+////                        map.put("name",bookname);
+////                        map.put("author",bookauthor);
+////                        map.put("pic",bookimg);
+////                        map.put("type",type);
+////                        list.add(map);
+//                        Message mes=new Message();
+//                        mes.what=RequestStatus.SUCCESS;
+//                        handler.sendMessage(mes);
+//
+//                }
+//                Message mes=new Message();
+//                mes.what=RequestStatus.FAILURE;
+//                handler.sendMessage(mes);
+//            }catch (JSONException e){
+//                e.printStackTrace();
+//            }
+//        }else{
+//            Message mes=new Message();
+//            mes.what=3;
+//            handler.sendMessage(mes);
+//        }
+//
+//    }
 
 
 
@@ -410,4 +428,46 @@ public class AudioFrequency extends Fragment{
         });
         dialog.show();
     }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        name = (((ReadActivity) activity).getDataName());
+        bimg = (((ReadActivity) activity).getDataImg());
+        author = (((ReadActivity) activity).getDataAuthor());
+        type = (((ReadActivity) activity).getDataType());
+
+        Message mes=new Message();
+        mes.what=RequestStatus.SUCCESS;
+        handler.sendMessage(mes);
+        Log.d(TAG, "onAttach: ----------------------typewei"+type);
+        if (type ==1){
+            video_path = ((ReadActivity) activity).getDataVurl();
+            music_path = null;
+            Message mes1=new Message();
+            mes1.what=RequestStatus.VIDEO;
+            handler.sendMessage(mes1);
+        }else{
+            String music = ((ReadActivity) activity).getDataMurl();
+            if (music ==null){
+                Message mes1=new Message();
+                mes1.what=RequestStatus.VIDEO;
+                handler.sendMessage(mes1);
+            }else{
+            music_path = music;
+            Log.d(TAG, "onAttach: ------------------------------------------tttttttttttttt"+music_path);
+            video_path = null;
+            Message mes2=new Message();
+            mes2.what= RequestStatus.AUDIO;
+            handler.sendMessage(mes2);
+            }
+        }
+        Log.d(TAG, "onAttach: -------------------------------------------------99"+"成功!");
+    }
+
+//    @Override
+//    public void onAttach(Context context) {
+//        super.onAttach(context);
+//
+//    }
 }
