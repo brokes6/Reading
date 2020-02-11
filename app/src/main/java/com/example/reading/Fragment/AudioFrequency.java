@@ -96,7 +96,9 @@ public class AudioFrequency extends Fragment{
                     Toast.makeText(getContext(),"获取数据失败，请稍后尝试",Toast.LENGTH_SHORT).show();
                     break;
                 case RequestStatus.AUDIO:
-
+                    /**
+                     * 到时候在Video多加俩个值，一个为视频图片，一个为有无视频
+                     */
                     break;
                 case RequestStatus.VIDEO:
                     EventBus.getDefault().post(new Video(video));//ssj,szq是我定义的两个string类型变量

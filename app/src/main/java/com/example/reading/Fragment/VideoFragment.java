@@ -97,6 +97,8 @@ public class VideoFragment extends Fragment {
     public void onEventMainThread(Video data) {
         Vurl=data.getVideo_path();
         if (Vurl ==null){
+            binding.playerListVideo.setVisibility(View.GONE);
+            Log.d(TAG, "onEventMainThread: -----------"+"无视频");
             Toast.makeText(getContext(),"该书籍暂无视频",Toast.LENGTH_SHORT).show();
         }else{
         /**
