@@ -374,10 +374,11 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/Solar_terms"
                         android:layout_gravity="center|left"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="每月必读"
+                        android:text="节气"
                         android:textSize="18sp"
                         android:textColor="#383838"
                         android:textStyle="bold" />
@@ -394,7 +395,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
-                        android:text="查看历史"
+                        android:text="查看历史节气"
                         android:textSize="14sp"
                         android:textColor="#8F8F8F" />
 
@@ -411,55 +412,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#CACACA"/>
-
-            <LinearLayout
-                android:layout_marginTop="10dp"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/festival_recycleview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="wrap_content">
+            </androidx.recyclerview.widget.RecyclerView>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <com.example.reading.util.RoundImageView
-                            android:id="@+id/moon_book_img"
-                            android:layout_marginRight="15dp"
-                            android:layout_centerVertical="true"
-                            android:layout_width="95dp"
-                            android:layout_height="110dp"
-                            app:type="round"
-                            android:src="@drawable/book_text" />
-
-                        <TextView
-                            android:id="@+id/moon_book_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="#222222"
-                            android:textSize="16sp"
-                            android:layout_toRightOf="@id/moon_book_img"
-                            android:text="测试书名" />
-
-                        <TextView
-                            android:id="@+id/book_introduce"
-                            android:layout_marginTop="15dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_toRightOf="@id/moon_book_img"
-                            android:padding="7dp"
-                            android:textSize="14sp"
-                            android:textColor="#8F8F8F"
-                            android:layout_below="@id/moon_book_name"
-                            android:background="@drawable/fillet_background_half"
-                            android:text="测试观看量" />
-                    </RelativeLayout>
-                </LinearLayout>
-            </LinearLayout>
         </LinearLayout>
                     <TextView
                         android:layout_width="match_parent"

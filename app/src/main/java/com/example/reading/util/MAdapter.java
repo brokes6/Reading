@@ -35,9 +35,6 @@ public class MAdapter extends RecyclerView.Adapter<MyViewHolder>{
         this.mContext = context;
         inflater = LayoutInflater.from(context);
     }
-    public void setBookDetails(List<BookDetails> bookDetailsList) {
-        this.bookDetails.addAll(bookDetailsList);
-    }
 
     public void setMyAdapter(List<BookDetails> bookDetails) {
         this.bookDetails.addAll(bookDetails);
@@ -55,9 +52,9 @@ public class MAdapter extends RecyclerView.Adapter<MyViewHolder>{
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         //为textview 赋值
-        Log.i(TAG, "onBindViewHolder: 开始设置");
+        Log.i(TAG, "MAdapter: 开始设置");
         final BookDetails bookDetails1 = bookDetails.get(position);
-        Log.i(TAG, "onBindViewHolder: " + bookDetails1.getBimg());
+        Log.i(TAG, "MAdapter: " + bookDetails1.getBimg());
         Uri uri = Uri.parse(bookDetails1.getBimg());
         holder.bookname.setText(bookDetails1.getBname());
 //        holder.bookimg.setImageURI(uri);

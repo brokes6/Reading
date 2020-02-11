@@ -70,13 +70,11 @@ public class ReadActivity extends BaseActivity {
         binding.tabMode.setupWithViewPager(binding.viewpager);
     }
     public void initData(){
-
-        EventBus.getDefault().post(bookComment);
-        Log.d(TAG, "initData: 1111111111111111111111111111111111111"+"Bundle发送数据");
     }
 
     public String getDataId(){
         Intent intent = getIntent();
+        Log.d(TAG, "getDataId: 当前书籍id为:"+intent.getStringExtra("id"));
         return intent.getStringExtra("id");
     }
 

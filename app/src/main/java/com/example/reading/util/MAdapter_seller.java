@@ -51,9 +51,9 @@ public class MAdapter_seller extends RecyclerView.Adapter<MyViewHolder_seller>{
     @Override
     public void onBindViewHolder(MyViewHolder_seller holder, int position) {
         //为textview 赋值
-        Log.i(TAG, "onBindViewHolder: 开始设置");
+        Log.i(TAG, "MAdapter_seller: 开始设置");
         final BookDetails bookDetails1 = bookDetails.get(position);
-        Log.i(TAG, "onBindViewHolder: " + bookDetails1.getBimg());
+        Log.i(TAG, "MAdapter_seller: " + bookDetails1.getBimg());
         Uri uri = Uri.parse(bookDetails1.getBimg());
         holder.bookname.setText(bookDetails1.getBname());
 //        holder.bookimg.setImageURI(uri);

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_marginTop="10dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/festivalwhole"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <com.example.reading.util.RoundImageView
+                android:id="@+id/festival_book_img"
+                android:layout_marginRight="15dp"
+                android:layout_centerVertical="true"
+                android:layout_width="95dp"
+                android:layout_height="110dp"
+                app:type="round"
+                android:src="@drawable/book_text" />
+
+            <TextView
+                android:id="@+id/festival_book_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#222222"
+                android:textSize="16sp"
+                android:layout_toRightOf="@id/festival_book_img"
+                android:text="测试书名" />
+
+            <TextView
+                android:id="@+id/festival_introduce"
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/festival_book_img"
+                android:padding="7dp"
+                android:textSize="14sp"
+                android:textColor="#8F8F8F"
+                android:layout_below="@id/festival_book_name"
+                android:background="@drawable/fillet_background_half"
+                android:text="测试介绍" />
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -25,7 +25,9 @@ import com.example.reading.Activity.ReadActivity;
 import com.example.reading.R;
 import com.example.reading.ToolClass.BookDetails;
 import com.example.reading.ToolClass.BookType;
+import com.example.reading.ToolClass.FestivalDetails;
 import com.example.reading.databinding.HomefragmentBinding;
+import com.example.reading.util.FestivalAdapter;
 import com.example.reading.util.MAdapter;
 import com.example.reading.util.MAdapter_seller;
 import com.google.gson.Gson;
@@ -59,18 +61,27 @@ public class HomeFragment extends Fragment {
     private ArrayList<Integer> imagePath;
     private ArrayList<String> imageTitle;
     String date1;
+    String SolarTermsData;
     int code;
+    int scode;
     private MAdapter mAdapter;
     private MAdapter_seller mAdapter_seller;
+    private FestivalAdapter festivalAdapter;
     private List<BookType> bookDetails;
     private String time;
+    private String Title;
     private Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case 200:
-                    System.out.println("123");
+                    System.out.println("----");
                     mAdapter.notifyDataSetChanged();
+                    mAdapter_seller.notifyDataSetChanged();
+                    break;
+                case 210:
+                    binding.SolarTerms.setText(Title);
+                    festivalAdapter.notifyDataSetChanged();
                     break;
             }
         }
@@ -123,16 +134,24 @@ public class HomeFragment extends Fragment {
                 })
                 //开始调用的方法，启动轮播图。
                 .start();
+        //MAdapter
         mAdapter=new MAdapter(getActivity());
-        mAdapter_seller = new MAdapter_seller(getActivity());
         LinearLayoutManager im = new LinearLayoutManager(getContext());
         im.setOrientation(LinearLayoutManager.HORIZONTAL);
         binding.RecommendRecycleview.setLayoutManager(im);
         binding.RecommendRecycleview.setAdapter(mAdapter);
+        //MAdapter_seller
+        mAdapter_seller = new MAdapter_seller(getActivity());
         LinearLayoutManager im2 = new LinearLayoutManager(getContext());
         im2.setOrientation(LinearLayoutManager.HORIZONTAL);
         binding.BestSellerRecycleview.setLayoutManager(im2);
         binding.BestSellerRecycleview.setAdapter(mAdapter_seller);
+        //FestivalAdapter
+        festivalAdapter = new FestivalAdapter(getActivity());
+        LinearLayoutManager im3 = new LinearLayoutManager(getContext());
+        im3.setOrientation(LinearLayoutManager.VERTICAL);
+        binding.festivalRecycleview.setLayoutManager(im3);
+        binding.festivalRecycleview.setAdapter(festivalAdapter);
     }
 
     private void initData() {
@@ -147,13 +166,6 @@ public class HomeFragment extends Fragment {
         imageTitle.add("测试图片2");
         imageTitle.add("测试图片3");
         imageTitle.add("测试图片4");
-        binding.moonBookImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ReadActivity.class);
-                startActivity(intent);
-            }
-        });
         binding.AllBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -179,21 +191,34 @@ public class HomeFragment extends Fragment {
                 OkHttpClient okHttpClient = new OkHttpClient();
                 time = String.valueOf(Calendar.getInstance().getTimeInMillis());
                 Log.d(TAG, "从1970至现在的毫秒数:"+time);
+                /**
+                 * 每月推送
+                 */
                 Request request = new Request.Builder()
                         .url("http://117.48.205.198/xiaoyoudushu/findBooksByDate?time="+time)
                         .build();
+                Log.d(TAG, "url为"+"http://117.48.205.198/xiaoyoudushu/findBooksByDate?time="+time);
+                /**
+                 * 节气推送
+                 */
+                Request RequestSolarTerms = new Request.Builder()
+                        .url("http://117.48.205.198/xiaoyoudushu/findFestivalBooks")
+                        .build();
                 try {
                     Response response = okHttpClient.newCall(request).execute();
+                    Response responseSolarTerms = okHttpClient.newCall(RequestSolarTerms).execute();
                     date1 = response.body().string();
-                    Log.d(TAG, " -----------------------------------------------------"+date1);
-                    JsonJX(date1);
+                    SolarTermsData = responseSolarTerms.body().string();
+                    Log.d(TAG, " 每月推荐数据："+date1);
+                    Log.d(TAG, " 节气推荐数据："+SolarTermsData);
+                    JsonJX(date1,SolarTermsData);
                 }catch (IOException e){
                     e.printStackTrace();
                 }
             }
         }).start();
     }
-    public void JsonJX(String Data) {
+    public void JsonJX(String Data,String SolarData) {
         if(Data !=null){
             try {
                 JSONObject object = new JSONObject(Data);
@@ -212,6 +237,30 @@ public class HomeFragment extends Fragment {
                     mAdapter_seller.setMAdapter_seller(bookDetails2);
                     Message message=Message.obtain();
                     message.what=200;
+                    handler.sendMessage(message);
+                }
+            }catch (JSONException e){
+                e.printStackTrace();
+            }
+        }
+        if (SolarData !=null){
+            try{
+                JSONObject object = new JSONObject(SolarData);
+                String data = object.getString("data");
+                JSONObject array = new JSONObject(data);
+                String festivaldata = array.getString("festival");
+                String bookDtoList = array.getString("bookDtoList");
+                JSONObject arrayfestival = new JSONObject(festivaldata);
+                Title = arrayfestival.getString("name");
+                Log.d(TAG, "JsonJX:name为 "+Title);
+                Log.d(TAG, "bookDtoList:"+bookDtoList);
+                scode = object.getInt("code");
+                if (code==1){
+                    Gson gson = new Gson();
+                    List<FestivalDetails> festivalDetails = gson.fromJson(bookDtoList,new TypeToken<List<FestivalDetails>>() {}.getType());
+                    festivalAdapter.setFestivalAdapter(festivalDetails);
+                    Message message=Message.obtain();
+                    message.what=210;
                     handler.sendMessage(message);
                 }
             }catch (JSONException e){
