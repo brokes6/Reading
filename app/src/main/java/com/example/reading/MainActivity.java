@@ -46,7 +46,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
             //修改为深色，因为我们把状态栏的背景色修改为主题色白色，默认的文字及图标颜色为白色，导致看不到了。
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
-//        Log.d(TAG, "onCreate: timetimetime"+Calendar.getInstance().getTimeInMillis());
         init();
         inData();
         /**

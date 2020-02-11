@@ -66,13 +66,8 @@ public class MAdapter extends RecyclerView.Adapter<MyViewHolder>{
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(mContext, ReadActivity.class);
-                intent.putExtra("author",bookDetails1.getAuthor());
-                intent.putExtra("img",bookDetails1.getBimg());
-                intent.putExtra("name",bookDetails1.getBname());
-                intent.putExtra("type",bookDetails1.getType());
-                intent.putExtra("vurl",bookDetails1.getVurl());
-                intent.putExtra("murl",bookDetails1.getRurl());
-                Log.d(TAG, "onClick: 888888888888888888888888888888888888888888888"+"传值完成"+bookDetails1.getType());
+                intent.putExtra("id",bookDetails1.getBid());
+                Log.d(TAG, "onClick: Madapter适配器"+"传值完成,书籍id为："+bookDetails1.getBid());
                 mContext.startActivity(intent);
             }
         });

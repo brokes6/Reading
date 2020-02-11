@@ -75,30 +75,11 @@ public class ReadActivity extends BaseActivity {
         Log.d(TAG, "initData: 1111111111111111111111111111111111111"+"Bundle发送数据");
     }
 
-    public String getDataName(){
+    public String getDataId(){
         Intent intent = getIntent();
-        return intent.getStringExtra("name");
+        return intent.getStringExtra("id");
     }
-    public String getDataAuthor(){
-        Intent intent = getIntent();
-        return intent.getStringExtra("author");
-    }
-    public int getDataType(){
-        Intent intent = getIntent();
-        return intent.getIntExtra("type",2);
-    }
-    public String getDataImg(){
-        Intent intent = getIntent();
-        return intent.getStringExtra("img");
-    }
-    public String getDataMurl(){
-        Intent intent = getIntent();
-        return intent.getStringExtra("murl");
-    }
-    public String getDataVurl(){
-        Intent intent = getIntent();
-        return intent.getStringExtra("vurl");
-    }
+
 
 
     public class MyAdapter extends FragmentPagerAdapter {

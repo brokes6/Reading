@@ -63,6 +63,7 @@ public class HomeFragment extends Fragment {
     private MAdapter mAdapter;
     private MAdapter_seller mAdapter_seller;
     private List<BookType> bookDetails;
+    private String time;
     private Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -176,9 +177,10 @@ public class HomeFragment extends Fragment {
             @Override
             public void run() {
                 OkHttpClient okHttpClient = new OkHttpClient();
+                time = String.valueOf(Calendar.getInstance().getTimeInMillis());
+                Log.d(TAG, "从1970至现在的毫秒数:"+time);
                 Request request = new Request.Builder()
-                        //http://117.48.205.198/xiaoyoudushu/findAllBooks?currentPage=1
-                        .url("http://117.48.205.198/xiaoyoudushu/findBooksByDate?time=1581225685669")
+                        .url("http://117.48.205.198/xiaoyoudushu/findBooksByDate?time="+time)
                         .build();
                 try {
                     Response response = okHttpClient.newCall(request).execute();

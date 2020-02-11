@@ -76,11 +76,7 @@ public class AudioFrequency extends Fragment{
     private String video;
     int current = 0;
     String date1;
-    String url;
-    String name;
-    String author;
-    String video_path;
-    String bimg;
+    String bid;
     private FragmentBackHandler backInterface;
     BookComment bookComment = new BookComment();
     ReadActivity activity;
@@ -91,17 +87,19 @@ public class AudioFrequency extends Fragment{
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case RequestStatus.SUCCESS:
-                    binding.BookName.setText(name);
-                    binding.author.setText(author);
-                    binding.authorBookimg.setImageURL(bimg);
-                    Log.d(TAG, "handleMessage: ----------3---------3-----33---------3----3--------3------3--------"+"设置完成");
+                    binding.BookName.setText(bookComment.getBname());
+                    binding.author.setText(bookComment.getAuthor());
+                    binding.authorBookimg.setImageURL(bookComment.getBimg());
+                    Log.d(TAG, "页面加载完成"+"当前页面信息为--"+"书名："+bookComment.getBname()+"--作者："+bookComment.getAuthor()+"--图片："+bookComment.getBimg());
                     break;
                 case RequestStatus.FAILURE:
+                    Toast.makeText(getContext(),"获取数据失败，请稍后尝试",Toast.LENGTH_SHORT).show();
                     break;
                 case RequestStatus.AUDIO:
+
                     break;
                 case RequestStatus.VIDEO:
-                    EventBus.getDefault().post(new Video(video_path));//ssj,szq是我定义的两个string类型变量
+                    EventBus.getDefault().post(new Video(video));//ssj,szq是我定义的两个string类型变量
                     binding.PlaybackOperation.setVisibility(View.GONE);
                     Toast.makeText(getContext(),"该书籍暂无音频",Toast.LENGTH_SHORT).show();
                     break;
@@ -125,7 +123,7 @@ public class AudioFrequency extends Fragment{
 //        binding.loadingLayout.setStatus(LoadingLayout.Loading);
         initView();
         initData();
-//        Getsongs();
+        Getsongs();
 
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -304,79 +302,82 @@ public class AudioFrequency extends Fragment{
             play();
         }
     }
-//    private void Getsongs(){
-//        list.clear();
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                OkHttpClient okHttpClient=new OkHttpClient();
-//                Request request=new Request.Builder()
-//                        .url("http://117.48.205.198/xiaoyoudushu/findBookById?id=5")
-//                        .build();
-//                try {
-//                    Response response = okHttpClient.newCall(request).execute();
-//                    date1 = response.body().string();
-//                    Log.d(TAG, " -----------------------------"+date1);
-//                    JsonJX(date1);
-//
-//                }catch (IOException e){
-//                    e.printStackTrace();
-//                }
-//            }
-//        }).start();
-//    }
+    private void Getsongs(){
+        list.clear();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient okHttpClient=new OkHttpClient();
+                Request request=new Request.Builder()
+                        .url("http://117.48.205.198/xiaoyoudushu/findBookById?id="+bid)
+                        .build();
+                try {
+                    Response response = okHttpClient.newCall(request).execute();
+                    date1 = response.body().string();
+                    Log.d(TAG, " 服务器返回的数据为："+date1);
+                    JsonJX(date1);
 
-//    public void JsonJX(String Data) {
-//        if(Data !=null){
-//            try{
-//                JSONObject object = new JSONObject(Data);
-//                code = object.getInt("code");
-//                if (code==1) {
-//                    JSONObject array = object.getJSONObject("data");
-//                    type = array.getInt("type");
-//                    if (type !=1){
-//                        music_path=array.getString("rurl");
-//                        Message mes=new Message();
-//                        mes.what= RequestStatus.AUDIO;
-//                        handler.sendMessage(mes);
-//                    }else{
-//                        video = array.getString("rurl");
-//                        bookComment.setVideo_path(video);
-//                        Message mes=new Message();
-//                        mes.what=RequestStatus.VIDEO;
-//                        handler.sendMessage(mes);
-//                    }
-//                        String bookname=array.getString("bname");
-//                        String bookauthor=array.getString("author");
-//                        String bookimg=array.getString("bimg");
-//                        bookComment.setAuthor(bookauthor);
-//                        bookComment.setBimg(bookimg);
-//                        bookComment.setBname(bookname);
-//
-////                        Map<String,Object> map=new HashMap<>();
-////                        map.put("name",bookname);
-////                        map.put("author",bookauthor);
-////                        map.put("pic",bookimg);
-////                        map.put("type",type);
-////                        list.add(map);
-//                        Message mes=new Message();
-//                        mes.what=RequestStatus.SUCCESS;
-//                        handler.sendMessage(mes);
-//
-//                }
-//                Message mes=new Message();
-//                mes.what=RequestStatus.FAILURE;
-//                handler.sendMessage(mes);
-//            }catch (JSONException e){
-//                e.printStackTrace();
-//            }
-//        }else{
-//            Message mes=new Message();
-//            mes.what=3;
-//            handler.sendMessage(mes);
-//        }
-//
-//    }
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    public void JsonJX(String Data) {
+        if(Data !=null){
+            try{
+                JSONObject object = new JSONObject(Data);
+                code = object.getInt("code");
+                if (code==1) {
+                    JSONObject array = object.getJSONObject("data");
+                    type = array.getInt("type");
+                    if (type !=1){
+                        //0为音频
+                        music_path=array.getString("rurl");
+                        Message mes=new Message();
+                        mes.what= RequestStatus.AUDIO;
+                        handler.sendMessage(mes);
+                    }else{
+                        //1为视频
+                        video = array.getString("rurl");
+                        bookComment.setVideo_path(video);
+                        Message mes=new Message();
+                        mes.what=RequestStatus.VIDEO;
+                        handler.sendMessage(mes);
+                    }
+                        String bookname=array.getString("bname");
+                        String bookauthor=array.getString("author");
+                        String bookimg=array.getString("bimg");
+                        bookComment.setAuthor(bookauthor);
+                        bookComment.setBimg(bookimg);
+                        bookComment.setBname(bookname);
+
+//                        Map<String,Object> map=new HashMap<>();
+//                        map.put("name",bookname);
+//                        map.put("author",bookauthor);
+//                        map.put("pic",bookimg);
+//                        map.put("type",type);
+//                        list.add(map);
+                        Message mes=new Message();
+                        mes.what=RequestStatus.SUCCESS;
+                        handler.sendMessage(mes);
+
+                }else{
+                    Message mes=new Message();
+                    mes.what=RequestStatus.FAILURE;
+                    handler.sendMessage(mes);
+                }
+            }catch (JSONException e){
+                e.printStackTrace();
+            }
+        }else{
+            Message mes=new Message();
+            mes.what=RequestStatus.FAILURE;
+            handler.sendMessage(mes);
+        }
+
+    }
 
 
 
@@ -432,42 +433,22 @@ public class AudioFrequency extends Fragment{
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        name = (((ReadActivity) activity).getDataName());
-        bimg = (((ReadActivity) activity).getDataImg());
-        author = (((ReadActivity) activity).getDataAuthor());
-        type = (((ReadActivity) activity).getDataType());
-
-        Message mes=new Message();
-        mes.what=RequestStatus.SUCCESS;
-        handler.sendMessage(mes);
-        Log.d(TAG, "onAttach: ----------------------typewei"+type);
-        if (type ==1){
-            video_path = ((ReadActivity) activity).getDataVurl();
-            music_path = null;
-            Message mes1=new Message();
-            mes1.what=RequestStatus.VIDEO;
-            handler.sendMessage(mes1);
+        bid = (((ReadActivity) activity).getDataId());
+        if (bid !=null){
+            Log.d(TAG, "activity返回的书籍id为"+bid);
         }else{
-            String music = ((ReadActivity) activity).getDataMurl();
-            if (music ==null){
-                Message mes1=new Message();
-                mes1.what=RequestStatus.VIDEO;
-                handler.sendMessage(mes1);
-            }else{
-            music_path = music;
-            Log.d(TAG, "onAttach: ------------------------------------------tttttttttttttt"+music_path);
-            video_path = null;
-            Message mes2=new Message();
-            mes2.what= RequestStatus.AUDIO;
-            handler.sendMessage(mes2);
-            }
+            Message mes=new Message();
+            mes.what=RequestStatus.FAILURE;
+            handler.sendMessage(mes);
         }
-        Log.d(TAG, "onAttach: -------------------------------------------------99"+"成功!");
+
+        }
     }
+
 
 //    @Override
 //    public void onAttach(Context context) {
 //        super.onAttach(context);
 //
 //    }
-}
+
