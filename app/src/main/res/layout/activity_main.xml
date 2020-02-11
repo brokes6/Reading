@@ -9,14 +9,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <LinearLayout
-            android:id="@+id/tb"
+        <FrameLayout
+            android:id="@+id/ll_content"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:orientation="horizontal">
-
-        </LinearLayout>
+            android:background="#fff"
+            android:layout_above="@+id/bottom_navigation_bar"
+            android:orientation="vertical">
+        </FrameLayout>
 
         <com.ashokvarma.bottomnavigation.BottomNavigationBar
             android:id="@+id/bottom_navigation_bar"

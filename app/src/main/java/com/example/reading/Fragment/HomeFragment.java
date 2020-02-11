@@ -225,9 +225,9 @@ public class HomeFragment extends Fragment {
                 String data = object.getString("data");
                 JSONObject Data1 = new JSONObject(data);
                 String newBooks = Data1.getString("newBooks");
-                Log.d(TAG, "JsonJX: ----------------------------6"+newBooks);
+                Log.d(TAG, "newBook数据为 :"+newBooks);
                 String popularBooks = Data1.getString("popularBooks");
-                Log.d(TAG, "JsonJX: ----------------------------6"+popularBooks);
+                Log.d(TAG, "popularBooks数据为 :"+popularBooks);
                 code = object.getInt("code");
                 if(code==1){
                     Gson gson = new Gson();
@@ -252,7 +252,7 @@ public class HomeFragment extends Fragment {
                 String bookDtoList = array.getString("bookDtoList");
                 JSONObject arrayfestival = new JSONObject(festivaldata);
                 Title = arrayfestival.getString("name");
-                Log.d(TAG, "JsonJX:name为 "+Title);
+                Log.d(TAG, "当前节日为 "+Title);
                 Log.d(TAG, "bookDtoList:"+bookDtoList);
                 scode = object.getInt("code");
                 if (code==1){

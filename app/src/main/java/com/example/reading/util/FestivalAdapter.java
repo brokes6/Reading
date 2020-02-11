@@ -53,7 +53,7 @@ public class FestivalAdapter extends RecyclerView.Adapter<FestivalViewHolder> {
         Uri uri = Uri.parse(festivalDetails.getBimg());
         holder.festival_book_name.setText(festivalDetails.getBname());
         holder.festival_introduce.setText(festivalDetails.getDescription());
-        Log.d(TAG, "onBindViewHolder: ------------------tt"+festivalDetails.getDescription());
+        Log.d(TAG, "书籍介绍为 : "+festivalDetails.getDescription());
         Glide.with(mContext).load(uri).into(holder.festival_book_img);
         holder.festivalwhole.setOnClickListener(new View.OnClickListener() {
             @Override

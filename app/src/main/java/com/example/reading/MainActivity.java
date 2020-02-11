@@ -93,7 +93,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                 bottomNavigationBar.getViewTreeObserver().removeGlobalOnLayoutListener(this);
 //                high.setHeight(bottomNavigationBar.getMeasuredHeight());
                 high.setH(bottomNavigationBar.getMeasuredHeight());
-                Log.d(TAG, "高为---------------------------------------"+high.getH());
                 Log.d("测试：", bottomNavigationBar.getMeasuredHeight()+","+bottomNavigationBar.getMeasuredWidth());
             }
         });
@@ -105,7 +104,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         FragmentManager manager=getSupportFragmentManager();
         FragmentTransaction transaction =  manager.beginTransaction();
         homeFragment = HomeFragment.newInstance();
-        transaction.replace(R.id.tb,homeFragment);
+        transaction.replace(R.id.ll_content,homeFragment);
         transaction.commit();
     }
     /**
@@ -114,42 +113,64 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     @Override
     public void onTabSelected(int position) {
         num = position;
-        Log.d(TAG, "onTabSelected() called with: " + "position = [" + position + "]");
         FragmentManager manager=getSupportFragmentManager();
         //开启事务
         FragmentTransaction transaction = manager.beginTransaction();
+        hideFragment(transaction);
         switch (position) {
             case 0:
-                Log.i(TAG, "onTabSelected: 我mhome被点击了啊");
                 if (homeFragment == null) {
-                    Log.i(TAG, "onTabSelected:进入");
-                    homeFragment = HomeFragment.newInstance();
+                    homeFragment = new HomeFragment();
+                    transaction.add(R.id.ll_content,homeFragment);
+                }else{
+                    transaction.show(homeFragment);
                 }
-
-                transaction.replace(R.id.tb,homeFragment);
-                if ((System .currentTimeMillis() - homeExitTime) < 2000) {
-                    //弹出提示，可以有多种方式
-                }
-                homeExitTime=System.currentTimeMillis();
+//                transaction.replace(R.id.ll_content,homeFragment);
+//                if ((System .currentTimeMillis() - homeExitTime) < 2000) {
+//                    //弹出提示，可以有多种方式
+//                }
+//                homeExitTime=System.currentTimeMillis();
                 break;
             case 1:
                 if (communityFragment == null) {
-                    communityFragment = CommunityFragment.newInstance("分类");
-                    Log.i(TAG, "onTabSelected: 开始创建mscanfragment");
+                    communityFragment = new CommunityFragment();
+                    transaction.add(R.id.ll_content,communityFragment);
+                }else{
+                    transaction.show(communityFragment);
                 }
-                transaction.replace(R.id.tb,communityFragment);
                 break;
             case 2:
                 if (myFragment == null) {
-                    myFragment = MyFragment.newInstance("个人");
+                    myFragment = new MyFragment();
+                    transaction.add(R.id.ll_content,myFragment);
+                }else{
+                    transaction.show(myFragment);
                 }
-                transaction.replace(R.id.tb,myFragment);
                 break;
             default:
                 break;
         }
         transaction.commit();
     }
+
+    /**
+     * 隐藏当前fragment
+     * @param transaction
+     */
+    private void hideFragment(FragmentTransaction transaction){
+        if (homeFragment != null){
+            transaction.hide(homeFragment);
+        }
+
+        if (communityFragment != null){
+            transaction.hide(communityFragment);
+        }
+        if (myFragment != null){
+            transaction.hide(myFragment);
+        }
+    }
+
+
     /**
      * 设置未选中Fragment 事务
      */
