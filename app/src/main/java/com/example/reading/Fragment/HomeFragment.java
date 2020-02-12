@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.reading.Activity.AllBooks;
 import com.example.reading.Activity.ReadActivity;
+import com.example.reading.Activity.XiaoYouSound;
 import com.example.reading.R;
 import com.example.reading.ToolClass.BookDetails;
 import com.example.reading.ToolClass.BookType;
@@ -173,6 +174,13 @@ public class HomeFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        binding.xiaoyou.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),XiaoYouSound.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private class MyImageLoader extends ImageLoader {
@@ -230,14 +238,18 @@ public class HomeFragment extends Fragment {
                 Log.d(TAG, "popularBooks数据为 :"+popularBooks);
                 code = object.getInt("code");
                 if(code==1){
-                    Gson gson = new Gson();
-                    List<BookDetails> bookDetails = gson.fromJson(newBooks,new TypeToken<List<BookDetails>>() {}.getType());
-                    mAdapter.setMyAdapter(bookDetails);
-                    List<BookDetails> bookDetails2 = gson.fromJson(popularBooks,new TypeToken<List<BookDetails>>() {}.getType());
-                    mAdapter_seller.setMAdapter_seller(bookDetails2);
-                    Message message=Message.obtain();
-                    message.what=200;
-                    handler.sendMessage(message);
+                    if (popularBooks!=null){
+//                        Gson gson = new Gson();
+//                        List<BookDetails> bookDetails = gson.fromJson(newBooks,new TypeToken<List<BookDetails>>() {}.getType());
+//                        mAdapter.setMyAdapter(bookDetails);
+//                        List<BookDetails> bookDetails2 = gson.fromJson(popularBooks,new TypeToken<List<BookDetails>>() {}.getType());
+//                        mAdapter_seller.setMAdapter_seller(bookDetails2);
+//                        Message message=Message.obtain();
+//                        message.what=200;
+//                        handler.sendMessage(message);
+                    }else{
+                        Toast.makeText(getContext(),"获取数据失败",Toast.LENGTH_SHORT).show();
+                    }
                 }
             }catch (JSONException e){
                 e.printStackTrace();
@@ -256,12 +268,16 @@ public class HomeFragment extends Fragment {
                 Log.d(TAG, "bookDtoList:"+bookDtoList);
                 scode = object.getInt("code");
                 if (code==1){
+                    if (bookDtoList==null){
+                        Log.d(TAG, "bookDtoList没数据拉");
+                    }else{
                     Gson gson = new Gson();
                     List<FestivalDetails> festivalDetails = gson.fromJson(bookDtoList,new TypeToken<List<FestivalDetails>>() {}.getType());
                     festivalAdapter.setFestivalAdapter(festivalDetails);
                     Message message=Message.obtain();
                     message.what=210;
                     handler.sendMessage(message);
+                    }
                 }
             }catch (JSONException e){
                 e.printStackTrace();
