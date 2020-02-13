@@ -248,6 +248,7 @@ public class HomeFragment extends Fragment {
 //                        message.what=200;
 //                        handler.sendMessage(message);
                     }else{
+                        Log.d(TAG, "暂无数据！");
                         Toast.makeText(getContext(),"获取数据失败",Toast.LENGTH_SHORT).show();
                     }
                 }

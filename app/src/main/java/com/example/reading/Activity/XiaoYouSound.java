@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -55,6 +56,7 @@ public class XiaoYouSound extends BaseActivity {
 
     }
     public void initView(){
+
         MyAdapter fragmentAdater = new MyAdapter(getSupportFragmentManager());
         binding.viewpager.setAdapter(fragmentAdater);
         binding.tablayoutReal.setupWithViewPager(binding.viewpager);

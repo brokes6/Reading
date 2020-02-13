@@ -100,6 +100,7 @@
                     android:textColor="#FFFFFF" />
 
                 <TextView
+                    android:id="@+id/texttext"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="比如小明在上学的路上,此时他的位置可以用离家多少米或者是离学校多少米表示,就是利用不同的参照物。"

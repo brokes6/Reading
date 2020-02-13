@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ECECEC"
+        android:orientation="vertical"
+        tools:context=".MainActivity">
+
+        <com.example.reading.util.RoundImageView
+            android:id="@+id/play_img"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/bottom_menuLayId"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="2dp"
+            android:src="@mipmap/ic_launcher_round"
+            app:type="circle"/>
+
+        <LinearLayout
+            android:id="@+id/bottom_menuLayId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="30dp"
+            android:orientation="vertical">
+
+            <!--标题，作者-->
+            <LinearLayout
+                android:id="@+id/author_layId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/book_detail_gaosimohuId"
+                android:layout_marginTop="91dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/act_book_detail_titleId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/afc_12dp"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:maxLines="2"
+                    android:text="标题"
+                    android:textColor="@color/color_33"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+                <!--主作者-->
+                <LinearLayout
+                    android:id="@+id/main_author_layId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal" />
+                <!--其他作者-->
+                <LinearLayout
+                    android:id="@+id/othor_author_layId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="@dimen/afc_5dp"
+                    android:gravity="center"
+                    android:orientation="horizontal" />
+            </LinearLayout>
+            <!--定时，下载，收藏-->
+            <LinearLayout
+                android:id="@+id/diff_btn_lay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:visibility="visible">
+                <!--定时-->
+                <TextView
+                    android:id="@+id/audio_speed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/afc_5dp"
+
+                    android:textColor="@color/color_33"
+                    android:textSize="@dimen/afc_16sp" />
+
+            </LinearLayout>
+            <!--进度-->
+            <LinearLayout
+                android:id="@+id/seek_bar_layId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/act_audio_player_booktitleId"
+                android:layout_marginLeft="45dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="45dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/act_play_time_start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/afc_10dp"
+                    android:layout_marginRight="@dimen/afc_5dp"
+                    android:text="00:00"
+                    android:textColor="@color/color_33"
+                    android:textSize="10sp" />
+
+                <SeekBar
+                    android:id="@+id/act_Progress"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/c28"
+                    android:focusable="false"
+                    android:max="100"
+                    android:maxHeight="2dp"
+                    android:minHeight="2dp"
+                    android:progress="0"
+                    android:progressDrawable="@drawable/po_seekbar"
+                    android:splitTrack="false"
+                    android:thumb="@mipmap/audio_skbar_icon" />
+
+                <TextView
+                    android:id="@+id/act_play_time_ent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/afc_10dp"
+                    android:text="00:00"
+                    android:textColor="@color/color_33"
+                    android:textSize="10sp" />
+            </LinearLayout>
+            <!--播放控制按钮-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/seek_bar_layId"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginRight="30dp"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/audio_timing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/afc_5dp"
+                    android:src="@mipmap/audio_timing" />
+
+                <ImageView
+                    android:id="@+id/act_Last_one"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="@dimen/afc_5dp"
+                    android:src="@mipmap/audio_pre_btn" />
+
+                <ImageView
+                    android:id="@+id/act_suspend"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="@dimen/afc_5dp"
+                    android:src="@mipmap/audio_state_pause" />
+
+                <ImageView
+                    android:id="@+id/act_Next_one"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="@dimen/afc_5dp"
+                    android:src="@mipmap/audio_next_btn" />
+
+                <ImageView
+                    android:id="@+id/act_audio_player_audion_listId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/afc_5dp"
+                    android:src="@mipmap/audio_list" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </RelativeLayout>
+</layout>
