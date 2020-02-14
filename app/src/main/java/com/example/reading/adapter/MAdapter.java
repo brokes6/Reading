@@ -1,4 +1,4 @@
-package com.example.reading.util;
+package com.example.reading.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,9 +14,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.reading.Activity.AllBooks;
 import com.example.reading.Activity.ReadActivity;
-import com.example.reading.Fragment.AudioFrequency;
 import com.example.reading.R;
 import com.example.reading.ToolClass.BookDetails;
 

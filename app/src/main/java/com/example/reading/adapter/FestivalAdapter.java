@@ -1,4 +1,4 @@
-package com.example.reading.util;
+package com.example.reading.adapter;
 
 import android.content.Context;
 import android.content.Intent;

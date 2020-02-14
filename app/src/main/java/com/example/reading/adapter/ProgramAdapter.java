@@ -1,24 +1,19 @@
-package com.example.reading.util;
+package com.example.reading.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.example.reading.Activity.ReadActivity;
 import com.example.reading.Activity.XPlayMusic;
 import com.example.reading.R;
-import com.example.reading.ToolClass.BookDetails;
 import com.example.reading.ToolClass.ProgramBean;
 
 import java.util.ArrayList;
@@ -56,7 +51,8 @@ public class ProgramAdapter extends RecyclerView.Adapter<ProgramViewHolder>{
         Log.i(TAG, "MAdapter: " + programBean1s.getMid());
         holder.id.setText(programBean1s.getAid());
         holder.text.setText(programBean1s.getDescription());
-        holder.publish_time.setText(programBean1s.getData());
+        holder.publish_time.setText(programBean1s.getDate());
+        Log.d(TAG, "onBindViewHolder: -------------------"+programBean1s.getDate());
         //还差播放量，评论数,点击进入播放器
         holder.whole.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +67,6 @@ public class ProgramAdapter extends RecyclerView.Adapter<ProgramViewHolder>{
 
     @Override
     public int getItemCount() {
-        Log.d(TAG, "getItemCount: ---------------"+programBeans.size());
         return programBeans.size();
     }
 }

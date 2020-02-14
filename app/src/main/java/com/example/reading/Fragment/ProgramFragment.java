@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.reading.R;
 import com.example.reading.ToolClass.ProgramBean;
 import com.example.reading.databinding.ProgramBinding;
-import com.example.reading.util.ProgramAdapter;
+import com.example.reading.adapter.ProgramAdapter;
 import com.example.reading.util.RequestStatus;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

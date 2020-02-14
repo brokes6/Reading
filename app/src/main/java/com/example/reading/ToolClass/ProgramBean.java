@@ -5,7 +5,7 @@ public class ProgramBean {
     private String title;
     private String description;
     private String url;
-    private String data;
+    private String date;
     private String aid;
     private int count;
     private int playNum;
@@ -66,11 +66,11 @@ public class ProgramBean {
         this.url = url;
     }
 
-    public String getData() {
-        return data;
+    public String getDate() {
+        return date;
     }
 
-    public void setData(String data) {
-        this.data = data;
+    public void setDate(String date) {
+        this.date = date;
     }
 }

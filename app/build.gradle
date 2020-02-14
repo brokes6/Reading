@@ -10,6 +10,10 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         dataBinding.enabled = true
+
+        renderscriptTargetApi 25    //添加
+        renderscriptSupportModeEnabled true  //添加
+
     }
     buildTypes {
         release {
@@ -58,4 +62,7 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.1.1'
     //Gson
     implementation 'com.google.code.gson:gson:2.7'
+    //模糊背景
+    implementation 'com.github.javaexception:FuzzyBackground:v1.0'
+
 }

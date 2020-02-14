@@ -15,32 +15,25 @@ import android.widget.Toast;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.reading.Activity.AllBooks;
-import com.example.reading.Activity.ReadActivity;
 import com.example.reading.Activity.XiaoYouSound;
 import com.example.reading.R;
-import com.example.reading.ToolClass.BookDetails;
 import com.example.reading.ToolClass.BookType;
 import com.example.reading.ToolClass.FestivalDetails;
 import com.example.reading.databinding.HomefragmentBinding;
-import com.example.reading.util.FestivalAdapter;
-import com.example.reading.util.MAdapter;
-import com.example.reading.util.MAdapter_seller;
+import com.example.reading.adapter.FestivalAdapter;
+import com.example.reading.adapter.MAdapter;
+import com.example.reading.adapter.MAdapter_seller;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
 import com.youth.banner.listener.OnBannerListener;
 import com.youth.banner.loader.ImageLoader;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 

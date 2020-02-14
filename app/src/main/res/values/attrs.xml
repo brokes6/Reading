@@ -7,4 +7,11 @@
         </attr>
         <attr name="radius" format="dimension"/>ssss
     </declare-styleable>
+    //帖子图片
+    <declare-styleable name="NineGridLayout">
+        <attr name="sapcing" format="dimension"/>
+    </declare-styleable>
+    <declare-styleable name="RatioImageView">
+        <attr name="ratio" format="float"/>
+    </declare-styleable>
 </resources>

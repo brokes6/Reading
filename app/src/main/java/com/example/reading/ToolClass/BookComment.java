@@ -7,6 +7,7 @@ public class BookComment {
     private int type;
     private String rurl;
     private String bimg;
+    private String img;
     private String bname;
     private String yurl;
     private String author;
@@ -52,6 +53,14 @@ public class BookComment {
 
     public void setBimg(String bimg) {
         this.bimg = bimg;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
     }
 
     public String getBname() {

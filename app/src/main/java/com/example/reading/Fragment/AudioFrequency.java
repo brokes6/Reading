@@ -77,6 +77,7 @@ public class AudioFrequency extends Fragment{
     int current = 0;
     String date1;
     String bid;
+    String img;
     private FragmentBackHandler backInterface;
     BookComment bookComment = new BookComment();
     ReadActivity activity;
@@ -332,17 +333,24 @@ public class AudioFrequency extends Fragment{
                 JSONObject object = new JSONObject(Data);
                 code = object.getInt("code");
                 if (code==1) {
+                    String data = object.getString("data");
+                    JSONObject bookdata = new JSONObject(data);
+                    String resources = bookdata.getString("resources");
+                    Log.d(TAG, "resources数据为"+resources);
+                    JSONObject resourcesdata = new JSONObject(resources);
                     JSONObject array = object.getJSONObject("data");
-                    type = array.getInt("type");
-                    if (type !=1){
-                        //0为音频
-                        music_path=array.getString("rurl");
+                    type = resourcesdata.getInt("type");
+                    if (type !=200){
+                        //100为音频
+                        music_path=resourcesdata.getString("url");
                         Message mes=new Message();
                         mes.what= RequestStatus.AUDIO;
                         handler.sendMessage(mes);
                     }else{
-                        //1为视频
-                        video = array.getString("rurl");
+                        //200为视频
+                        video = resourcesdata.getString("url");
+                        img = resourcesdata.getString("img");
+                        bookComment.setImg(img);
                         bookComment.setVideo_path(video);
                         Message mes=new Message();
                         mes.what=RequestStatus.VIDEO;
