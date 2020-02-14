@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.reading.Activity.ReadActivity;
 import com.example.reading.R;
-import com.example.reading.ToolClass.FestivalDetails;
+import com.example.reading.Bean.FestivalDetails;
 
 import java.util.ArrayList;
 import java.util.List;

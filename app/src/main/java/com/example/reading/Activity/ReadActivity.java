@@ -11,8 +11,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.View;
 
@@ -20,12 +18,8 @@ import com.example.reading.Fragment.AudioFrequency;
 import com.example.reading.Fragment.VideoFragment;
 import com.example.reading.R;
 import com.example.reading.ToolClass.BaseActivity;
-import com.example.reading.ToolClass.BookComment;
+import com.example.reading.Bean.BookComment;
 import com.example.reading.databinding.ReadbookBinding;
-import com.example.reading.util.BackHandlerHelper;
-import com.example.reading.util.FragmentBackHandler;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;

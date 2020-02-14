@@ -10,6 +10,9 @@ import com.example.reading.R;
 import me.jessyan.autosize.AutoSizeConfig;
 
 public class CommunityFragment extends Fragment {
+    public static final int POSTDETAILS=1;
+    public static final int SEARCHVIEW=2;
+    public static final int SHOWIMAGEACTIVITY=3;
     private View view;
     public static CommunityFragment newInstance(String param1) {
         CommunityFragment fragment = new CommunityFragment();

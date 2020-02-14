@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.reading.Activity.XPlayMusic;
 import com.example.reading.R;
-import com.example.reading.ToolClass.ProgramBean;
+import com.example.reading.Bean.ProgramBean;
 
 import java.util.ArrayList;
 import java.util.List;

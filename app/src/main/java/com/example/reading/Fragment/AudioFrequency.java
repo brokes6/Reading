@@ -1,15 +1,12 @@
 package com.example.reading.Fragment;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.media.PlaybackParams;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.Message;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -32,7 +29,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.reading.Activity.ReadActivity;
 import com.example.reading.R;
-import com.example.reading.ToolClass.BookComment;
+import com.example.reading.Bean.BookComment;
 import com.example.reading.ToolClass.Video;
 import com.example.reading.databinding.AudioBinding;
 import com.example.reading.util.FragmentBackHandler;
@@ -48,7 +45,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;

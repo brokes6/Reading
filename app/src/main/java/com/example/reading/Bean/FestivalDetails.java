@@ -1,4 +1,4 @@
-package com.example.reading.ToolClass;
+package com.example.reading.Bean;
 
 public class FestivalDetails {
     private String author;

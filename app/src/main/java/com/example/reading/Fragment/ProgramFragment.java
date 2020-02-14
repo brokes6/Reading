@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.reading.R;
-import com.example.reading.ToolClass.ProgramBean;
+import com.example.reading.Bean.ProgramBean;
 import com.example.reading.databinding.ProgramBinding;
 import com.example.reading.adapter.ProgramAdapter;
 import com.example.reading.util.RequestStatus;

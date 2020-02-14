@@ -1,4 +1,4 @@
-package com.example.reading.ToolClass;
+package com.example.reading.Bean;
 
 import java.util.List;
 

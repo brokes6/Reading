@@ -3,13 +3,9 @@ package com.example.reading.Fragment;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
-import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -29,13 +25,10 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
-import com.example.reading.Activity.ReadActivity;
 import com.example.reading.R;
-import com.example.reading.ToolClass.BookComment;
+import com.example.reading.Bean.BookComment;
 import com.example.reading.ToolClass.Video;
 import com.example.reading.databinding.VideoBinding;
-import com.example.reading.util.JzViewOutlineProvider;
-import com.example.reading.util.RequestStatus;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
