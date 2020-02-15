@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.example.reading.Activity.AllBooks;
+import com.example.reading.Activity.Party;
 import com.example.reading.Activity.XiaoYouSound;
 import com.example.reading.R;
 import com.example.reading.Bean.BookType;
@@ -171,6 +172,13 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(),XiaoYouSound.class);
+                startActivity(intent);
+            }
+        });
+        binding.party.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), Party.class);
                 startActivity(intent);
             }
         });

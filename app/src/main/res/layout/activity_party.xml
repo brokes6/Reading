@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/refreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F3F3F3">
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/layout_top"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appbar"
+                android:background="#E2615A"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    app:layout_scrollFlags="scroll|snap"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/topLayout"
+                        android:layout_alignParentTop="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="15dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="left|center"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="28dp"
+                                android:layout_height="28dp"
+                                android:src="@mipmap/back" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="right|center"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="28dp"
+                                android:layout_height="28dp"
+                                android:src="@drawable/customerservice" />
+
+                            <ImageView
+                                android:layout_marginLeft="15dp"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@mipmap/more" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.example.reading.util.RoundImageView
+                            android:id="@+id/XLogin"
+                            android:layout_margin="17dp"
+                            android:layout_width="110dp"
+                            android:layout_height="110dp"
+                            app:type="round"
+                            android:src="@mipmap/party" />
+
+                        <TextView
+                            android:id="@+id/XTitle"
+                            android:layout_marginTop="17dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="24sp"
+                            android:text="党建 栏目"
+                            android:layout_toRightOf="@id/XLogin"
+                            android:letterSpacing="0.05"
+                            android:textColor="#fff"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:padding="3dp"
+                            android:layout_marginTop="14dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp"
+                            android:background="@drawable/fillet_back_gray"
+                            android:text=" 视 频 "
+                            android:layout_below="@id/XTitle"
+                            android:layout_toRightOf="@id/XLogin"
+                            android:textColor="#FFFFFF" />
+
+                        <TextView
+                            android:id="@+id/texttext"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="不忘初心，牢记使命，高举中国特色社会主义伟大旗帜，决胜全面建成小康社会，夺取新时代中国特色社会主义伟大胜利，为实现中华民族伟大复兴的中国梦不懈奋斗!!!"
+                            android:layout_below="@id/XLogin"
+                            android:padding="17dp"
+                            android:textSize="16sp"
+                            android:lineSpacingExtra="25dp"
+                            android:textColor="#FFFFFF"
+                            android:maxLines="5" />
+                    </RelativeLayout>
+
+
+                    <TextView
+                        android:layout_marginTop="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#CACACA" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/file_back_shape"
+                    android:gravity="center"
+                    android:layout_marginTop="15dp">
+                        <TextView
+                            android:paddingTop="5dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:textSize="20sp"
+                            android:text="党建 节目"/>
+                </LinearLayout>
+            </com.google.android.material.appbar.AppBarLayout>
+<!--            <ListView-->
+<!--                android:id="@+id/video_view"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/video_view"
+                android:minHeight="120dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </androidx.recyclerview.widget.RecyclerView>
+            </LinearLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+</layout>

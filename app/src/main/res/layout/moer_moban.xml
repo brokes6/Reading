@@ -33,11 +33,11 @@
         android:paddingLeft="10dp"
         android:orientation="vertical">
 
-        <com.example.bottomnavigationabar2.MyImageView
+        <com.example.reading.Picture.MyImageView
             android:id="@+id/moer_user_img"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/ic_launcher_round"
+            android:src="@drawable/ic_launcher_foreground"
             android:scaleType="centerCrop" />
 
         <TextView

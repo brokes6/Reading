@@ -14,7 +14,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.XPlayMusic"></activity>
+        <activity android:name=".Activity.Party"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait" >
+
+        </activity>
+        <activity android:name=".Activity.XPlayMusic" />
         <activity android:name=".Activity.XiaoYouSound" />
         <activity android:name=".Activity.AllBooks" />
         <activity

@@ -46,7 +46,7 @@ public class ProgramAdapter extends RecyclerView.Adapter<ProgramViewHolder>{
 
     @Override
     public void onBindViewHolder(ProgramViewHolder holder, int position) {
-        Log.i(TAG, "ProgramAdapter: 开始加载");
+        Log.i(TAG, "ProgramAdapter: 执行第"+position+"边");
         final ProgramBean programBean1s = programBeans.get(position);
         Log.i(TAG, "MAdapter: " + programBean1s.getMid());
         holder.id.setText(programBean1s.getAid());
