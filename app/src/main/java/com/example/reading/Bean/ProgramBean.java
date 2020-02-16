@@ -1,6 +1,7 @@
 package com.example.reading.Bean;
 
 public class ProgramBean {
+    private String img;
     private String mid;
     private String title;
     private String description;
@@ -9,6 +10,14 @@ public class ProgramBean {
     private String aid;
     private int count;
     private int playNum;
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
 
     public int getPlayNum() {
         return playNum;

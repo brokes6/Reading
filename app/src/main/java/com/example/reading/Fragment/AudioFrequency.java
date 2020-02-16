@@ -59,6 +59,7 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
  */
 public class AudioFrequency extends Fragment{
     int  type;
+    String video_img;
     int code;
     private ProgressBar progressBar;
     private BottomSheetDialog dialog;
@@ -98,7 +99,7 @@ public class AudioFrequency extends Fragment{
                      */
                     break;
                 case RequestStatus.VIDEO:
-                    EventBus.getDefault().post(new Video(video));//ssj,szq是我定义的两个string类型变量
+                    EventBus.getDefault().post(new Video(video,video_img));//ssj,szq是我定义的两个string类型变量
                     binding.PlaybackOperation.setVisibility(View.GONE);
                     Toast.makeText(getContext(),"该书籍暂无音频",Toast.LENGTH_SHORT).show();
                     break;
@@ -331,30 +332,34 @@ public class AudioFrequency extends Fragment{
                 if (code==1) {
                     String data = object.getString("data");
                     JSONObject bookdata = new JSONObject(data);
-                    String resources = bookdata.getString("resources");
-                    Log.d(TAG, "resources数据为"+resources);
-                    JSONObject resourcesdata = new JSONObject(resources);
-                    JSONObject array = object.getJSONObject("data");
-                    type = resourcesdata.getInt("type");
-                    if (type !=200){
-                        //100为音频
-                        music_path=resourcesdata.getString("url");
+                    //获取音频
+                    String BookAudioData = bookdata.getString("audio");
+                    JSONObject BookAudio = new JSONObject(BookAudioData);
+                    Log.d(TAG, "audio数据为"+BookAudioData);
+                    //获取视频
+                    String BookVideoData = bookdata.getString("video");
+                    JSONObject BookVideo = new JSONObject(BookVideoData);
+                    Log.d(TAG, "video数据为"+BookAudioData);
+                    type = object.getInt("type");
+                    if (type !=1){
+                        //1为音频
+                        music_path=BookAudio.getString("url");
                         Message mes=new Message();
                         mes.what= RequestStatus.AUDIO;
                         handler.sendMessage(mes);
                     }else{
-                        //200为视频
-                        video = resourcesdata.getString("url");
-                        img = resourcesdata.getString("img");
-                        bookComment.setImg(img);
+                        //0为视频
+                        video = BookVideo.getString("url");
+                        video_img = BookVideo.getString("img");
+                        bookComment.setImg(video_img);
                         bookComment.setVideo_path(video);
                         Message mes=new Message();
                         mes.what=RequestStatus.VIDEO;
                         handler.sendMessage(mes);
                     }
-                        String bookname=array.getString("bname");
-                        String bookauthor=array.getString("author");
-                        String bookimg=array.getString("bimg");
+                        String bookname=bookdata.getString("bname");
+                        String bookauthor=bookdata.getString("author");
+                        String bookimg=bookdata.getString("bimg");
                         bookComment.setAuthor(bookauthor);
                         bookComment.setBimg(bookimg);
                         bookComment.setBname(bookname);

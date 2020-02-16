@@ -37,8 +37,9 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
+                        android:id="@+id/Xback"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:src="@mipmap/back" />
                 </LinearLayout>
 
@@ -50,8 +51,8 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:src="@drawable/customerservice" />
 
                     <ImageView

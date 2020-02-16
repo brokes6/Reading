@@ -1,2 +1,2 @@
-include ':app', ':soundtouch', ':kprogresshud'
+include ':app', ':soundtouch', ':kprogresshud', 'Video', ':jiaozivideoplayer'
 rootProject.name='Reading'

@@ -6,7 +6,12 @@
     <data>
 
     </data>
-
+    <com.weavey.loading.lib.LoadingLayout
+        android:id="@+id/loadButton"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:isFirstVisible="true">
     <RelativeLayout
         android:id="@+id/Musical_background"
         android:layout_width="match_parent"
@@ -157,13 +162,7 @@
                     android:padding="@dimen/afc_5dp"
                     android:src="@mipmap/audio_timing" />
 
-                <ImageView
-                    android:id="@+id/act_Last_one"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:padding="@dimen/afc_5dp"
-                    android:src="@mipmap/audio_pre_btn" />
+
 
                 <ImageView
                     android:id="@+id/act_suspend"
@@ -173,13 +172,7 @@
                     android:padding="@dimen/afc_5dp"
                     android:src="@mipmap/audio_state_pause" />
 
-                <ImageView
-                    android:id="@+id/act_Next_one"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:padding="@dimen/afc_5dp"
-                    android:src="@mipmap/audio_next_btn" />
+
 
                 <ImageView
                     android:id="@+id/act_audio_player_audion_listId"
@@ -192,4 +185,5 @@
 
 
     </RelativeLayout>
+    </com.weavey.loading.lib.LoadingLayout>
 </layout>

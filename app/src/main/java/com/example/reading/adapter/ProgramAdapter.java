@@ -58,8 +58,10 @@ public class ProgramAdapter extends RecyclerView.Adapter<ProgramViewHolder>{
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(mContext, XPlayMusic.class);
-                intent.putExtra("id",programBean1s.getMid());
-                Log.d(TAG, "onClick: Madapter适配器"+"传值完成,书籍id为："+programBean1s.getMid());
+                intent.putExtra("url",programBean1s.getUrl());
+                intent.putExtra("img",programBean1s.getImg());
+                intent.putExtra("name",programBean1s.getTitle());
+                Log.d(TAG, "onClick: Madapter适配器"+"传值完成,音频url为："+programBean1s.getUrl()+"名字为 :"+programBean1s.getTitle());
                 mContext.startActivity(intent);
             }
         });

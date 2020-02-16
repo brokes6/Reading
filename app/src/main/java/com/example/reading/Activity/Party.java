@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,7 +26,7 @@ import android.widget.Toast;
 import com.example.reading.Bean.VideoDetails;
 import com.example.reading.R;
 import com.example.reading.ToolClass.BaseActivity;
-import com.example.reading.adapter.Video_item_test;
+import com.example.reading.adapter.VideoAdapter;
 import com.example.reading.adapter.video_item;
 import com.example.reading.databinding.ActivityPartyBinding;
 import com.google.gson.Gson;
@@ -42,6 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import cn.jzvd.Jzvd;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 import okhttp3.OkHttpClient;
@@ -61,7 +64,7 @@ public class Party extends BaseActivity {
     public ArrayList<Map<String, Object>> list = new ArrayList<>();
     public video_item video;
     String data;
-    private Video_item_test video_item_test;
+    private VideoAdapter video_item_test;
     ActionBar actionBar;
     Handler handler = new Handler(){
         @Override
@@ -91,10 +94,6 @@ public class Party extends BaseActivity {
             //修改为深色，因为我们把状态栏的背景色修改为主题色白色，默认的文字及图标颜色为白色，导致看不到了。
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
-        actionBar=getSupportActionBar();
-        if (actionBar!=null){
-            actionBar.hide();
-        }
         initView();
         initData();
         Getsongs();
@@ -105,14 +104,21 @@ public class Party extends BaseActivity {
         //设置 Footer样式
         binding.refreshLayout.setRefreshFooter(new BallPulseFooter(this).setSpinnerStyle(SpinnerStyle.Scale));
         binding.refreshLayout.setDisableContentWhenRefresh(true);
-        video_item_test = new Video_item_test(this);
+        video_item_test = new VideoAdapter(this);
         LinearLayoutManager im = new LinearLayoutManager(this);
         im.setOrientation(LinearLayoutManager.VERTICAL);
         binding.videoView.setLayoutManager(im);
         binding.videoView.setAdapter(video_item_test);
+
+
     }
     public void initData(){
-
+        binding.Pback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
     private void Getsongs(){
         list.clear();
@@ -157,7 +163,7 @@ public class Party extends BaseActivity {
                         Log.d(TAG, "video_description: "+video_description);
                         Gson gson = new Gson();
                         List<VideoDetails> videoDetails = gson.fromJson(teamPrograms,new TypeToken<List<VideoDetails>>() {}.getType());
-                        video_item_test.setVideo_item_test(videoDetails);
+                        video_item_test.setVideoAdapter(videoDetails);
                         Message mes=new Message();
                         mes.what=100;
                         handler.sendMessage(mes);
@@ -208,6 +214,9 @@ public class Party extends BaseActivity {
         }
         super.onConfigurationChanged(newConfig);
     }
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 
 }

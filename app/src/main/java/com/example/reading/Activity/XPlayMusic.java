@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -29,12 +30,19 @@ import com.example.reading.ToolClass.XBaseActivity;
 import com.example.reading.databinding.XplayMusicBinding;
 import com.example.reading.util.RequestStatus;
 import com.qzs.android.fuzzybackgroundlibrary.Fuzzy_Background;
+import com.weavey.loading.lib.LoadingLayout;
 
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import okhttp3.OkHttpClient;
 
 
 public class XPlayMusic extends XBaseActivity {
@@ -48,21 +56,29 @@ public class XPlayMusic extends XBaseActivity {
     private Bitmap bitmap;
     private ObjectAnimator mCircleAnimator;
     int index=0;
+    String ximg;
+    String xurl;
+    Bitmap Img;
+    String title;
     String music_path ="https://sharefs.yun.kugou.com/202002131159/fe12bf1743fba8bdccd893e96d6227c5/G012/M02/18/1B/rIYBAFUPGLiAY70aAEjYKJYV34o632.mp3";
-    private String[] url = {
-            "https://sharefs.yun.kugou.com/202002131159/5e5776ff8e30198d5d39ff2f4233fe9a/G005/M05/03/04/pYYBAFT7EnKANNQ6ADfV3w4vyeE944.mp3",
-            "https://sharefs.yun.kugou.com/202002131159/06045de85f5196330e9945a6cf29b1c4/G009/M03/01/1D/SQ0DAFT_AJKALPNBAEYW2uBd2gc565.mp3",
-            "https://sharefs.yun.kugou.com/202002131159/fe12bf1743fba8bdccd893e96d6227c5/G012/M02/18/1B/rIYBAFUPGLiAY70aAEjYKJYV34o632.mp3",
-            ""
-    };
     XplayMusicBinding binding;
     Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case RequestStatus.SUCCESS:
-                    binding.playImg.setImageResource(R.mipmap.bt);
-                    binding.MusicalBackground.setBackground(ToBlurredPicture(R.mipmap.bt));
+                    if (ximg==null){
+                        Log.d(TAG, "当前音乐无背景···");
+                        binding.actBookDetailTitleId.setText(title);
+                        binding.playImg.setImageResource(R.mipmap.bt);
+                        binding.MusicalBackground.setBackground(ToBlurredPicture(R.mipmap.bt));
+                    }else{
+                        binding.actBookDetailTitleId.setText(title);
+                        binding.playImg.setImageURL(ximg);
+                        Img = returnBitMap(ximg);
+                        binding.MusicalBackground.setBackground(ToBitmapPicture(Img));
+                    }
+
                     break;
             }
         }
@@ -79,8 +95,10 @@ public class XPlayMusic extends XBaseActivity {
         if (actionBar!=null){
             actionBar.hide();
         }
+        binding.loadButton.setStatus(LoadingLayout.Loading);
         initView();
         initData();
+        Getsongs();
         Message mes=new Message();
         mes.what=RequestStatus.SUCCESS;
         handler.sendMessage(mes);
@@ -89,8 +107,14 @@ public class XPlayMusic extends XBaseActivity {
             public void run() {
                 mediaPlayer = new MediaPlayer();
                 try {
-                    mediaPlayer.setDataSource(url[index]);
+                    mediaPlayer.setDataSource(xurl);
                     mediaPlayer.prepareAsync();
+                    mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                        @Override
+                        public void onPrepared(MediaPlayer mp) {
+                            binding.loadButton.setStatus(LoadingLayout.Success);
+                        }
+                    });
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -110,6 +134,11 @@ public class XPlayMusic extends XBaseActivity {
     }
 
     public void initView(){
+        Intent intent = getIntent();
+        ximg = intent.getStringExtra("img");
+        xurl = intent.getStringExtra("url");
+        title = intent.getStringExtra("name");
+
         binding.actSuspend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -142,12 +171,6 @@ public class XPlayMusic extends XBaseActivity {
 //                showSingleAlertDialog(getView());
 //            }
 //        });
-        binding.actNextOne.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Nextone();
-            }
-        });
 
     }
 
@@ -185,13 +208,6 @@ public class XPlayMusic extends XBaseActivity {
                     }
                 }
             },0,50);
-        }
-    }
-
-    public void Nextone(){
-        index=index+1;
-        if (index>url.length){
-
         }
     }
 
@@ -239,13 +255,63 @@ public class XPlayMusic extends XBaseActivity {
         Log.d(TAG, "ToBlurredPicture: 已返回背景");
         return drawable;
     }
+    public Drawable ToBitmapPicture(Bitmap bitmap1){
+        final Bitmap bitmap = bitmap1;
+        Bitmap finalBitmap = Fuzzy_Background.with(XPlayMusic.this)
+                .bitmap(bitmap) //要模糊的图片
+                .radius(25)//模糊半径
+                .blur();
+        Drawable drawable = new BitmapDrawable(finalBitmap);
+        Log.d(TAG, "ToBlurredPicture: 已返回背景");
+        return drawable;
+    }
+    private void Getsongs(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient okHttpClient=new OkHttpClient();
+
+            }
+        }).start();
+    }
+
+    public Bitmap returnBitMap(final String url){
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                URL imageurl = null;
+
+                try {
+                    imageurl = new URL(url);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    HttpURLConnection conn = (HttpURLConnection)imageurl.openConnection();
+                    conn.setDoInput(true);
+                    conn.connect();
+                    InputStream is = conn.getInputStream();
+                    bitmap = BitmapFactory.decodeStream(is);
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+        return bitmap;
+    }
+
 
     @Override
     public void onDestroy() {
         if(timer!=null)
             timer.cancel();
         if (mediaPlayer != null) {
-            mediaPlayer.stop();
+            if (mediaPlayer.isPlaying())
+                mediaPlayer.stop();
+            mediaPlayer.reset();
             mediaPlayer.release();
             mCircleAnimator.end();
         }

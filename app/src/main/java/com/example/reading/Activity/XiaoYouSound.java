@@ -75,7 +75,12 @@ public class XiaoYouSound extends BaseActivity {
         });
     }
     public void initData(){
-
+        binding.Xback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     public class MyAdapter extends FragmentPagerAdapter {

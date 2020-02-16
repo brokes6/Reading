@@ -52,6 +52,7 @@ public class VideoFragment extends Fragment {
     SensorManager sensorManager;
     BookComment bookComment = new BookComment();
     String Vurl;
+    String Vimg;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,9 +90,10 @@ public class VideoFragment extends Fragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMainThread(Video data) {
         Vurl=data.getVideo_path();
+        Vimg=data.getVideo_img();
         if (Vurl ==null){
             binding.playerListVideo.setVisibility(View.GONE);
-            Log.d(TAG, "onEventMainThread: -----------"+"无视频");
+            Log.d(TAG, "VideoFragment :"+"无视频");
             Toast.makeText(getContext(),"该书籍暂无视频",Toast.LENGTH_SHORT).show();
         }else{
         /**
@@ -101,7 +103,7 @@ public class VideoFragment extends Fragment {
          */
         binding.playerListVideo.setUp(Vurl, JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "标题");
         binding.playerListVideo.thumbImageView.setScaleType(ImageView.ScaleType.FIT_XY);
-        Glide.with(getActivity()).load("https://gss2.bdstatic.com/-fo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike80%2C5%2C5%2C80%2C26/sign=0c5a25bad1ca7bcb6976cf7ddf600006/6d81800a19d8bc3ecf611ab3848ba61ea8d34559.jpg").into(binding.playerListVideo.thumbImageView);
+        Glide.with(getActivity()).load(Vimg).into(binding.playerListVideo.thumbImageView);
         }
     }
 

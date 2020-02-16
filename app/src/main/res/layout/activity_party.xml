@@ -43,8 +43,9 @@
                             android:orientation="horizontal">
 
                             <ImageView
-                                android:layout_width="28dp"
-                                android:layout_height="28dp"
+                                android:id="@+id/Pback"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
                                 android:src="@mipmap/back" />
                         </LinearLayout>
 
@@ -56,8 +57,8 @@
                             android:orientation="horizontal">
 
                             <ImageView
-                                android:layout_width="28dp"
-                                android:layout_height="28dp"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
                                 android:src="@drawable/customerservice" />
 
                             <ImageView
@@ -142,11 +143,6 @@
                             android:text="党建 节目"/>
                 </LinearLayout>
             </com.google.android.material.appbar.AppBarLayout>
-<!--            <ListView-->
-<!--                android:id="@+id/video_view"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
