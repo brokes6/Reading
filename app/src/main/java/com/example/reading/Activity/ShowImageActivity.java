@@ -1,4 +1,3 @@
-/*
 package com.example.reading.Activity;
 
 import android.animation.LayoutTransition;
@@ -11,7 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.service.autofill.UserData;
-
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +28,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
@@ -45,12 +44,16 @@ import com.bumptech.glide.request.transition.Transition;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.example.reading.Bean.Post;
+import com.example.reading.Picture.LocalCacheUtils;
+import com.example.reading.Picture.MemoryCacheUtils;
 import com.example.reading.R;
 import com.example.reading.adapter.ShowImageAdapter;
 import com.example.reading.util.ImageUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.youth.banner.transformer.DepthPageTransformer;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -70,27 +73,28 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+
 public class ShowImageActivity extends AppCompatActivity {
     public static final int GET_DATA_SUCCESS = 1;
     public static final int NETWORK_ERROR = 2;
     public static final int SERVER_ERROR = 3;
+    //---两个缓存方法----
+    private LocalCacheUtils mLocalCacheUtils;
+    private MemoryCacheUtils mMemoryCacheUtils;
+    //----
     private static final String TAG = "ShowImageActivity";
     private ViewPager viewPager;
     private TextView picture_text;
     private TextView picture_num;
-    private LinearLayout lin;
     private List<View>  listViews =new ArrayList<>();
+    private int index=0;
     private ImageView back,button_images;
     private ShowImageAdapter imageAdapter;
     private List<Post> mList=new ArrayList<>();
     private ArrayList<String> urls =null;
     private ArrayList<Boolean> booleans;
     private int position,total;
-    private LinearLayout bottom,bottom_text;
     private LinearLayout Open_and_Retract;
-    private LinearLayout loveLayout,collectionLayout;
-    private ImageView loveImageView,collectionImageView;
-    private TextView Picture_text,button_text,loveStr,talkStr,collectionStr,loadTextView;
     private ScrollView Picture_text_main;
     private Boolean Picture_key;
     private RelativeLayout.LayoutParams linearParams;
@@ -127,86 +131,33 @@ public class ShowImageActivity extends AppCompatActivity {
         if (actionbar != null) {
             actionbar.hide();
         }
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.show_image_layout_text);
         initView();
         initData();
-        back = findViewById(R.id.title_back);
-        lin = findViewById(R.id.lin_go);
-        viewp = findViewById(R.id.show_view_pager);
-        //设置加载动画
-        //
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                    onBackPressed();
-            }
-        });
-        mMemoryCacheUtils = MemoryCacheUtils.getInstance();
-        mLocalCacheUtils = LocalCacheUtils.getInstance();
     }
     private void initView(){
+        back = findViewById(R.id.title_back);
+        viewPager = findViewById(R.id.show_view_pager);
         Picture_key=false;
         //容器内的子view的layout发生变化时也播放动画
-        ViewGroup container = (ViewGroup) findViewById(R.id.container);
+        ViewGroup container = findViewById(R.id.container);
         transition = new LayoutTransition();
         container.setLayoutTransition(transition);
         transition = container.getLayoutTransition();
         transition.enableTransitionType(LayoutTransition.CHANGING);
-        Picture_text_main = findViewById(R.id.Picture_text_main);
-        button_images = findViewById(R.id.button_images);
-        button_text = findViewById(R.id.button_text);
-        bottom = findViewById(R.id.bottom);
-        Picture_text = findViewById(R.id.Picture_text);
-        Open_and_Retract = findViewById(R.id.Open_and_Retract);
         viewPager =findViewById(R.id.show_view_pager);
         //将设置好的动画指定给它
         viewPager.setPageTransformer(true, new DepthPageTransformer());
         picture_num=findViewById(R.id.picture_num);
         //先写死把
-        loveLayout=findViewById(R.id.loveLayout);
-        loadTextView=findViewById(R.id.loadTextView);
-        loveImageView=findViewById(R.id.loveNum);
-        loveStr=findViewById(R.id.loveNumStr);
-        collectionLayout=findViewById(R.id.collectionLayout);
-        collectionImageView=findViewById(R.id.collection);
-        collectionStr=findViewById(R.id.collectionNum);
-        talkStr=findViewById(R.id.talkNum);
-        Picture_text_main.getBackground().mutate().setAlpha(100);
-        Picture_text.setOnClickListener(new View.OnClickListener() {
+        back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Picture_key==false){
-                    button_text.setText("展开");
-                    button_images.setImageResource(R.drawable.open_gray);
-                    linearParams =(RelativeLayout.LayoutParams) Picture_text_main.getLayoutParams();
-                    linearParams.height=0;
-                    Picture_text_main.setLayoutParams(linearParams);
-                    Picture_key=true;
-                }
+                onBackPressed();
             }
         });
-        Open_and_Retract.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Picture_key==true){
-                    button_text.setText("收起");
-                    button_images.setImageResource(R.drawable.retract_gray);
-                    linearParams =(RelativeLayout.LayoutParams) Picture_text_main.getLayoutParams();
-                    linearParams.height=420;
-                    Picture_text_main.setLayoutParams(linearParams);
-                    Picture_key=false;
-                }else{
-                    button_text.setText("展开");
-                    button_images.setImageResource(R.drawable.open_gray);
-                    linearParams =(RelativeLayout.LayoutParams) Picture_text_main.getLayoutParams();
-                    linearParams.height=0;
-                    Picture_text_main.setLayoutParams(linearParams);
-                    Picture_key=true;
-                }
-
-            }
-        });
+        mMemoryCacheUtils = MemoryCacheUtils.getInstance();
+        mLocalCacheUtils = LocalCacheUtils.getInstance();
     }
     private void initData(){
         Bundle bundle=getIntent().getExtras();
@@ -351,99 +302,6 @@ public class ShowImageActivity extends AppCompatActivity {
             }
         }).into(imageView);
     }
-*/
-/*    private void initStatus(){
-        Log.i(TAG, "initStatus: loveNum="+info.getContent());
-        loveStr.setText(info.getLoveNum());
-        talkStr.setText(info.getTalkNum());
-        loveStatus=info.getLoveStatus();
-        collectionStatus=info.getCollectionStatus();
-        content=info.getContent();
-        if(loveStatus==1){
-            loveImageView.setImageDrawable(getResources().getDrawable(R.drawable.thumbs_up_complete));
-        }else{
-            loveImageView.setImageDrawable(getResources().getDrawable(R.drawable.thumbs_up_white));
-        }
-        loveLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (loveStatus==1){
-                    loveImageView.setImageDrawable(getResources().getDrawable(R.drawable.thumbs_up_white));
-                    loveStatus=0;
-                    //加加
-                    loveStr.setText(String.valueOf(Integer.valueOf(loveStr.getText().toString())-1));
-
-                }else{
-                    loveImageView.setImageDrawable(getResources().getDrawable(R.drawable.thumbs_up_complete));
-                    loveStatus=1;
-                    //减减
-                    loveStr.setText(String.valueOf(Integer.valueOf(loveStr.getText().toString())+1));
-                }
-                netWorkUtil.updatePostLove(info.getPostId(),userData.getToken());
-            }
-        });
-        if(collectionStatus==1){
-            collectionImageView.setImageDrawable(getResources().getDrawable(R.drawable.shocangwanc));
-            collectionStr.setText("已收藏");
-        }else {
-            collectionImageView.setImageDrawable(getResources().getDrawable(R.drawable.shocang_text));
-            collectionStr.setText("未收藏");
-        }
-        collectionLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handlerCollection();
-                if (collectionStatus==1){
-                    collectionImageView.setImageDrawable(getResources().getDrawable(R.drawable.shocang_text));
-                    collectionStatus=0;
-                    collectionStr.setText("未收藏");
-
-                }else{
-                    collectionImageView.setImageDrawable(getResources().getDrawable(R.drawable.shocangwanc));
-                    collectionStatus=1;
-                    collectionStr.setText("已收藏");
-                }
-            }
-        });
-    }*//*
-
-*/
-/*    private void handlerCollection(){
-        RequestBody requestBody=new FormBody.Builder()
-                .add("postId", String.valueOf(info.getPostId()))
-                .add("token",userData.getToken())
-                .build();
-        Request request=new Request.Builder()
-                .post(requestBody)
-                .url(getRequestUrl())
-                .build();
-        OkHttpClient client=new OkHttpClient();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String responseData =response.body().string();
-                Log.i(TAG, "onResponse: "+responseData);
-                JSONObject jsonObject= null;
-                try {
-                    jsonObject = new JSONObject(responseData);
-                    int code =jsonObject.getInt("code");
-                    String msg=jsonObject.getString("msg");
-                    if(code==0){
-                        return;
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }*//*
-
-*/
 /*    public void onBackPressed() {
         Log.i(TAG, "onBackPressed: 放回了啊");
         Intent intent=new Intent();
@@ -453,7 +311,5 @@ public class ShowImageActivity extends AppCompatActivity {
         intent.putExtra("collectionStatus",collectionStatus);
         setResult(HomeFragment.SHOWIMAGEACTIVITY,intent);
         finish();
-    }*//*
-
+    }*/
 }
-*/

@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.reading.Activity.PostDetails;
+import com.example.reading.Activity.ShowImageActivity;
 import com.example.reading.Fragment.CommunityFragment;
 import com.example.reading.adapter.NineGridAdapter;
 import com.example.reading.util.ImageLoaderUtil;
@@ -107,9 +108,9 @@ public class StandardNineGridLayout extends NineGridLayout {
             }
         }
         Log.i(TAG, "onClickImage: info"+info);
-        EventBus.getDefault().postSticky(detailsImgUrls);
+        EventBus.getDefault().postSticky(urlList);
         //帖子详情-----
-        Intent intent = new Intent(getContext(), PostDetails.class);
+        Intent intent = new Intent(getContext(), ShowImageActivity.class);
         intent.putExtra("id",i);   //将当前点击的位置传递过去
         intent.putExtra("info",info);
         intent.putExtra("total",urlList.size());

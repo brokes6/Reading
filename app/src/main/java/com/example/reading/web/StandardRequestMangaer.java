@@ -144,7 +144,12 @@ public class StandardRequestMangaer {
                             });
                         }
                     } catch (JSONException e) {
-                        callBack.onEror(call,response.code());
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                callBack.onEror(call,response.code());
+                            }
+                        });
                     }
                 }else {
                     callBack.onEror(call,response.code());

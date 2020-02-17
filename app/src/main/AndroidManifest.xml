@@ -14,6 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Activity.ShowImageActivity"/>
         <activity android:name=".Activity.PostDetails"/>
         <activity android:name=".Activity.Party"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"

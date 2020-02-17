@@ -98,6 +98,7 @@ public class NineGridAdapter extends RecyclerView.Adapter<NineGridAdapter.ViewHo
         if (TextUtils.isEmpty(imgUrls)){
             holder.layout.setVisibility(View.GONE);
         }else {
+
             holder.layout.setUrlList(Arrays.asList(imgUrls.split(",")));
         }
         holder.loveNum.setOnClickListener(new View.OnClickListener() {
