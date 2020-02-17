@@ -92,14 +92,12 @@
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <com.youth.banner.Banner
-                android:layout_marginRight="2dp"
-                android:layout_marginLeft="2dp"
-                android:id="@+id/banner"
+            <wowo.kjt.library.GalleryBanner
+                android:id="@+id/gallery_banner"
                 android:layout_width="match_parent"
-                android:layout_height="145dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_height="150dp"
+                app:dotLightColor="#03A9F4"
+                app:showIndicator="true"/>
 
         </LinearLayout>
         //热点按钮位置

@@ -266,13 +266,13 @@ public class XPlayMusic extends XBaseActivity {
         return drawable;
     }
     private void Getsongs(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                OkHttpClient okHttpClient=new OkHttpClient();
-
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                OkHttpClient okHttpClient=new OkHttpClient();
+//
+//            }
+//        }).start();
     }
 
     public Bitmap returnBitMap(final String url){
