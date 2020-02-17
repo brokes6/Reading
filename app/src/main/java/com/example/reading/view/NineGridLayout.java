@@ -137,6 +137,7 @@ public abstract class NineGridLayout extends ViewGroup implements View.OnClickLi
             LayoutParams params = getLayoutParams();
             params.height = mSingleWidth;
             setLayoutParams(params);
+            Log.i(TAG, "refresh: imageview="+imageView);
             imageView.layout(0, 0, mSingleWidth, mSingleWidth);
             Log.i(TAG, "refresh:url="+url);
             boolean isShowDefualt = displayOneImage(imageView, url, mTotalWidth);
@@ -197,6 +198,7 @@ public abstract class NineGridLayout extends ViewGroup implements View.OnClickLi
                         onClickImage(i, url, mUrlList);
                     }
                 });
+                Log.i(TAG, "createImageView: jpeg格式来的");
                 return imageView;
             case ImageUtils.GIF:
                 GifImageView gifImageView=new GifImageView(mContext);

@@ -12,10 +12,10 @@ import android.widget.ImageView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.reading.Activity.PostDetails;
 import com.example.reading.Fragment.CommunityFragment;
-import com.example.reading.Fragment.HomeFragment;
-import com.example.reading.adapter.NineGridTest2Adapter;
+import com.example.reading.adapter.NineGridAdapter;
 import com.example.reading.util.ImageLoaderUtil;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -27,22 +27,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 描述：
- * 作者：HMY
- * 时间：2016/5/12
+ * 描述：图片布局
+ * 作者：czj
+ * 时间：2020-02-15
  */
-public class NineGridTestLayout extends NineGridLayout {
+public class StandardNineGridLayout extends NineGridLayout {
     private static final String TAG = "NineGridTestLayout";
     protected static final int MAX_W_H_RATIO = 3;
     private List<String> detailsImgUrls;
     private ShowImageInfo info;
-    private NineGridTest2Adapter.ViewHolder viewHolder;
+    private NineGridAdapter.ViewHolder viewHolder;
     private OnClickListener listener;
-    public NineGridTestLayout(Context context) {
+    public StandardNineGridLayout(Context context) {
         super(context);
     }
 
-    public NineGridTestLayout(Context context, AttributeSet attrs) {
+    public StandardNineGridLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
@@ -92,7 +92,7 @@ public class NineGridTestLayout extends NineGridLayout {
 
     @Override
     protected void displayImage(ImageView imageView, String url) {
-        ImageLoaderUtil.getImageLoader(mContext).displayImage(url, imageView, ImageLoaderUtil.getPhotoImageOption());
+        Glide.with(mContext).load(url).into(imageView);
     }
 
     @Override
@@ -118,7 +118,7 @@ public class NineGridTestLayout extends NineGridLayout {
 
     }
 
-    public void setInfo(String content, String loveNum, String talkNum, int loveStatus, int collectionStatus, int postId, NineGridTest2Adapter.ViewHolder viewHolder) {
+    public void setInfo(String content, String loveNum, String talkNum, int loveStatus, int collectionStatus, int postId, NineGridAdapter.ViewHolder viewHolder) {
         info=new ShowImageInfo(content,loveNum,talkNum,loveStatus,collectionStatus,postId);
         this.viewHolder=viewHolder;
     }

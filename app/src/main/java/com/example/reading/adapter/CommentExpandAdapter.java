@@ -13,11 +13,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.example.reading.Bean.CommentDetailBean;
+import com.example.reading.Bean.PostComment;
 import com.example.reading.Bean.ReplyDetailBean;
 import com.example.reading.Picture.MyImageView;
 import com.example.reading.R;
+import com.example.reading.constant.RequestUrl;
 import com.example.reading.util.DateTimeUtil;
+import com.example.reading.util.UserUtil;
+import com.example.reading.web.BaseCallBack;
+import com.example.reading.web.StandardRequestMangaer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,6 +29,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -39,18 +44,16 @@ import okhttp3.Response;
 
 public class CommentExpandAdapter extends BaseExpandableListAdapter {
     private static final String TAG = "CommentExpandAdapter";
-    private List<CommentDetailBean> commentBeanList=new ArrayList<>();
+    private List<PostComment> commentBeanList=new ArrayList<>();
     private static final int REPLYNUM=3;
     private Context context;
     private int pageIndex = 1;
-    private String token;
-    public CommentExpandAdapter(Context context, List<CommentDetailBean> commentBeanList, String token) {
+    public CommentExpandAdapter(Context context, List<PostComment> commentBeanList) {
         this.context = context;
         this.commentBeanList = commentBeanList;
-        this.token=token;
     }
 
-    public void setCommentBeanList(List<CommentDetailBean> commentBeanList) {
+    public void setCommentBeanList(List<PostComment> commentBeanList) {
         if(commentBeanList==null){
             this.commentBeanList=commentBeanList;
         }else {
@@ -58,7 +61,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
         }
         notifyDataSetChanged();
     }
-    public List<CommentDetailBean> getCommentBeanList() {
+    public List<PostComment> getCommentBeanList() {
         return commentBeanList;
     }
     @Override
@@ -68,17 +71,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
     }
     @Override
     public int getChildrenCount(int i) {
-        if(i>=commentBeanList.size()){
-            Log.e(TAG, "getChildrenCount: ????");
-            return 0;
-        }
-        List<ReplyDetailBean> detailBeans=commentBeanList.get(i).getReplyVoList();
-        if(detailBeans==null||detailBeans.size()==0){
-            return 0;
-        }else {
-            Log.e(TAG, "getChildrenCount: 长度"+detailBeans.size());
-            return detailBeans.size()>2 ?REPLYNUM :detailBeans.size();
-        }
+        return -1;
     }
     @Override
     public Object getGroup(int i) {
@@ -86,8 +79,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
     }
     @Override
     public Object getChild(int i, int i1) {
-        Log.e(TAG, "getChild: 天天被调用");
-        return commentBeanList.get(i).getReplyVoList().get(i1);
+        return null;
     }
     @Override
     public long getGroupId(int groupPosition) {
@@ -106,7 +98,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(final int groupPosition, boolean isExpand, View convertView, ViewGroup viewGroup) {
         final GroupHolder groupHolder;
-        final CommentDetailBean bean=commentBeanList.get(groupPosition);
+        final PostComment bean=commentBeanList.get(groupPosition);
         if(convertView == null){
             convertView = LayoutInflater.from(context).inflate(R.layout.comment_item_layout, viewGroup, false);
             groupHolder = new GroupHolder(convertView);
@@ -121,10 +113,9 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
         groupHolder.tv_name.setText(bean.getUsername());
         groupHolder.tv_time.setText(DateTimeUtil.handlerDateTime(bean.getCcreateTime()));
         groupHolder.tv_content.setText(bean.getContent());
-        groupHolder.status=bean.getStatus();
-        groupHolder.loveNum.setText(String.valueOf(bean.getLove_count()));
+        groupHolder.status=bean.getLoveStatus();
+        groupHolder.loveNum.setText(String.valueOf(bean.getLoveCount()));
         groupHolder.position=groupPosition;
-        groupHolder.floorTextView.setText("第"+bean.getFloor()+"层");
         if(groupHolder.status==1){
             groupHolder.iv_like.setColorFilter(Color.parseColor("#FF5C5C"));
         }
@@ -145,7 +136,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
                     groupHolder.iv_like.setColorFilter(Color.parseColor("#FF5C5C"));
                     groupHolder.loveNum.setText(String.valueOf(Integer.valueOf(groupHolder.loveNum.getText().toString())+1));
                 }
-                updateCommentLove(bean.getCid());
+                handlerPostCommentNum(bean.getCid());
             }
 
         });
@@ -154,28 +145,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(final int groupPosition, int childPosition, boolean b, View convertView, ViewGroup viewGroup) {
-        final ChildHolder childHolder;
-        CommentDetailBean commentDetailBean=commentBeanList.get(groupPosition);
-        List<ReplyDetailBean> replyDetailBeans =commentDetailBean.getReplyVoList();
-        Log.i(TAG, "getChildView:groupPosition="+groupPosition+"childposition="+childPosition);
-        if(replyDetailBeans.size()>=3&&childPosition==2){
-            Log.i(TAG, "getChildView: 最后一个啦你不操作一下?\nchildPosition="+childPosition);
-            convertView= LayoutInflater.from(context).inflate(R.layout.look_more_layout,viewGroup, false);
-            return convertView;
-        }
-
-            convertView = LayoutInflater.from(context).inflate(R.layout.comment_reply_item_layout,viewGroup, false);
-            childHolder = new ChildHolder(convertView);
-            convertView.setTag(childHolder);
-        Log.i(TAG, "getChildView: childHolder="+childHolder);
-        String replyUser = replyDetailBeans.get(childPosition).getUsername();
-        if(!TextUtils.isEmpty(replyUser)){
-            childHolder.tv_name.setText(replyUser + ":");
-        }else {
-            childHolder.tv_name.setText("无名"+":");
-        }
-        childHolder.tv_content.setText(replyDetailBeans.get(childPosition).getContent());
-        return convertView;
+        return null;
     }
 
     @Override
@@ -191,33 +161,25 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
         private int position;
         public GroupHolder(View view) {
             logo = view.findViewById(R.id.comment_item_logo);
-            tv_content = (TextView) view.findViewById(R.id.comment_item_content);
-            tv_name = (TextView) view.findViewById(R.id.comment_item_userName);
-            tv_time = (TextView) view.findViewById(R.id.comment_item_time);
-            iv_like = (ImageView) view.findViewById(R.id.comment_item_like);
-            loveNum=view.findViewById(R.id.loveNum);
+            tv_content = view.findViewById(R.id.comment_item_content);
+            tv_name = view.findViewById(R.id.comment_item_userName);
+            tv_time = view.findViewById(R.id.comment_item_time);
+            iv_like = view.findViewById(R.id.comment_item_like);
+            loveNum = view.findViewById(R.id.loveNum);
             floorTextView=view.findViewById(R.id.comment_item_floor);
         }
 
-    }
-
-    private class ChildHolder{
-        private TextView tv_name, tv_content;
-        public ChildHolder(View view) {
-            tv_name = (TextView) view.findViewById(R.id.reply_item_user);
-            tv_content = (TextView) view.findViewById(R.id.reply_item_content);
-        }
     }
 
 
     /**
      * by moos on 2018/04/20
      * func:评论成功后插入一条数据
-     * @param commentDetailBean 新的评论数据
+     * @param PostComment 新的评论数据
      */
-    public void addTheCommentData(CommentDetailBean commentDetailBean){
-        if(commentDetailBean!=null){
-            commentBeanList.add(commentDetailBean);
+    public void addTheCommentData(PostComment PostComment){
+        if(PostComment!=null){
+            commentBeanList.add(PostComment);
             notifyDataSetChanged();
         }else {
             throw new IllegalArgumentException("评论数据为空!");
@@ -225,76 +187,44 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
 
     }
 
-    /**
-     * by moos on 2018/04/20
-     * func:回复成功后插入一条数据
-     * @param replyDetailBean 新的回复数据
-     */
-    public void addTheReplyData(ReplyDetailBean replyDetailBean, int groupPosition){
-        if(replyDetailBean!=null){
-            Log.e(TAG, "addTheReplyData: >>>>该刷新回复列表了:"+replyDetailBean.toString() );
-            if(commentBeanList.get(groupPosition).getReplyVoList() != null ){
-                commentBeanList.get(groupPosition).getReplyVoList().add(replyDetailBean);
-            }else {
-                List<ReplyDetailBean> replyList = new ArrayList<>();
-                replyList.add(replyDetailBean);
-                commentBeanList.get(groupPosition).setReplyVoList(replyList);
-            }
-            notifyDataSetChanged();
-        }else {
-            throw new IllegalArgumentException("回复数据为空!");
-        }
 
-    }
 
-    /**
-     * by moos on 2018/04/20
-     * func:添加和展示所有回复
-     * @param replyBeanList 所有回复数据
-     * @param groupPosition 当前的评论
-     */
-    private void addReplyList(List<ReplyDetailBean> replyBeanList, int groupPosition){
-        if(commentBeanList.get(groupPosition).getReplyVoList() != null ){
-            commentBeanList.get(groupPosition).getReplyVoList().clear();
-            commentBeanList.get(groupPosition).getReplyVoList().addAll(replyBeanList);
-        }else {
+    private void handlerPostCommentNum(int cid){
+        Map<String,String> params= UserUtil.createUserMap();
+        params.put("cid", String.valueOf(cid));
+        StandardRequestMangaer.getInstance()
+                .post(RequestUrl.HANDLER_POST_COMMENT_LOVE,new BaseCallBack<String>(){
 
-            commentBeanList.get(groupPosition).setReplyVoList(replyBeanList);
-        }
+                    @Override
+                    protected void OnRequestBefore(Request request) {
 
-        notifyDataSetChanged();
-    }
-    private void updateCommentLove(int commentId){
-        final Request request =new Request.Builder()
-                .url("http://106.54.134.17/app/updateLoveComment?token="+token+"&commentId="+commentId)
-                .build();
-        OkHttpClient okHttpClient = new OkHttpClient();
-        okHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-                Log.d(TAG, "onFailure: 失败呃");
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String dataStr = response.body().string();
-                Log.i(TAG, "onResponse: 返回json数据"+dataStr);
-                JSONObject jsonObject = null;
-                try {
-                    jsonObject=new JSONObject(dataStr);
-                    int code=jsonObject.getInt("code");
-                    if(code==0){
-                        Log.i(TAG, "onResponse:点赞/取消赞 遇到未知错误。。");
-                        return;
                     }
-                    String msg=jsonObject.getString("msg");
-                    Log.i(TAG, "onResponse: 响应信息"+msg);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+
+                    @Override
+                    protected void onFailure(Call call) {
+                        Toast.makeText(context, "操作失败", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    protected void onSuccess(Call call, Response response, String s) {
+                        Toast.makeText(context, "操作成功！", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    protected void onResponse(Response response) {
+
+                    }
+
+                    @Override
+                    protected void onEror(Call call, int statusCode) {
+                        Toast.makeText(context, "请检查网络后重试~", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    protected void inProgress(int progress, long total, int id) {
+
+                    }
+                },params);
     }
     public void clearAll(){
         commentBeanList.clear();

@@ -44,7 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import cn.jzvd.Jzvd;
+/*import cn.jzvd.Jzvd;*/
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 import okhttp3.OkHttpClient;

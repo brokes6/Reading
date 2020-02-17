@@ -18,6 +18,12 @@ android {
             sourceCompatibility JavaVersion.VERSION_1_8
             targetCompatibility JavaVersion.VERSION_1_8
         }
+//添加如下配置 开启annotation processor
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath true
+            }
+        }
     }
     buildTypes {
         release {
@@ -82,6 +88,11 @@ dependencies {
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-21'
     //网络加载图片
     implementation 'com.squareup.picasso:picasso:2.5.2'
+
+    implementation 'org.projectlombok:lombok:1.16.8'  //添加lombok依赖
+    implementation 'org.glassfish:javax.annotation:10.0-b28' //java注解
     //引入Module
+/*
     implementation project(':jiaozivideoplayer')
+*/
 }

@@ -50,7 +50,7 @@
                     android:maxLines="4"
                     android:textColor="#303030"/>
                 //放置图片
-                <com.example.reading.view.NineGridTestLayout
+                <com.example.reading.view.StandardNineGridLayout
                     xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/layout_nine_grid"
                     android:layout_width="match_parent"

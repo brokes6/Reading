@@ -1,16 +1,15 @@
 package com.example.reading.Bean;
 
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-/**
- * 创建于2019/9/16 21:00🐎
- */
 @Getter
 @Setter
 @ToString
-public class Post {
+public class PostDetailsBean {
     private Integer pid;
     private Integer puid;
     private String pcreateTime;
@@ -22,4 +21,5 @@ public class Post {
     private int commentNum;
     private int forwardNum;
     private int loveStatus;
+    private PostCommentVo postCommentVo;
 }

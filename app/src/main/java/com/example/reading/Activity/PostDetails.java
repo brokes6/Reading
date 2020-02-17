@@ -30,8 +30,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 
-import com.example.reading.Bean.CommentDetailBean;
+import com.bumptech.glide.Glide;
+import com.example.reading.Bean.PostComment;
 import com.example.reading.Bean.Post;
+import com.example.reading.Bean.PostDetailsBean;
 import com.example.reading.Bean.ReplyDetailBean;
 import com.example.reading.Bean.User;
 import com.example.reading.Fragment.CommunityFragment;
@@ -39,14 +41,18 @@ import com.example.reading.Picture.MyImageView;
 import com.example.reading.R;
 import com.example.reading.ToolClass.BaseActivity;
 import com.example.reading.adapter.CommentExpandAdapter;
+import com.example.reading.constant.RequestUrl;
 import com.example.reading.util.DateTimeUtil;
 import com.example.reading.util.FileCacheUtil;
 import com.example.reading.util.NetWorkUtil;
 import com.example.reading.util.PostHitoryUtil;
 import com.example.reading.util.PostTemplateInterface;
 import com.example.reading.util.RequestStatus;
+import com.example.reading.util.UserUtil;
 import com.example.reading.view.CommentExpandableListView;
-import com.example.reading.view.NineGridTestLayout;
+import com.example.reading.view.StandardNineGridLayout;
+import com.example.reading.web.BaseCallBack;
+import com.example.reading.web.StandardRequestMangaer;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.gson.Gson;
@@ -66,8 +72,10 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -90,7 +98,7 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
     private int postId;
     private int commentPage=1;
     private int loveStatus=0,collectionStatus=0;
-    private List<CommentDetailBean> commentsList=new ArrayList<>();
+    private List<PostComment> commentsList=new ArrayList<>();
     private BottomSheetDialog dialog;
     private TextView username,dateTime,content,message,loveNumStr,commentStr,loadTextView,collectionStr;
     private LinearLayout back;
@@ -98,7 +106,7 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
     private ImageView loveNum,collection;
     private LinearLayout messageLayout;
     private LinearLayout commentLayout;
-    private NineGridTestLayout nineGridTestLayout;
+    private StandardNineGridLayout standardNineGridLayout;
     private LinearLayout loveLayout;
     private LinearLayout collectionLayout;
     private LinearLayout loadLayout;
@@ -106,11 +114,11 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
     private ProgressBar progressBar;
     private SmartRefreshLayout refreshLayout;
     private NetWorkUtil netWorkUtil;
-    private User userData;
     private NiceSpinner niceSpinner;
     private boolean commentFlag;
     private Button loadButton;
     private int postUserId;
+    private int position;
     private List<String> spinnerData = new LinkedList<>(Arrays.asList("时间排序", "点赞排序"));
     private  Handler handler=new Handler(){
         @Override
@@ -119,42 +127,26 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
                 case PostTemplateInterface.HANDLER_DATA:
                     final Post post = (Post) msg.obj;
                     String str=Html.fromHtml(post.getContent()).toString();
-                    postUserId=post.getUid();
+                    postUserId=post.getPuid();
                     Log.i(TAG, "handleMessage:  postUserId="+postUserId);
-                    String imgUrls=post.getImgUrl();
-                    loveStatus=post.getStatus();
-                    collectionStatus=post.getCollection();
+                    String imgUrls=post.getImgurl();
+/*                    loveStatus=post.getStatus();
+                    collectionStatus=post.getCollection();*/
                     username.setText(post.getUsername());
                     userImg.setImageURL(post.getUimg());
                     dateTime.setText(DateTimeUtil.handlerDateTime(post.getPcreateTime()));
                     content.setText(str);
-                    commentStr.setText(String.valueOf(post.getCommentCount()));
+                    commentStr.setText(String.valueOf(post.getCommentNum()));
                     if(imgUrls==null||imgUrls.trim().equals("")){
-                        nineGridTestLayout.setVisibility(View.GONE);
+                        standardNineGridLayout.setVisibility(View.GONE);
                     }else {
-                        nineGridTestLayout.setUrlList(Arrays.asList(imgUrls.split(",")));
-                        nineGridTestLayout.setIsShowAll(post.isShowAll());
+                        standardNineGridLayout.setUrlList(Arrays.asList(imgUrls.split(",")));
                     }
-                    loveNumStr.setText(String.valueOf(post.getLoveCount()));
-                    loveLayout.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (loveStatus==1){
-                                loveNum.setImageDrawable(getResources().getDrawable(R.mipmap.thumbs_up_black));
-                                loveStatus=0;
-                                loveNumStr.setText(String.valueOf(Integer.valueOf(loveNumStr.getText().toString())-1));
-                            }else{
-                                loveNum.setImageDrawable(getResources().getDrawable(R.mipmap.thumbs_up_wanc));
-                                loveStatus=1;
-                                loveNumStr.setText(String.valueOf(Integer.valueOf(loveNumStr.getText().toString())+1));
-                            }
-                            netWorkUtil.updatePostLove(postId,userData.getToken());
-                        }
-                    });
+                    loveNumStr.setText(String.valueOf(post.getLoveNum()));
                     collectionLayout.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            handlerCollection();
+                            /*handlerCollection();*/
                             if (collectionStatus==1){
                                 collection.setImageDrawable(getResources().getDrawable(R.mipmap.shocang));
                                 collectionStatus=0;
@@ -182,10 +174,12 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
                     }
                     contentLayout.setVisibility(View.VISIBLE);
                     loadLayout.setVisibility(View.GONE);
-                    nineGridTestLayout.setOnClickListener(new View.OnClickListener() {
+                    standardNineGridLayout.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            nineGridTestLayout.setInfo(post.getContent(),String.valueOf(post.getLoveCount()),String.valueOf(post.getCommentCount()),post.getStatus(),post.getCollection(),post.getPid(),null);
+/*
+                            standardNineGridLayout.setInfo(post.getContent(),String.valueOf(post.getLoveCount()),String.valueOf(post.getCommentCount()),post.getStatus(),post.getCollection(),post.getPid(),null);
+*/
                         }
                     });
                     PostHitoryUtil.saveSearchHistory(String.valueOf(postId),PostDetails.this);break;
@@ -199,10 +193,11 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
                     for(int i =index; i<commentsList.size()+index; i++){
                         expandableListView.expandGroup(i);
                     }
-/*                    if(index<6){
+                    if(index<6){
                         refreshLayout.setEnableLoadMore(false);
                         Log.i(TAG, "handleMessage: 不能够加载更多");
-                    }*/
+                    }
+
                     messageLayout.setVisibility(View.VISIBLE);
                     message.setText("暂无更多");
                     message.setTextSize(14);
@@ -215,7 +210,7 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
                     break;
                 case PostTemplateInterface.NOTIFY_COMMENT:
                     Toast.makeText(PostDetails.this,"评论成功",Toast.LENGTH_SHORT).show();
-                    adapter.addTheCommentData((CommentDetailBean) msg.obj);
+                    adapter.addTheCommentData((PostComment) msg.obj);
                     Log.i(TAG, "handleMessage: 评论处理");
                     int index1=adapter.getCommentBeanList().size();
                     commentStr.setText(String.valueOf(Integer.valueOf(commentStr.getText().toString())+1));
@@ -234,7 +229,6 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
                     progressBar.setVisibility(View.GONE);
                     ReplyDetailBean detailBean= (ReplyDetailBean) msg.obj;
                     int position=msg.arg1;
-                    adapter.addTheReplyData(detailBean, position);
                     expandableListView.expandGroup(position);
                     break;
 
@@ -254,13 +248,13 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
         if (actionbar != null) {
             actionbar.hide();
         }
-        userData= FileCacheUtil.getUser(this);
         postId = getPostId();
         initView();
         click();
         initDetailsLayout();
         initRefreshLayout();
         initLoadLayout();
+        getPostById();
     }
     //初始化
     private void initView() {
@@ -277,14 +271,13 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
         expandableListView =findViewById(R.id.detail_page_lv_comment);
         bt_comment =findViewById(R.id.detail_page_do_comment);
         bt_comment.setOnClickListener(this);
-        adapter = new CommentExpandAdapter(this,commentsList,userData.getToken());
+        adapter = new CommentExpandAdapter(this,commentsList);
         expandableListView.setGroupIndicator(null);
         //默认展开所有回复
         expandableListView.setAdapter(adapter);
         initExpandableListView();
         getComments();
         progressBar=findViewById(R.id.progress);
-        Log.i(TAG, "initView: userData="+userData);
         niceSpinner = findViewById(R.id.nice_spinner);
         niceSpinner.attachDataSource(spinnerData);
         niceSpinner.setBackgroundResource(R.drawable.textview_round_border);
@@ -335,40 +328,7 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
         expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPosition, long l) {
-                boolean isExpanded = expandableListView.isGroupExpanded(groupPosition);
-                Log.e(TAG, "onGroupClick: 当前的评论id>>>"+adapter.getCommentBeanList().get(groupPosition).getCid());
-                showReplyDialog(groupPosition,-1);
                 return true;
-            }
-        });
-        expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long l) {
-                if(childPosition==2) {
-                    Log.i(TAG, "onChildClick: 点击查看更多");
-                    CommentDetailBean bean=adapter.getCommentBeanList().get(groupPosition);
-                    String name = bean.getUsername();
-                    String data = bean.getContent();
-                    String time = DateTimeUtil.handlerDateTime(bean.getCcreateTime());
-                    String url = bean.getUimg();
-                    int userId = bean.getUid();
-                    Intent intent = new Intent(PostDetails.this, MoerReply.class);
-                    intent.putExtra("userId",userId);
-                    intent.putExtra("data",data);
-                    intent.putExtra("url",url);
-                    intent.putExtra("time",time);
-                    intent.putExtra("name",name);
-                    intent.putExtra("cid",adapter.getCommentBeanList().get(groupPosition).getCid());
-                    Log.d(TAG, "名字为----------------"+name);
-                    Log.d(TAG, "时间为----------------"+time);
-                    Log.d(TAG, "内容为----------------"+data);
-                    Log.d(TAG, "url为----------------"+url);
-                    startActivity(intent);
-                    return false;
-                }
-                Log.e(TAG, "onGroupClick: -----当前的评论id>>>" + adapter.getCommentBeanList().get(groupPosition).getCid());
-                showReplyDialog(groupPosition,childPosition);
-                return false;
             }
         });
         expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
@@ -395,10 +355,7 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
             showCommentDialog();
         }
     }
-    /**
-     *2019/10/16
-     * 方法：弹出评论框
-     */
+
     private void showCommentDialog(){
         dialog = new BottomSheetDialog(this,R.style.BottomSheetEdit);
         final View commentView = LayoutInflater.from(this).inflate(R.layout.comment_dialog_layout,null);
@@ -415,8 +372,7 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
                 String commentContent = commentText.getText().toString().trim();
                 //后期需要检查token的值 查看是否被更改了喔
                 if(!TextUtils.isEmpty(commentContent)){
-                    progressBar.setVisibility(View.VISIBLE);
-                    addComment(commentContent,userData.getUsername(),content.getText().toString(),postUserId);
+                    addComment(commentContent);
                     dialog.dismiss();
                 }else {
                     Toast.makeText(PostDetails.this,"评论内容不能为空",Toast.LENGTH_SHORT).show();
@@ -444,128 +400,99 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
         });
         dialog.show();
     }
-        /**
-         * by   czj 2019/10/23
-         * 方法:弹出回复框
-         */
-    private void showReplyDialog(final int groupPosition,final int childPosition){
-        String commentContent=null;
-        String username=null;
-        int commentUserId=0;
-        int cid=0;
-        if(childPosition==-1){
-            CommentDetailBean detailBean=adapter.getCommentBeanList().get(groupPosition);
-            commentContent=detailBean.getContent();
-            commentUserId=detailBean.getUid();
-            username=detailBean.getUsername();
-            cid=detailBean.getCid();
-        }else {
-            CommentDetailBean commentDetailBean=adapter.getCommentBeanList().get(groupPosition);
-            ReplyDetailBean detailBean=commentDetailBean.getReplyVoList().get(childPosition);
-            commentContent=detailBean.getContent();
-            commentUserId=detailBean.getUid();
-            username=detailBean.getUsername();
-            cid=commentDetailBean.getCid();
-        }
-        dialog = new BottomSheetDialog(this,R.style.BottomSheetEdit);
-        View commentView = LayoutInflater.from(this).inflate(R.layout.comment_dialog_layout,null);
-        Log.i(TAG, "showReplyDialog: view="+commentView);
-        final EditText commentText = commentView.findViewById(R.id.dialog_comment_et);
-        final Button bt_comment =commentView.findViewById(R.id.dialog_comment_bt);
-        commentText.setHint("回复 " + username+ " 的评论:");
-        dialog.setContentView(commentView);
-        View parent = (View) commentView.getParent();
-        BottomSheetBehavior behavior = BottomSheetBehavior.from(parent);
-        commentView.measure(0,0);
-        behavior.setPeekHeight(commentView.getMeasuredHeight());
-        final int finalCommentUserId = commentUserId;
-        final String finalCommentContent = commentContent;
-        final int finalCid = cid;
-        bt_comment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String replyContent =commentText.getText().toString();
-                Log.i(TAG, "onClick:"+replyContent);
-                if(!TextUtils.isEmpty(replyContent)){
-                    dialog.dismiss();
-                    addReply(replyContent,userData.getToken(), finalCommentUserId, finalCommentContent, finalCid,userData.getUsername(),groupPosition);
-                }else {
-                    Toast.makeText(PostDetails.this,"回复内容不能为空",Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-        commentText.addTextChangedListener(new TextWatcher() {
-        @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                }
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if(!TextUtils.isEmpty(charSequence) && charSequence.length()>2){
-                        bt_comment.setBackgroundColor(Color.parseColor("#FFB568"));
-                    }else {
-                        bt_comment.setBackgroundColor(Color.parseColor("#D8D8D8"));
-                    }
-                }
-                @Override
-                public void afterTextChanged(Editable editable) {
-                }
-        });
-    dialog.show();
-    }
     private void getPostById(){
-        final Request request = new Request.Builder()
-                .url(getRequestStr(1))
-                .build();
-        OkHttpClient okHttpClient = new OkHttpClient();
-        okHttpClient.newCall(request).enqueue(new Callback() {
+        Map<String,String> params= UserUtil.createUserMap();
+        params.put("pid", String.valueOf(postId));
+        StandardRequestMangaer.getInstance().get(RequestUrl.FIND_POST_DEATILS, new BaseCallBack<PostDetailsBean>() {
+
             @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-                Log.d(TAG, "onFailure:失败呃");
-                Message message=new Message();
-                message.what=PostTemplateInterface.NO_NETWORK;
-                handler.sendMessage(message);
+            protected void OnRequestBefore(Request request) {
+                loadButton.setVisibility(View.GONE);
+                Log.i(TAG, "OnRequestBefore: 正在加载");
+                loadTextView.setText("网络波动...加载中...");
             }
+
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String dataStr = response.body().string();
-                System.out.println("帖子数据"+dataStr);
-                JSONObject jsonObject = null;
-                try {
-                    jsonObject = new JSONObject(dataStr);
-                    int code = jsonObject.getInt("code");
-                    if(code==0){
-                        Log.i(TAG, "onResponse:失败咯");
-                        return;
-                    }
-                    Gson gson = new Gson();
-                    Post post = gson.fromJson(jsonObject.getString("data"),Post.class);
-                    if(post==null){
-                        Log.i(TAG, "onResponse: 解析json数据失败");
-                        return;
-                    }
-                    handlerData(post);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+            protected void onFailure(Call call) {
+                loadTextView.setText("该帖子已被删除！");
+            }
+
+            @Override
+            protected void onSuccess(Call call, Response response, PostDetailsBean postDetailsBean) {
+                contentLayout.setVisibility(View.VISIBLE);
+                loadLayout.setVisibility(View.GONE);
+                Log.i(TAG, "onSuccess: 获得帖子详细信息成功！"+postDetailsBean);
+                Glide.with(PostDetails.this).load(postDetailsBean.getUimg()).into(userImg);
+                username.setText(postDetailsBean.getUsername());
+                content.setText(postDetailsBean.getContent());
+                loveNumStr.setText(String.valueOf(postDetailsBean.getLoveNum()));
+                commentStr.setText(String.valueOf(postDetailsBean.getCommentNum()));
+                dateTime.setText(DateTimeUtil.handlerDateTime(postDetailsBean.getPcreateTime()));
+                String imgUrls=postDetailsBean.getImgurl();
+                if (!TextUtils.isEmpty(imgUrls)){
+                    standardNineGridLayout.setUrlList(Arrays.asList(imgUrls.split(",")));
+                    standardNineGridLayout.setVisibility(View.VISIBLE);
+                }else {
+                    standardNineGridLayout.setVisibility(View.GONE);
                 }
+                loveStatus=postDetailsBean.getLoveStatus();
+                if (loveStatus==0){
+                    loveNum.setImageDrawable(getResources().getDrawable(R.mipmap.thumbs_up_black));
+                }else{
+                    loveNum.setImageDrawable(getResources().getDrawable(R.mipmap.thumbs_up_wanc));
+                }
+                loveNum.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (loveStatus==1){
+                            loveNum.setImageDrawable(getResources().getDrawable(R.mipmap.thumbs_up_black));
+                            loveStatus=0;
+                            loveNumStr.setText(String.valueOf(Integer.valueOf(loveNumStr.getText().toString())-1));
+                        }else{
+                            loveNum.setImageDrawable(getResources().getDrawable(R.mipmap.thumbs_up_wanc));
+                            loveStatus=1;
+                            loveNumStr.setText(String.valueOf(Integer.valueOf(loveNumStr.getText().toString())+1));
+                        }
+                        handlerLove(postDetailsBean.getPid());
+                    }
+                });
+                commentsList.addAll(postDetailsBean.getPostCommentVo().getComments());
+                adapter.notifyDataSetChanged();
             }
-        });
+
+            @Override
+            protected void onResponse(Response response) {
+
+            }
+
+            @Override
+            protected void onEror(Call call, int statusCode) {
+                Log.i(TAG, "OnRequestBefore: 正在加载");
+                loadTextView.setText("网络好像不太好喔，请检查网络后重试");
+                loadButton.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            protected void inProgress(int progress, long total, int id) {
+
+            }
+        },params);
     }
     private void initDetailsLayout(){
         netWorkUtil=new NetWorkUtil(this);
         username=findViewById(R.id.tiezi_username);
         dateTime=findViewById(R.id.tiezi_time);
         content=findViewById(R.id.tieze_Text);
-        nineGridTestLayout=findViewById(R.id.layout_nine_grid);
+        standardNineGridLayout =findViewById(R.id.layout_nine_grid);
         Log.i(TAG, "initDetailsLayout: ---------id=="+postId);
         loveNum=findViewById(R.id.loveNum);
         loveNumStr=findViewById(R.id.loveNumStr);
         loveLayout=findViewById(R.id.loveLayout);
         commentStr=findViewById(R.id.commentStr);
-        getPostById();
     }
     private int getPostId(){
         Intent intent = getIntent();
+        position=intent.getIntExtra("position",-1);
         return intent.getIntExtra("postId",-1);
     }
     private void handlerData(Post post){
@@ -574,105 +501,49 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
         message.obj=post;
         handler.sendMessage(message);
     }
-    private void addComment(final String content, String username, String postContent, int puid){
-        Log.i(TAG, "addComment: 文章长度"+postContent);
-        if(postContent.length()>30) {
-            postContent = postContent.substring(0, 30);
-        }
-        Log.i(TAG, "addComment: 长度="+postContent);
-        RequestBody requestBody = new FormBody.Builder()
-                .add("cpid", String.valueOf(postId))
-                .add("content",content)
-                .add("token",userData.getToken())
-                .add("username",username)
-                .add("postContent",postContent)
-                .add("puid",String.valueOf(puid))
-                .build();
-        final Request request = new Request.Builder()
-                .url(PostTemplateInterface.REQUEST_ADD_COMMENT_STR)
-                .post(requestBody)
-                .build();
-        OkHttpClient okHttpClient = new OkHttpClient();
-        okHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-                Log.d(TAG, "onFailure:失败呃");
-            }
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String dataStr = response.body().string();
-                Log.i(TAG, "onResponse:"+dataStr);
-                JSONObject jsonObject = null;
-                try {
-                    jsonObject = new JSONObject(dataStr);
-                    int code = jsonObject.getInt("code");
-                    if(code==0){
-                        Log.i(TAG, "onResponse:失败咯");
-                        return;
+    private void addComment(final String content){
+        Map<String,String> params=UserUtil.createUserMap();
+        params.put("cpid", String.valueOf(postId));
+        params.put("content",content);
+        StandardRequestMangaer.getInstance()
+                .post(RequestUrl.ADD_POST_COMMENT,new BaseCallBack<String>(){
+
+                    @Override
+                    protected void OnRequestBefore(Request request) {
+                        loadLayout.setVisibility(View.VISIBLE);
+                        loadButton.setVisibility(View.GONE);
+                        Log.i(TAG, "OnRequestBefore: 正在加载");
+                        loadTextView.setText("---正在上传评论中---");
                     }
-                    int floor =jsonObject.getInt("data");
-                    CommentDetailBean detailBean = new CommentDetailBean(userData.getUsername(), content,"刚刚",userData.getUimg());
-                    detailBean.setFloor(floor);
-                    Message message=new Message();
-                    message.what=PostTemplateInterface.NOTIFY_COMMENT;
-                    message.obj=detailBean;
-                    handler.sendMessage(message);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-    private void addReply(final String content, String token, int commentUserId, final String commentContent, int cid, String username, final int position){
-    //修改回复 设置参数
-        Log.i(TAG, "addReply: 被回复人的用户id为="+commentUserId);
-        RequestBody requestBody = new FormBody.Builder()
-                .add("content",content)
-                .add("tcuid", String.valueOf(commentUserId))
-                .add("token",token)
-                .add("pid", String.valueOf(postId))
-                .add("commentContent",commentContent)
-                .add("cid",String.valueOf(cid))
-                .add("username",username)
-                .build();
-        final Request request = new Request.Builder()
-                .url("http://106.54.134.17/app/addReply")
-                .post(requestBody)
-                .build();
-        OkHttpClient okHttpClient = new OkHttpClient();
-        okHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Message message=new Message();
-                message.what= RequestStatus.NO_NETWORK;
-                handler.sendMessage(message);
-                return;
-            }
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String dataStr = response.body().string();
-                System.out.println("帖子数据"+dataStr);
-                JSONObject jsonObject = null;
-                try {
-                    jsonObject = new JSONObject(dataStr);
-                    int code = jsonObject.getInt("code");
-                    if(code==0){
-                        Log.i(TAG, "onResponse:失败咯");
-                        return;
+
+                    @Override
+                    protected void onFailure(Call call) {
+                        loadTextView.setText("遇到未知原因,上传评论失败,请稍后重试");
                     }
-                    Log.i(TAG, "onResponse:信息"+jsonObject.getString("msg"));
-                    ReplyDetailBean detailBean = new ReplyDetailBean(userData.getUsername(),content,"刚刚");
-                    Message message=new Message();
-                    message.what=PostTemplateInterface.NOTIFY_REPLY;
-                    message.obj=detailBean;
-                    message.arg1=position;
-                    handler.sendMessage(message);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+
+                    @Override
+                    protected void onSuccess(Call call, Response response, String s) {
+                        loadLayout.setVisibility(View.GONE);
+                        Toast.makeText(PostDetails.this, s, Toast.LENGTH_SHORT).show();
+                        adapter.addTheCommentData(new PostComment("刚刚",content,"测试","http://image.biaobaiju.com/uploads/20180803/23/1533308847-sJINRfclxg.jpeg"));
+                        commentStr.setText(String.valueOf(Integer.valueOf(commentStr.getText().toString())+1));
+                    }
+
+                    @Override
+                    protected void onResponse(Response response) {
+
+                    }
+
+                    @Override
+                    protected void onEror(Call call, int statusCode) {
+                        loadTextView.setText("网络好像不太好喔，请检查网络后重试");
+                    }
+
+                    @Override
+                    protected void inProgress(int progress, long total, int id) {
+
+                    }
+                },params);
     }
     private void getComments(){
         final Request request =new Request.Builder()
@@ -702,7 +573,7 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
                         return;
                     }
                     Gson gson = new Gson();
-                    commentsList=gson.fromJson(jsonObject.getString("data"),new TypeToken<List<CommentDetailBean>>(){}.getType());
+                    commentsList=gson.fromJson(jsonObject.getString("data"),new TypeToken<List<PostComment>>(){}.getType());
                     Message message = new Message();
                     message.what=PostTemplateInterface.NOTIFY;
                     handler.sendMessage(message);
@@ -713,7 +584,7 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
             }
         });
     }
-    private void handlerCollection(){
+/*    private void handlerCollection(){
         RequestBody requestBody=new FormBody.Builder()
                 .add("postId", String.valueOf(postId))
                 .add("token",userData.getToken())
@@ -746,7 +617,7 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
                 }
             }
         });
-    }
+    }*/
     private String getRequestStr(int mode){
         String urlStr=null;
         String token=null;
@@ -760,7 +631,6 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
                             return urlStr;
             default:break;
         }
-        token=userData.getToken();
         if(token==null) {
             return urlStr;
         }
@@ -771,10 +641,10 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
     @Override
     public void onBackPressed() {
         Intent intent=new Intent();
-        intent.putExtra("loveNum",loveNumStr.getText().toString());
-        intent.putExtra("talkNum",commentStr.getText().toString());
-        intent.putExtra("status",loveStatus);
-        intent.putExtra("collectionStatus",collectionStatus);
+        intent.putExtra("position",position);
+        intent.putExtra("loveNum",Integer.valueOf(loveNumStr.getText().toString()));
+        intent.putExtra("commentNum",Integer.valueOf(commentStr.getText().toString()));
+        intent.putExtra("loveStatus",loveStatus);
         setResult(CommunityFragment.POSTDETAILS,intent);
         finish();
     }
@@ -787,12 +657,7 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
         //设置多监听器，包括顶部下拉刷新、底部上滑刷新
         refreshLayout.setOnMultiPurposeListener(new SimpleMultiPurposeListener(){
 
-            /**
-             * 根据上拉的状态，设置文字，并且判断条件
-             * @param refreshLayout
-             * @param oldState
-             * @param newState
-             */
+
             @Override
             public void onStateChanged(@NonNull RefreshLayout refreshLayout, @NonNull RefreshState oldState, @NonNull RefreshState newState) {
                 switch (newState) {
@@ -817,10 +682,7 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
                 }
             }
 
-            /**
-             * 添加是否可以加载更多数据的条件
-             * @param refreshLayout
-             */
+
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
                 if (mostTimes.get() < 3) {
@@ -830,11 +692,7 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
                 refreshLayout.finishLoadMore(1000); //这个记得设置，否则一直转圈
             }
 
-            /**
-             *  在这里根据不同的情况来修改加载完成后的提示语
-             * @param footer
-             * @param success
-             */
+
             @Override
             public void onFooterFinish(RefreshFooter footer, boolean success) {
                 super.onFooterFinish(footer, success);
@@ -862,14 +720,6 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
         loadLayout=findViewById(R.id.loadLayout);
         loadTextView=findViewById(R.id.loadTextView);
         loadButton=findViewById(R.id.loadButton);
-        loadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getPostById();
-                getComments();
-                loadButton.setClickable(false);
-            }
-        });
     }
 
     @Override
@@ -898,4 +748,43 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
                 }
         }
     }
+    private void handlerLove(int pid){
+        Map<String,String> params= UserUtil.createUserMap();
+        params.put("pid", String.valueOf(pid));
+        StandardRequestMangaer.getInstance()
+                .post(RequestUrl.HANDLER_POST_LOVE,new BaseCallBack<String>(){
+
+                    @Override
+                    protected void OnRequestBefore(Request request) {
+
+                    }
+
+                    @Override
+                    protected void onFailure(Call call) {
+
+                    }
+
+                    @Override
+                    protected void onSuccess(Call call, Response response, String s) {
+                        Toast.makeText(PostDetails.this, "操作成功！", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    protected void onResponse(Response response) {
+
+                    }
+
+                    @Override
+                    protected void onEror(Call call, int statusCode) {
+                        Toast.makeText(PostDetails.this, "请检查网络后重试", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                    @Override
+                    protected void inProgress(int progress, long total, int id) {
+
+                    }
+                },params);
+    }
+
 }

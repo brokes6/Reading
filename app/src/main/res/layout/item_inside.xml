@@ -68,7 +68,7 @@
             android:transitionName="longtext"
             />
 
-        <com.example.reading.view.NineGridTestLayout
+        <com.example.reading.view.StandardNineGridLayout
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/layout_nine_grid"
             android:layout_width="match_parent"

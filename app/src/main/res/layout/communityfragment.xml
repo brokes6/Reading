@@ -37,7 +37,7 @@
             android:layout_marginTop="10dp"
             android:paddingTop="20dp">
 
-            <ListView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list_data"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
