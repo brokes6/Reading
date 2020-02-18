@@ -155,15 +155,6 @@ public class VideoFragment extends Fragment {
             }
         });
     }
-    public boolean isFmActive() {
-        final AudioManager am = (AudioManager)getContext().getSystemService(Context.AUDIO_SERVICE);
-        if (am == null) {
-            Log.d(TAG, "isFmActive: 播放？----------------------------");
-         return false;
-     }
-        Log.d(TAG, "isFmActive: 不播放----------------------------");
-        return true;
-    }
 
 
     /**

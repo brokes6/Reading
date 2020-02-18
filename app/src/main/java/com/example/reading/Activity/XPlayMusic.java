@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,6 +16,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -24,25 +29,30 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.reading.R;
 import com.example.reading.ToolClass.BaseActivity;
 import com.example.reading.ToolClass.XBaseActivity;
 import com.example.reading.databinding.XplayMusicBinding;
+import com.example.reading.util.FastBlurUtil;
 import com.example.reading.util.RequestStatus;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.qzs.android.fuzzybackgroundlibrary.Fuzzy_Background;
 import com.weavey.loading.lib.LoadingLayout;
 
+
+import net.qiujuer.genius.blur.StackBlur;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import okhttp3.OkHttpClient;
 
 
 public class XPlayMusic extends XBaseActivity {
@@ -55,13 +65,16 @@ public class XPlayMusic extends XBaseActivity {
     private boolean fristplay = false;
     private Bitmap bitmap;
     private ObjectAnimator mCircleAnimator;
+    FastBlurUtil fastBlurUtil = new FastBlurUtil();
     int index=0;
     String ximg;
     String xurl;
     Bitmap Img;
     String title;
+    Bitmap bitmap2;
     String music_path ="https://sharefs.yun.kugou.com/202002131159/fe12bf1743fba8bdccd893e96d6227c5/G012/M02/18/1B/rIYBAFUPGLiAY70aAEjYKJYV34o632.mp3";
     XplayMusicBinding binding;
+    private Drawable drawable;
     Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -75,22 +88,22 @@ public class XPlayMusic extends XBaseActivity {
                     }else{
                         binding.actBookDetailTitleId.setText(title);
                         binding.playImg.setImageURL(ximg);
-                        Img = returnBitMap(ximg);
-                        binding.MusicalBackground.setBackground(ToBitmapPicture(Img));
+                        binding.playImg.setStrokeWidth(5);
                     }
-
+                    break;
+                case RequestStatus.AUDIO:
+                    Bitmap bitmaps = (Bitmap) msg.obj;
+                    Bitmap newBitmap = StackBlur.blurNativelyPixels(bitmaps, 25, false);
+                    binding.MusicalBackground.setBackground(ToBitmapPicture(newBitmap));
                     break;
             }
         }
     };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this,R.layout.xplay_music);
-//        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            //修改为深色，因为我们把状态栏的背景色修改为主题色白色，默认的文字及图标颜色为白色，导致看不到了。
-//            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-//        }
         ActionBar actionBar=getSupportActionBar();
         if (actionBar!=null){
             actionBar.hide();
@@ -106,6 +119,11 @@ public class XPlayMusic extends XBaseActivity {
             @Override
             public void run() {
                 mediaPlayer = new MediaPlayer();
+                Bitmap bitmap =fastBlurUtil.getBitMBitmap(ximg);
+                Message msg=new Message();
+                msg.what = RequestStatus.AUDIO;
+                msg.obj = bitmap;
+                handler.sendMessage(msg);
                 try {
                     mediaPlayer.setDataSource(xurl);
                     mediaPlayer.prepareAsync();
@@ -136,6 +154,7 @@ public class XPlayMusic extends XBaseActivity {
     public void initView(){
         Intent intent = getIntent();
         ximg = intent.getStringExtra("img");
+        Log.d(TAG, "initView: 返回的图片为"+ximg);
         xurl = intent.getStringExtra("url");
         title = intent.getStringExtra("name");
 
@@ -165,12 +184,7 @@ public class XPlayMusic extends XBaseActivity {
                 binding.actPlayTimeStart.setText(calculateTime(mediaPlayer.getCurrentPosition() / 1000));
             }
         });
-//        binding.doubleSpeed.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                showSingleAlertDialog(getView());
-//            }
-//        });
+
 
     }
 
@@ -255,52 +269,12 @@ public class XPlayMusic extends XBaseActivity {
         Log.d(TAG, "ToBlurredPicture: 已返回背景");
         return drawable;
     }
-    public Drawable ToBitmapPicture(Bitmap bitmap1){
-        final Bitmap bitmap = bitmap1;
-        Bitmap finalBitmap = Fuzzy_Background.with(XPlayMusic.this)
-                .bitmap(bitmap) //要模糊的图片
-                .radius(25)//模糊半径
-                .blur();
-        Drawable drawable = new BitmapDrawable(finalBitmap);
-        Log.d(TAG, "ToBlurredPicture: 已返回背景");
+    public Drawable ToBitmapPicture(Bitmap bitmapX){
+        Drawable drawable = new BitmapDrawable(bitmapX);
         return drawable;
     }
+
     private void Getsongs(){
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                OkHttpClient okHttpClient=new OkHttpClient();
-//
-//            }
-//        }).start();
-    }
-
-    public Bitmap returnBitMap(final String url){
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                URL imageurl = null;
-
-                try {
-                    imageurl = new URL(url);
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    HttpURLConnection conn = (HttpURLConnection)imageurl.openConnection();
-                    conn.setDoInput(true);
-                    conn.connect();
-                    InputStream is = conn.getInputStream();
-                    bitmap = BitmapFactory.decodeStream(is);
-                    is.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-
-        return bitmap;
     }
 
 
