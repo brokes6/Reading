@@ -3,9 +3,19 @@ package com.example.reading.ToolClass;
 public class Video {
     private String video_path;
     private String video_img;
-    public Video(String data,String img){
+    private int type;
+    public Video(String data,String img,int i){
         this.video_path= data;
         this.video_img= img;
+        this.type= i;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     public String getVideo_path() {

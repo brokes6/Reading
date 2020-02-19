@@ -20,17 +20,18 @@
         android:orientation="vertical"
         tools:context=".MainActivity">
 
-        <com.example.reading.util.RoundImageView
+        <com.example.reading.imageview.RoundImageViewBT
             android:id="@+id/play_img"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp"
+            android:layout_centerHorizontal="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/bottom_menuLayId"
             android:layout_marginTop="40dp"
             android:layout_marginBottom="2dp"
             android:src="@mipmap/ic_launcher_round"
-            app:type="circle"/>
+            />
 
         <LinearLayout
             android:id="@+id/bottom_menuLayId"

@@ -9,9 +9,10 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.reading.R;
+import com.example.reading.ToolClass.BaseActivity;
 import com.example.reading.databinding.AllBooksBinding;
 
-public class AllBooks extends AppCompatActivity {
+public class AllBooks extends BaseActivity {
     AllBooksBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

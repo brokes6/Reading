@@ -56,12 +56,17 @@
                 android:layout_marginLeft="15dp"
                 android:src="@mipmap/userimg"
                 app:type="circle" />
+
             <TextView
                 android:id="@+id/user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="79dp"
+                android:layout_marginBottom="59dp"
                 android:layout_toRightOf="@id/user_img"
-                android:layout_centerVertical="true"
                 android:text="Must "
                 android:textColor="#fff"
                 android:textSize="24sp" />

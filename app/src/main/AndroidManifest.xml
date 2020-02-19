@@ -27,6 +27,7 @@
         <activity android:name=".Activity.AllBooks" />
         <activity
             android:name=".Activity.ReadActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
 

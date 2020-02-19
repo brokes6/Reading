@@ -36,6 +36,7 @@ import com.example.reading.util.FragmentBackHandler;
 import com.example.reading.util.RequestStatus;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.weavey.loading.lib.LoadingLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -78,30 +79,63 @@ public class AudioFrequency extends Fragment{
     private FragmentBackHandler backInterface;
     BookComment bookComment = new BookComment();
     ReadActivity activity;
-    String music_path = "https://sharefs.yun.kugou.com/202002081817/3813c40ebddcde982ec510e16f3c57b3/G004/M08/16/03/pIYBAFS-a_aAcZRBAEGtSN5wixs886.mp3";
+    String music_path;
     public ArrayList<Map<String, Object>> list = new ArrayList<>();
     private Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case RequestStatus.SUCCESS:
+                    binding.loadingLayout.setStatus(LoadingLayout.Success);
                     binding.BookName.setText(bookComment.getBname());
                     binding.author.setText(bookComment.getAuthor());
                     binding.authorBookimg.setImageURL(bookComment.getBimg());
+                    binding.PlaybackOperation.setVisibility(View.GONE);
+                    EventBus.getDefault().post(new Video(null,null,1));
+                    Toast.makeText(getContext(),"该书籍暂无音频",Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "页面加载完成"+"当前页面信息为--"+"书名："+bookComment.getBname()+"--作者："+bookComment.getAuthor()+"--图片："+bookComment.getBimg());
                     break;
                 case RequestStatus.FAILURE:
                     Toast.makeText(getContext(),"获取数据失败，请稍后尝试",Toast.LENGTH_SHORT).show();
                     break;
                 case RequestStatus.AUDIO:
-                    /**
-                     * 到时候在Video多加俩个值，一个为视频图片，一个为有无视频
-                     */
+                    binding.BookName.setText(bookComment.getBname());
+                    binding.author.setText(bookComment.getAuthor());
+                    binding.authorBookimg.setImageURL(bookComment.getBimg());
+                    EventBus.getDefault().post(new Video(null,null,1));
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mediaPlayer = new MediaPlayer();
+                            try {
+                                mediaPlayer.setDataSource(music_path);
+                                Log.d(TAG, "handleMessage: url为"+music_path);
+                                mediaPlayer.prepareAsync();
+                                mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                                    @Override
+                                    public void onPrepared(MediaPlayer mp) {
+                                        binding.loadingLayout.setStatus(LoadingLayout.Success);
+                                    }
+                                });
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            duration2 = mediaPlayer.getDuration() / 1000;
+                            position = mediaPlayer.getCurrentPosition();
+                            binding.tvStart.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    binding.tvStart.setText(calculateTime(position / 1000));
+                                    binding.tvEnd.setText(calculateTime(duration2));
+                                }
+                            });
+                        }
+                    });
+                    thread.start();
                     break;
                 case RequestStatus.VIDEO:
-                    EventBus.getDefault().post(new Video(video,video_img));//ssj,szq是我定义的两个string类型变量
-                    binding.PlaybackOperation.setVisibility(View.GONE);
-                    Toast.makeText(getContext(),"该书籍暂无音频",Toast.LENGTH_SHORT).show();
+                    binding.loadingLayout.setStatus(LoadingLayout.Empty);
+                    EventBus.getDefault().post(new Video(video,video_img,0));
                     break;
             }
         }
@@ -120,33 +154,10 @@ public class AudioFrequency extends Fragment{
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.audio,container,false);
         //默认加载
-//        binding.loadingLayout.setStatus(LoadingLayout.Loading);
+        binding.loadingLayout.setStatus(LoadingLayout.Loading);
         initView();
         initData();
         Getsongs();
-
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mediaPlayer = new MediaPlayer();
-                try {
-                    mediaPlayer.setDataSource(music_path);
-                    mediaPlayer.prepareAsync();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                duration2 = mediaPlayer.getDuration() / 1000;
-                position = mediaPlayer.getCurrentPosition();
-                binding.tvStart.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        binding.tvStart.setText(calculateTime(position / 1000));
-                        binding.tvEnd.setText(calculateTime(duration2));
-                    }
-                });
-            }
-        });
-        thread.start();
         return binding.getRoot();
     }
     public void initView(){
@@ -332,23 +343,33 @@ public class AudioFrequency extends Fragment{
                 if (code==1) {
                     String data = object.getString("data");
                     JSONObject bookdata = new JSONObject(data);
-                    //获取音频
-                    String BookAudioData = bookdata.getString("audio");
-                    JSONObject BookAudio = new JSONObject(BookAudioData);
-                    Log.d(TAG, "audio数据为"+BookAudioData);
-                    //获取视频
-                    String BookVideoData = bookdata.getString("video");
-                    JSONObject BookVideo = new JSONObject(BookVideoData);
-                    Log.d(TAG, "video数据为"+BookAudioData);
-                    type = object.getInt("type");
-                    if (type !=1){
-                        //1为音频
+                    type = bookdata.getInt("type");
+                    Log.d(TAG, "JsonJX: 当前type为"+type);
+                    if (type ==100){
+                        //100为音频
+                        //获取音频
+                        String BookAudioData = bookdata.getString("audio");
+                        JSONObject BookAudio = new JSONObject(BookAudioData);
+                        Log.d(TAG, "audio数据为"+BookAudioData);
                         music_path=BookAudio.getString("url");
+                        Log.d(TAG, "音频url为"+music_path);
+                        //获取数据
+                        String bookname=bookdata.getString("bname");
+                        String bookauthor=bookdata.getString("author");
+                        String bookimg=bookdata.getString("bimg");
+                        bookComment.setAuthor(bookauthor);
+                        bookComment.setBimg(bookimg);
+                        bookComment.setBname(bookname);
                         Message mes=new Message();
                         mes.what= RequestStatus.AUDIO;
                         handler.sendMessage(mes);
-                    }else{
+                    }
+                    if (type ==200){
                         //0为视频
+                        //获取视频
+                        String BookVideoData = bookdata.getString("video");
+                        JSONObject BookVideo = new JSONObject(BookVideoData);
+                        Log.d(TAG, "video数据为"+BookVideoData);
                         video = BookVideo.getString("url");
                         video_img = BookVideo.getString("img");
                         bookComment.setImg(video_img);
@@ -357,23 +378,17 @@ public class AudioFrequency extends Fragment{
                         mes.what=RequestStatus.VIDEO;
                         handler.sendMessage(mes);
                     }
+                    if (type ==0){
                         String bookname=bookdata.getString("bname");
                         String bookauthor=bookdata.getString("author");
                         String bookimg=bookdata.getString("bimg");
                         bookComment.setAuthor(bookauthor);
                         bookComment.setBimg(bookimg);
                         bookComment.setBname(bookname);
-
-//                        Map<String,Object> map=new HashMap<>();
-//                        map.put("name",bookname);
-//                        map.put("author",bookauthor);
-//                        map.put("pic",bookimg);
-//                        map.put("type",type);
-//                        list.add(map);
                         Message mes=new Message();
                         mes.what=RequestStatus.SUCCESS;
                         handler.sendMessage(mes);
-
+                    }
                 }else{
                     Message mes=new Message();
                     mes.what=RequestStatus.FAILURE;

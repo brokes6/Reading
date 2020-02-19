@@ -6,6 +6,8 @@ import android.graphics.Color;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -29,8 +31,10 @@ import com.example.reading.R;
 import com.example.reading.Bean.BookComment;
 import com.example.reading.ToolClass.Video;
 import com.example.reading.databinding.VideoBinding;
+import com.example.reading.util.RequestStatus;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.weavey.loading.lib.LoadingLayout;
 
 
 import org.greenrobot.eventbus.EventBus;
@@ -53,6 +57,23 @@ public class VideoFragment extends Fragment {
     BookComment bookComment = new BookComment();
     String Vurl;
     String Vimg;
+    int type = 1;
+    private Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case RequestStatus.SUCCESS:
+                    binding.loading.setStatus(LoadingLayout.Success);
+                    binding.playerListVideo.setUp(Vurl, JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "标题");
+                    binding.playerListVideo.thumbImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                    Glide.with(getActivity()).load(Vimg).into(binding.playerListVideo.thumbImageView);
+                    break;
+                case RequestStatus.FAILURE:
+                    binding.loading.setStatus(LoadingLayout.Empty);
+                    break;
+            }
+        }
+    };
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +84,7 @@ public class VideoFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.video,container,false);
         EventBus.getDefault().register(this);
+        binding.loading.setStatus(LoadingLayout.Loading);
         initView();
         initData();
         return binding.getRoot();
@@ -91,19 +113,27 @@ public class VideoFragment extends Fragment {
     public void onEventMainThread(Video data) {
         Vurl=data.getVideo_path();
         Vimg=data.getVideo_img();
-        if (Vurl ==null){
-            binding.playerListVideo.setVisibility(View.GONE);
-            Log.d(TAG, "VideoFragment :"+"无视频");
-            Toast.makeText(getContext(),"该书籍暂无视频",Toast.LENGTH_SHORT).show();
+        type=data.getType();
+        Log.d(TAG, "当前传过来的type为"+type);
+        if (Vurl !=null){
+        if (type ==1){
+            Message mes=new Message();
+            mes.what= RequestStatus.FAILURE;
+            handler.sendMessage(mes);
         }else{
         /**
          * 参数1：视频路径
          * 参数2：播放器类型
          * 参数3：视频标题  可为空
          */
-        binding.playerListVideo.setUp(Vurl, JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "标题");
-        binding.playerListVideo.thumbImageView.setScaleType(ImageView.ScaleType.FIT_XY);
-        Glide.with(getActivity()).load(Vimg).into(binding.playerListVideo.thumbImageView);
+        Message mes=new Message();
+        mes.what= RequestStatus.SUCCESS;
+        handler.sendMessage(mes);
+            }
+        }else{
+            Message mes=new Message();
+            mes.what= RequestStatus.FAILURE;
+            handler.sendMessage(mes);
         }
     }
 
@@ -124,15 +154,6 @@ public class VideoFragment extends Fragment {
                 return false;
             }
         });
-    }
-    public boolean isFmActive() {
-        final AudioManager am = (AudioManager)getContext().getSystemService(Context.AUDIO_SERVICE);
-        if (am == null) {
-            Log.d(TAG, "isFmActive: 播放？----------------------------");
-         return false;
-     }
-        Log.d(TAG, "isFmActive: 不播放----------------------------");
-        return true;
     }
 
 

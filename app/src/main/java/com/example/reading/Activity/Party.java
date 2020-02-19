@@ -34,6 +34,7 @@ import com.google.gson.reflect.TypeToken;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
 import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
 import com.scwang.smartrefresh.layout.header.BezierRadarHeader;
+import com.weavey.loading.lib.LoadingLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -75,6 +76,7 @@ public class Party extends BaseActivity {
 //                    binding.videoView.setAdapter(video);
 //                    Log.d(TAG, "handleMessage: 适配器完成链接");
                     video_item_test.notifyDataSetChanged();
+                    binding.loading.setStatus(LoadingLayout.Success);
                     break;
                 case 200:
                     Log.i("TAG","-------------"+data);
@@ -94,6 +96,7 @@ public class Party extends BaseActivity {
             //修改为深色，因为我们把状态栏的背景色修改为主题色白色，默认的文字及图标颜色为白色，导致看不到了。
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
+        binding.loading.setStatus(LoadingLayout.Loading);
         initView();
         initData();
         Getsongs();
@@ -167,19 +170,8 @@ public class Party extends BaseActivity {
                         Message mes=new Message();
                         mes.what=100;
                         handler.sendMessage(mes);
-//                        String video_pic = object.getString("")
-                        //存入map
-//                        Map<String,Object> map=new HashMap<>();
-//                        map.put("title",video_titie);
-//                        map.put("url",video_url);
-//                        map.put("description",video_description);
-//                        map.put("pic",video_pic);
-//                        list.add(map);
                     }
                 }
-//                Message mes=new Message();
-//                mes.what=100;
-//                handler.sendMessage(mes);
             }catch (JSONException e){
                 e.printStackTrace();
             }
