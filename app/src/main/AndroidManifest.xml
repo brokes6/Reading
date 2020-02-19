@@ -36,7 +36,7 @@
         <meta-data
             android:name="design_height_in_dp"
             android:value="640" />
-
+        <activity android:name=".Activity.Error"/>
         <activity android:name=".Activity.LoginActivity" />
         <activity android:name=".MainActivity" />
         <activity
@@ -44,7 +44,6 @@
             android:theme="@style/SplashActivityTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

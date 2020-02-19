@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -104,6 +105,8 @@ public class XPlayMusic extends XBaseActivity implements CustomAdapt {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //设置竖屏
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         binding = DataBindingUtil.setContentView(this,R.layout.xplay_music);
         ActionBar actionBar=getSupportActionBar();
         if (actionBar!=null){

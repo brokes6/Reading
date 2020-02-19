@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.Toast;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
@@ -18,6 +19,7 @@ import com.example.reading.Fragment.CommunityFragment;
 import com.example.reading.Fragment.HomeFragment;
 import com.example.reading.Fragment.MyFragment;
 import com.example.reading.ToolClass.BarHigh;
+import com.example.reading.util.ActivityCollector;
 
 import java.util.Calendar;
 
@@ -30,6 +32,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     private MyFragment myFragment;
     private HomeFragment homeFragment;
     private CommunityFragment communityFragment;
+    private long firstTime = 0;
     private long homeExitTime=0;
     int num = 0;
     @Override
@@ -193,6 +196,21 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
 
 
     }
+
+    /**
+     * 第三种方法
+     */
+    @Override
+    public void onBackPressed() {
+        long secondTime = System.currentTimeMillis();
+        if (secondTime - firstTime > 2000) {
+            Toast.makeText(MainActivity.this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            firstTime = secondTime;
+        } else{
+            ActivityCollector.finishAll();
+        }
+    }
+
     //需要改变适配尺寸的时候，在重写这两个方法
     @Override
     public boolean isBaseOnWidth() {

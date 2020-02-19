@@ -1,6 +1,7 @@
 package com.example.reading;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 import com.example.reading.Activity.LoginActivity;
@@ -14,7 +15,8 @@ public class StartupPage extends Transparent {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        //设置竖屏
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         Thread myThread = new Thread() {//创建子线程
             @Override
             public void run() {
