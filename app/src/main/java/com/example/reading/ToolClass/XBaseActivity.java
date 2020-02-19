@@ -1,6 +1,7 @@
 package com.example.reading.ToolClass;
 
 import android.content.Context;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,12 +9,15 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.reading.Broadcast.LoginOutBroadcastReceiver;
+import com.example.reading.util.ActivityCollector;
 import com.example.reading.util.ScreenAdapterUtil;
 import com.example.reading.util.StatusBarUtil;
 
 public abstract class XBaseActivity extends AppCompatActivity {
     private static final String TAG = "XBaseActivity";
     int sum= 0;
+    protected LoginOutBroadcastReceiver locallReceiver;
     @Override
     protected  void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +60,31 @@ public abstract class XBaseActivity extends AppCompatActivity {
         {
             Log.d("ScreenAdapterUtil","你是常规屏");
         }
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // 注册广播接收器
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("com.gesoft.admin.loginout");
+        locallReceiver = new LoginOutBroadcastReceiver();
+        registerReceiver(locallReceiver, intentFilter);
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // 取消注册广播接收器
+        unregisterReceiver(locallReceiver);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // 销毁活动时，将其从管理器中移除
+        ActivityCollector.removeActivity(this);
     }
 }
 

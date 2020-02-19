@@ -10,4 +10,5 @@ public interface RequestStatus {
     public static final int REQUEST_FAILED=400;
     public static final int NO_RESOURCE=300;
     public static final int NO_NETWORK=-1;
+    public static final int INCREASE=500;
 }

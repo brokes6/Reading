@@ -21,11 +21,14 @@ import com.example.reading.R;
 import com.example.reading.ToolClass.BaseActivity;
 import com.example.reading.databinding.XiaoYouSoundBinding;
 import com.google.android.material.appbar.AppBarLayout;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.reading.Activity.ReadActivity.NUM_ITEMS;
+import static com.example.reading.application.AppApplication.getContext;
+
 /**
  * 小悠之声
  */

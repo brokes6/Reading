@@ -53,9 +53,10 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import me.jessyan.autosize.internal.CustomAdapt;
 
 
-public class XPlayMusic extends XBaseActivity {
+public class XPlayMusic extends XBaseActivity implements CustomAdapt {
     private static final String TAG = "XPlayMusic";
     private Timer timer;//定时器
     private MediaPlayer mediaPlayer;
@@ -291,6 +292,14 @@ public class XPlayMusic extends XBaseActivity {
         }
         super.onDestroy();
     }
-
+    //需要改变适配尺寸的时候，在重写这两个方法
+    @Override
+    public boolean isBaseOnWidth() {
+        return false;
+    }
+    @Override
+    public float getSizeInDp() {
+        return 640;
+    }
 
 }
