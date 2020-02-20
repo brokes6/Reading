@@ -94,7 +94,9 @@ public class ProgramFragment extends Fragment {
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
                 ++Page;
                 analysis(AUrl+Page);
-                programAdapter.add(programBindings);
+                //加了这一句反而不行了。。。。吐了
+//                programAdapter.add(programBindings);
+                programAdapter.notifyDataSetChanged();
                 binding.refreshLayout.finishLoadMore(true);//加载完成
                 Log.d(TAG, "onLoadMore: 添加更多完成");
             }
@@ -143,7 +145,7 @@ public class ProgramFragment extends Fragment {
                         Gson gson = new Gson();
                         if (Page>1){
                             programBindings = gson.fromJson(musicPrograms,new TypeToken<List<ProgramBean>>(){}.getType());
-                            Log.d(TAG, "JsonJX: 开始添加数据--"+musicPrograms);
+                            Log.d(TAG, "小悠之声开始添加数据--"+musicPrograms);
                             Message message=Message.obtain();
                             message.what=RequestStatus.INCREASE;
                             handler.sendMessage(message);
