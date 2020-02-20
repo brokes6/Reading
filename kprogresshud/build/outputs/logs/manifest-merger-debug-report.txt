@@ -1,43 +1,43 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\ZJ\Desktop\reading\kprogresshud\src\main\AndroidManifest.xml:1:1-7:12
-INJECTED from C:\Users\ZJ\Desktop\reading\kprogresshud\src\main\AndroidManifest.xml:1:1-7:12
-INJECTED from C:\Users\ZJ\Desktop\reading\kprogresshud\src\main\AndroidManifest.xml:1:1-7:12
-INJECTED from C:\Users\ZJ\Desktop\reading\kprogresshud\src\main\AndroidManifest.xml:1:1-7:12
-INJECTED from C:\Users\ZJ\Desktop\reading\kprogresshud\src\main\AndroidManifest.xml:1:1-7:12
-INJECTED from C:\Users\ZJ\Desktop\reading\kprogresshud\src\main\AndroidManifest.xml:1:1-7:12
-INJECTED from C:\Users\ZJ\Desktop\reading\kprogresshud\src\main\AndroidManifest.xml:1:1-7:12
+ADDED from D:\Android\Reading\kprogresshud\src\main\AndroidManifest.xml:1:1-7:12
+INJECTED from D:\Android\Reading\kprogresshud\src\main\AndroidManifest.xml:1:1-7:12
+INJECTED from D:\Android\Reading\kprogresshud\src\main\AndroidManifest.xml:1:1-7:12
+INJECTED from D:\Android\Reading\kprogresshud\src\main\AndroidManifest.xml:1:1-7:12
+INJECTED from D:\Android\Reading\kprogresshud\src\main\AndroidManifest.xml:1:1-7:12
+INJECTED from D:\Android\Reading\kprogresshud\src\main\AndroidManifest.xml:1:1-7:12
+INJECTED from D:\Android\Reading\kprogresshud\src\main\AndroidManifest.xml:1:1-7:12
 	package
-		ADDED from C:\Users\ZJ\Desktop\reading\kprogresshud\src\main\AndroidManifest.xml:1:11-44
-		INJECTED from C:\Users\ZJ\Desktop\reading\kprogresshud\src\main\AndroidManifest.xml
-		INJECTED from C:\Users\ZJ\Desktop\reading\kprogresshud\src\main\AndroidManifest.xml
+		ADDED from D:\Android\Reading\kprogresshud\src\main\AndroidManifest.xml:1:11-44
+		INJECTED from D:\Android\Reading\kprogresshud\src\main\AndroidManifest.xml
+		INJECTED from D:\Android\Reading\kprogresshud\src\main\AndroidManifest.xml
 	android:versionName
-		INJECTED from C:\Users\ZJ\Desktop\reading\kprogresshud\src\main\AndroidManifest.xml
-		ADDED from C:\Users\ZJ\Desktop\reading\kprogresshud\src\main\AndroidManifest.xml:1:1-7:12
-		INJECTED from C:\Users\ZJ\Desktop\reading\kprogresshud\src\main\AndroidManifest.xml
+		INJECTED from D:\Android\Reading\kprogresshud\src\main\AndroidManifest.xml
+		ADDED from D:\Android\Reading\kprogresshud\src\main\AndroidManifest.xml:1:1-7:12
+		INJECTED from D:\Android\Reading\kprogresshud\src\main\AndroidManifest.xml
 	android:versionCode
-		INJECTED from C:\Users\ZJ\Desktop\reading\kprogresshud\src\main\AndroidManifest.xml
-		ADDED from C:\Users\ZJ\Desktop\reading\kprogresshud\src\main\AndroidManifest.xml:1:1-7:12
-		INJECTED from C:\Users\ZJ\Desktop\reading\kprogresshud\src\main\AndroidManifest.xml
+		INJECTED from D:\Android\Reading\kprogresshud\src\main\AndroidManifest.xml
+		ADDED from D:\Android\Reading\kprogresshud\src\main\AndroidManifest.xml:1:1-7:12
+		INJECTED from D:\Android\Reading\kprogresshud\src\main\AndroidManifest.xml
 	xmlns:android
-		ADDED from C:\Users\ZJ\Desktop\reading\kprogresshud\src\main\AndroidManifest.xml:2:11-69
+		ADDED from D:\Android\Reading\kprogresshud\src\main\AndroidManifest.xml:2:11-69
 application
-ADDED from C:\Users\ZJ\Desktop\reading\kprogresshud\src\main\AndroidManifest.xml:4:5-6:38
+ADDED from D:\Android\Reading\kprogresshud\src\main\AndroidManifest.xml:4:5-6:38
 	android:supportsRtl
-		ADDED from C:\Users\ZJ\Desktop\reading\kprogresshud\src\main\AndroidManifest.xml:6:9-35
+		ADDED from D:\Android\Reading\kprogresshud\src\main\AndroidManifest.xml:6:9-35
 	android:allowBackup
-		ADDED from C:\Users\ZJ\Desktop\reading\kprogresshud\src\main\AndroidManifest.xml:5:9-35
+		ADDED from D:\Android\Reading\kprogresshud\src\main\AndroidManifest.xml:5:9-35
 uses-sdk
-INJECTED from C:\Users\ZJ\Desktop\reading\kprogresshud\src\main\AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from C:\Users\ZJ\Desktop\reading\kprogresshud\src\main\AndroidManifest.xml
-INJECTED from C:\Users\ZJ\Desktop\reading\kprogresshud\src\main\AndroidManifest.xml
-INJECTED from C:\Users\ZJ\Desktop\reading\kprogresshud\src\main\AndroidManifest.xml
-INJECTED from C:\Users\ZJ\Desktop\reading\kprogresshud\src\main\AndroidManifest.xml
+INJECTED from D:\Android\Reading\kprogresshud\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from D:\Android\Reading\kprogresshud\src\main\AndroidManifest.xml
+INJECTED from D:\Android\Reading\kprogresshud\src\main\AndroidManifest.xml
+INJECTED from D:\Android\Reading\kprogresshud\src\main\AndroidManifest.xml
+INJECTED from D:\Android\Reading\kprogresshud\src\main\AndroidManifest.xml
 	android:targetSdkVersion
-		INJECTED from C:\Users\ZJ\Desktop\reading\kprogresshud\src\main\AndroidManifest.xml
-		ADDED from C:\Users\ZJ\Desktop\reading\kprogresshud\src\main\AndroidManifest.xml
-		INJECTED from C:\Users\ZJ\Desktop\reading\kprogresshud\src\main\AndroidManifest.xml
+		INJECTED from D:\Android\Reading\kprogresshud\src\main\AndroidManifest.xml
+		ADDED from D:\Android\Reading\kprogresshud\src\main\AndroidManifest.xml
+		INJECTED from D:\Android\Reading\kprogresshud\src\main\AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from C:\Users\ZJ\Desktop\reading\kprogresshud\src\main\AndroidManifest.xml
-		ADDED from C:\Users\ZJ\Desktop\reading\kprogresshud\src\main\AndroidManifest.xml
-		INJECTED from C:\Users\ZJ\Desktop\reading\kprogresshud\src\main\AndroidManifest.xml
+		INJECTED from D:\Android\Reading\kprogresshud\src\main\AndroidManifest.xml
+		ADDED from D:\Android\Reading\kprogresshud\src\main\AndroidManifest.xml
+		INJECTED from D:\Android\Reading\kprogresshud\src\main\AndroidManifest.xml
