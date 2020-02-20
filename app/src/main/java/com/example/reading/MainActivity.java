@@ -197,9 +197,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
 
     }
 
-    /**
-     * 第三种方法
-     */
     @Override
     public void onBackPressed() {
         long secondTime = System.currentTimeMillis();

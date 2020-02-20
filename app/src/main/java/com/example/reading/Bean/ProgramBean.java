@@ -9,7 +9,7 @@ public class ProgramBean {
     private String date;
     private String aid;
     private int count;
-    private int playNum;
+    private String playNum;
 
     public String getImg() {
         return img;
@@ -19,11 +19,12 @@ public class ProgramBean {
         this.img = img;
     }
 
-    public int getPlayNum() {
+
+    public String getPlayNum() {
         return playNum;
     }
 
-    public void setPlayNum(int playNum) {
+    public void setPlayNum(String playNum) {
         this.playNum = playNum;
     }
 

@@ -1,5 +1,6 @@
 package com.example.reading.Activity;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +24,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 
+import com.example.reading.Bean.ProgramBean;
 import com.example.reading.Bean.VideoDetails;
 import com.example.reading.R;
 import com.example.reading.ToolClass.BaseActivity;
@@ -31,9 +33,12 @@ import com.example.reading.adapter.video_item;
 import com.example.reading.databinding.ActivityPartyBinding;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
 import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
+import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.BezierRadarHeader;
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.weavey.loading.lib.LoadingLayout;
 
 import org.json.JSONArray;
@@ -67,6 +72,9 @@ public class Party extends BaseActivity {
     String data;
     private VideoAdapter video_item_test;
     ActionBar actionBar;
+    int Page = 1;
+    List<VideoDetails> videoDetailsList;
+    String AUrl = "http://117.48.205.198/xiaoyoudushu/findTeamPrograms?currentPage=";
     Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -101,19 +109,30 @@ public class Party extends BaseActivity {
         binding.loading.setStatus(LoadingLayout.Loading);
         initView();
         initData();
-        Getsongs();
+        Getsongs(AUrl+Page);
     }
     public void initView(){
-        //设置 Header式
-        binding.refreshLayout.setRefreshHeader(new BezierRadarHeader(this).setEnableHorizontalDrag(true));
-        //设置 Footer样式
-        binding.refreshLayout.setRefreshFooter(new BallPulseFooter(this).setSpinnerStyle(SpinnerStyle.Scale));
-        binding.refreshLayout.setDisableContentWhenRefresh(true);
+        binding.refreshLayout.setEnableRefresh(false);
+        //设置 Footer 为 经典样式
+        binding.refreshLayout.setRefreshFooter(new ClassicsFooter(Party.this));
+
         video_item_test = new VideoAdapter(this);
         LinearLayoutManager im = new LinearLayoutManager(this);
         im.setOrientation(LinearLayoutManager.VERTICAL);
         binding.videoView.setLayoutManager(im);
         binding.videoView.setAdapter(video_item_test);
+        binding.refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+                ++Page;
+                Getsongs(AUrl+Page);
+                //加了这一句反而不行了。。。。吐了
+//                programAdapter.add(programBindings);
+                video_item_test.notifyDataSetChanged();
+                binding.refreshLayout.finishLoadMore(true);//加载完成
+                Log.d(TAG, "onLoadMore: 添加更多完成");
+            }
+        });
 
 
     }
@@ -125,14 +144,14 @@ public class Party extends BaseActivity {
             }
         });
     }
-    private void Getsongs(){
+    private void Getsongs(String url){
         list.clear();
         new Thread(new Runnable() {
             @Override
             public void run() {
                 OkHttpClient okHttpClient = new OkHttpClient();
                 Request request=new Request.Builder()
-                        .url("http://117.48.205.198/xiaoyoudushu/findTeamPrograms?currentPage=1").build();
+                        .url(url).build();
                 try{
                     Response response = okHttpClient.newCall(request).execute();
                     data = response.body().string();
@@ -161,12 +180,15 @@ public class Party extends BaseActivity {
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject object = array.getJSONObject(i);
                         String video_titie = object.getString("title");
-                        Log.d(TAG, "video_titie: "+video_titie);
+                        Log.d(TAG, "视频标题: "+video_titie);
                         String video_url = object.getString("rurl");
-                        Log.d(TAG, "video_url: "+video_url);
+                        Log.d(TAG, "视频url为: "+video_url);
                         String video_description = object.getString("description");
-                        Log.d(TAG, "video_description: "+video_description);
                         Gson gson = new Gson();
+                            if (Page>1){
+                                videoDetailsList = gson.fromJson(teamPrograms,new TypeToken<List<VideoDetails>>() {}.getType());
+                                Log.d(TAG, "党建开始添加数据--"+teamPrograms);
+                            }
                         List<VideoDetails> videoDetails = gson.fromJson(teamPrograms,new TypeToken<List<VideoDetails>>() {}.getType());
                         video_item_test.setVideoAdapter(videoDetails);
                         Message mes=new Message();
