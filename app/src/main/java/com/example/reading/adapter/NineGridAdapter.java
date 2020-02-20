@@ -132,16 +132,7 @@ public class NineGridAdapter extends RecyclerView.Adapter<NineGridAdapter.ViewHo
                 Intent intent = new Intent(mContext, PostDetails.class);
                 intent.putExtra("postId",mList.get(position).getPid());
                 intent.putExtra("position",position);
-                //获取两个页面的共同值
-                androidx.core.util.Pair<View, String> uimg = new androidx.core.util.Pair(holder.uimg, "userphoto");
-                androidx.core.util.Pair<View, String> username = new androidx.core.util.Pair(holder.username, "username");
-                androidx.core.util.Pair<View, String> image = new androidx.core.util.Pair(holder.layout, "image");
-                androidx.core.util.Pair<View, String> text = new androidx.core.util.Pair(holder.datetime, "time");
-                androidx.core.util.Pair<View, String> longtext = new androidx.core.util.Pair(holder.content, "longtext");
-                ActivityOptionsCompat optionsCompat =
-                        //将获取到的共同值传入，随后进行跳转
-                        ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) mContext, image,text,longtext,uimg,username);
-                fragment.startActivityForResult(intent, CommunityFragment.POSTDETAILS,optionsCompat.toBundle());
+                fragment.startActivityForResult(intent, CommunityFragment.POSTDETAILS);
             }
         });
     }
