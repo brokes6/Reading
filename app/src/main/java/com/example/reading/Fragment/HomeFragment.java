@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.reading.Activity.AllBooks;
 import com.example.reading.Activity.Party;
+import com.example.reading.Activity.SearchActivity;
 import com.example.reading.Activity.XiaoYouSound;
 import com.example.reading.Bean.BookDetails;
 import com.example.reading.R;
@@ -149,6 +151,14 @@ public class HomeFragment extends Fragment implements CustomAdapt {
         im3.setOrientation(LinearLayoutManager.VERTICAL);
         binding.festivalRecycleview.setLayoutManager(im3);
         binding.festivalRecycleview.setAdapter(festivalAdapter);
+        binding.searchBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "onClick: 开始跳转");
+                Intent intent=new Intent(getContext(), SearchActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initData() {
