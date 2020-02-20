@@ -9,23 +9,25 @@
 
     <LinearLayout
         android:id="@+id/back"
+        android:paddingBottom="5dp"
         android:layout_width="match_parent"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="15dp"
+        android:background="#fff"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <ImageView
             android:layout_marginLeft="5dp"
             android:id="@+id/title_back"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_gravity="center"
             android:src="@drawable/sanzuo" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="返回"
+            android:layout_marginLeft="10dp"
             android:textSize="17sp"
             android:textColor="#979797"
             android:layout_gravity="center_vertical"/>
@@ -53,8 +55,7 @@
             <androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:id="@+id/main_content"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-               >
+                android:layout_height="match_parent">
                 //详细页面的布局
             <RelativeLayout
                 android:layout_width="match_parent"

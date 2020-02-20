@@ -47,6 +47,7 @@ import com.example.reading.Bean.Post;
 import com.example.reading.Picture.LocalCacheUtils;
 import com.example.reading.Picture.MemoryCacheUtils;
 import com.example.reading.R;
+import com.example.reading.ToolClass.BaseActivity;
 import com.example.reading.adapter.ShowImageAdapter;
 import com.example.reading.util.ImageUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -74,7 +75,7 @@ import okhttp3.Response;
 import wowo.kjt.library.transform.DepthPageTransformer;
 
 
-public class ShowImageActivity extends AppCompatActivity {
+public class ShowImageActivity extends BaseActivity {
     public static final int GET_DATA_SUCCESS = 1;
     public static final int NETWORK_ERROR = 2;
     public static final int SERVER_ERROR = 3;

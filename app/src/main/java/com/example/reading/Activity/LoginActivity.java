@@ -9,7 +9,11 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +24,10 @@ import com.example.reading.R;
 import com.example.reading.ToolClass.BaseActivity;
 import com.example.reading.ToolClass.XBaseActivity;
 import com.example.reading.databinding.LoginBinding;
+import com.example.reading.util.RequestStatus;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import me.jessyan.autosize.internal.CustomAdapt;
 /**
@@ -32,7 +40,24 @@ public class LoginActivity extends BaseActivity implements CustomAdapt {
     SharedPreferences.Editor editor;
     LoginBinding binding;
     int key;
+    private Timer timer = new Timer();
+    private final long DELAY = 1000; // in ms
     private static final String TAG = "LoginActivity";
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case RequestStatus.SUCCESS:
+                    binding.login.setEnabled(true);
+                    binding.login.setBackgroundResource(R.drawable.file_back_bule);
+                    break;
+                case RequestStatus.FAILURE:
+                    binding.login.setBackgroundResource(R.drawable.file_back_bule_false);
+                    binding.login.setEnabled(false);
+                    break;
+            }
+        }
+    };
     /**
      * 关于屏幕适配，需要适配的屏幕就继承CustomAdapt，然后实现两个接口就ok了
      * 不需要的则继承CancelAdapt
@@ -56,10 +81,64 @@ public class LoginActivity extends BaseActivity implements CustomAdapt {
         sp = getSharedPreferences("data", Context.MODE_PRIVATE);
         editor = sp.edit();
         AutomaticLogon();
+        Logon();
         init();
         initData();
     }
+
+    private void Logon(){
+        String userAccount;
+        String userPassword;
+        userAccount = binding.loginUser.getText().toString();
+        userPassword = binding.loginPassword.getText().toString();
+        if (TextUtils.isEmpty(userAccount)){
+            Message mes=new Message();
+            mes.what=RequestStatus.FAILURE;
+            handler.sendMessage(mes);
+        }else{
+            Message mes=new Message();
+            mes.what=RequestStatus.SUCCESS;
+            handler.sendMessage(mes);
+        }
+        if (TextUtils.isEmpty(userPassword)){
+            Message mes=new Message();
+            mes.what=RequestStatus.FAILURE;
+            handler.sendMessage(mes);
+        }else{
+            Message mes=new Message();
+            mes.what=RequestStatus.SUCCESS;
+            handler.sendMessage(mes);
+        }
+    }
+
     private void init(){
+        binding.loginUser.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            //输入时的调用
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(timer != null)
+                    timer.cancel();
+                    Logon();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.length() >= 1) {
+                    timer = new Timer();
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            Logon();
+                        }
+                    }, DELAY);
+                }
+            }
+        });
+
         binding.login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,6 +152,9 @@ public class LoginActivity extends BaseActivity implements CustomAdapt {
     }
     private void initData(){
     }
+
+
+
     public void AutomaticLogon(){
         key = sp.getInt("key",0);
         if (key==0){

@@ -19,8 +19,8 @@
                 android:layout_height="wrap_content">
         <com.example.reading.Picture.MyImageView
             android:id="@+id/tieze_user_img"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_launcher_foreground" />
 
@@ -28,11 +28,10 @@
             android:id="@+id/tiezi_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="60dp"
+            android:layout_marginLeft="49dp"
             android:text="我是名字"
-            android:textSize="17sp"
-            android:textColor="#494949"
-            android:textStyle="bold" />
+            android:textSize="14sp"
+            android:textColor="#494949" />
         <TextView
             android:id="@+id/tiezi_time"
             android:layout_centerHorizontal="true"
@@ -40,18 +39,9 @@
             android:layout_marginRight="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="14sp"
             android:text="我是时间"
             android:transitionName="time"
-            />
-        <TextView
-            android:layout_marginLeft="60dp"
-            android:id="@+id/tieze_felei"
-            android:layout_below="@+id/tiezi_username"
-            android:text="-APP俱乐部-"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#6F6F6F"
-            android:textSize="12sp"
             />
             </RelativeLayout>
         </LinearLayout>
@@ -59,7 +49,7 @@
         <TextView
             android:layout_marginTop="15dp"
             android:layout_marginLeft="5dp"
-            android:textSize="18sp"
+            android:textSize="14sp"
             android:id="@+id/tieze_Text"
             android:text="123"
             android:textColor="#424242"
@@ -81,7 +71,7 @@
     <LinearLayout
         android:layout_marginTop="8dp"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="40dp"
         android:layout_gravity="bottom"
         android:background="#ECECEC"
         android:orientation="horizontal">

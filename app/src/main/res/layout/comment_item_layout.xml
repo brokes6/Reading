@@ -3,8 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="20dp"
-    >
+    android:layout_marginBottom="20dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,9 +29,8 @@
                 android:id="@+id/comment_item_userName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="17sp"
+                android:textSize="15sp"
                 android:textColor="#494949"
-                android:textStyle="bold"
                 android:text="沐风" />
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -83,14 +81,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
         android:textColor="#484848"
-        android:textSize="16sp"
+        android:textSize="15sp"
         android:layout_marginLeft="65dp"
         android:layout_marginRight="24dp"
         android:text="测试文字"/>
 
     <TextView
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="9dp"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:background="#DFDFDF"/>
 </LinearLayout>
