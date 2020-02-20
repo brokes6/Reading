@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.reading.Bean.SearchResult;
 import com.example.reading.R;
+import com.example.reading.ToolClass.BaseActivity;
 import com.example.reading.adapter.HistorySearchAdapter;
 import com.example.reading.adapter.SearchResultAdapter;
 import com.example.reading.constant.RequestUrl;
@@ -36,7 +37,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends BaseActivity {
     private static final String TAG = "SearchActivity";
     private SearchView searchView;
     private LinearLayout historyLayout;
@@ -68,12 +69,14 @@ public class SearchActivity extends AppCompatActivity {
     }
     private void initView(){
         searchView=findViewById(R.id.searchView);
+        searchView.findViewById(androidx.appcompat.R.id.search_plate).setBackground(null);
+        searchView.findViewById(androidx.appcompat.R.id.submit_area).setBackground(null);
         recyclerHisotryView=findViewById(R.id.recyclerHistoryView);
         historyLayout=findViewById(R.id.historyLayout);
         resultLayout=findViewById(R.id.resultLayout);
         recyclerResultView=findViewById(R.id.recyclerResultView);
         searchView.setQueryHint("请输入搜索内容");
-        searchView.setIconifiedByDefault(false);
+        searchView.onActionViewExpanded();
         back = findViewById(R.id.search_back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override

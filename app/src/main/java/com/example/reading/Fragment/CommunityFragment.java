@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.reading.Activity.addPost;
 import com.example.reading.Bean.Post;
 import com.example.reading.R;
 import com.example.reading.adapter.NineGridAdapter;
@@ -44,6 +45,7 @@ public class CommunityFragment extends Fragment {
     private View view;
     private RecyclerView recyclerView;
     private NineGridAdapter adapter;
+    private int oid;
     private AtomicInteger integer=new AtomicInteger(1);
     public static CommunityFragment newInstance(String param1) {
         CommunityFragment fragment = new CommunityFragment();
@@ -77,9 +79,9 @@ public class CommunityFragment extends Fragment {
         actionA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent_addPost = new Intent(getActivity(),addPost.class);
-//                intent_addPost.putExtra("oid",oid);
-//                startActivity(intent_addPost);
+                Intent intent_addPost = new Intent(getActivity(), addPost.class);
+                intent_addPost.putExtra("oid",oid);
+                startActivity(intent_addPost);
             }
         });
     }

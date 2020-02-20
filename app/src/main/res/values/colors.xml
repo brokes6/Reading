@@ -15,4 +15,7 @@
     <color name="fafafa">#fafafa</color>
     <color name="color_33">#333333</color>
     <color name="colo_6666">#666666</color>
+    <color name="white_pressed">#f1f1f1</color>
+    <color name="half_black">#808080</color>
+    <color name="button_enabled">#333333</color>
 </resources>

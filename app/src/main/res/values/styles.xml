@@ -17,4 +17,20 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
+    <style name="EditorIcon">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">20dp</item>
+        <item name="android:layout_marginLeft">20dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/button_enabled</item>
+    </style>
+    //颜色
+    <declare-styleable name="ColorPickerView">
+        <attr name="indicatorColor" format="color" /><!--指示点颜色-->
+        <attr name="indicatorEnable" format="boolean" /><!--是否启用指示点-->
+        <attr name="orientation" format="integer">
+            <enum name="horizontal" value="0" />
+            <enum name="vertical" value="1" />
+        </attr>
+    </declare-styleable>
 </resources>

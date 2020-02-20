@@ -2,30 +2,32 @@
 <RelativeLayout android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
     <LinearLayout
         android:id="@+id/searchLayout"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_alignParentTop="true"
-        android:background="#DFE2E4"
+        android:background="@drawable/file_back_light_grey"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
         <ImageView
+            android:layout_marginLeft="7dp"
             android:layout_gravity="center_vertical"
             android:id="@+id/search_back"
-            android:layout_width="50dp"
-            android:layout_height="30dp"
-            android:src="@drawable/other_back_gray"/>
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/sanzuo"/>
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView"
-        android:layout_marginLeft="10dp"
-        android:layout_width="300dp"
-        android:layout_height="38dp"
+        android:layout_marginLeft="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
         android:layout_marginTop="8dp"
-        android:layout_marginRight="6dp"
+        android:layout_marginRight="20dp"
         android:layout_marginBottom="8dp"
-        android:background="#F3F3F3"
+        android:background="@drawable/file_back_light_grey"
         android:gravity="center"
         android:layout_gravity="center" />
     </LinearLayout>
@@ -39,11 +41,11 @@
             android:orientation="vertical"
             android:id="@+id/historyLayout">
         <TextView
-            android:textSize="19sp"
+            android:textSize="16sp"
             android:textColor="#383838"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="搜索历史:"/>
+            android:text="搜索历史 :"/>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerHistoryView"
             android:layout_width="match_parent"

@@ -1,0 +1,46 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_marginTop="5dp"
+    android:paddingBottom="9dp"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <LinearLayout
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/title_back"
+            android:layout_marginLeft="9dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center|left"
+            android:src="@drawable/close" />
+
+        <TextView
+            android:layout_gravity="center"
+            android:text="发布动态"
+            android:textSize="18sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:text="发表"
+            android:id="@+id/sendPost"
+            android:layout_marginRight="10dp"
+            android:layout_gravity="right|center"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bt_edit"/>
+
+    </LinearLayout>
+</LinearLayout>

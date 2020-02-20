@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="110dp"
+    android:layout_height="115dp"
+
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <com.example.reading.Picture.MyImageView
+            android:id="@+id/ivPic"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/jiahao"
+            />
+
+        <ProgressBar
+            android:id="@+id/bg_progressbar"
+            style="@style/AppTheme"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="@drawable/ic_launcher_background"
+            android:max="100"
+            android:progress="60" />
+    </LinearLayout>
+    <com.example.reading.Picture.MyImageView
+        android:id="@+id/ivDel"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/ic_launcher_background"
+        android:layout_alignParentRight="true"/>
+
+</RelativeLayout>

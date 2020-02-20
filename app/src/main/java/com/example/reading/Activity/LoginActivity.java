@@ -48,6 +48,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static cn.jpush.android.api.JPushInterface.ErrorCode.s;
+
 /**
  * CustomAdapt 设置
  */
@@ -95,6 +97,15 @@ public class LoginActivity extends BaseActivity implements CustomAdapt {
                     binding.login.setEnabled(false);
                     break;
             }
+        }
+    };
+    private Runnable delayRun = new Runnable() {
+
+        @Override
+        public void run() {
+            //在这里调用服务器的接口，获取数据
+            Log.d(TAG, "run: 开始判断是否输入---------------");
+            Logon();
         }
     };
     /**
@@ -150,6 +161,8 @@ public class LoginActivity extends BaseActivity implements CustomAdapt {
     }
 
     private void init(){
+        binding.loginUser.setSingleLine(true);
+        binding.loginPassword.setSingleLine(true);
         binding.loginUser.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -165,15 +178,35 @@ public class LoginActivity extends BaseActivity implements CustomAdapt {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (editable.length() >= 1) {
-                    timer = new Timer();
-                    timer.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            Logon();
-                        }
-                    }, DELAY);
+                if(delayRun!=null){
+                    //每次editText有变化的时候，则移除上次发出的延迟线程
+                    handler.removeCallbacks(delayRun);
                 }
+                //延迟800ms，如果不再输入字符，则执行该线程的run方法
+                handler.postDelayed(delayRun, 800);
+            }
+        });
+        binding.loginPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            //输入时的调用
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(timer != null)
+                    timer.cancel();
+                Logon();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(delayRun!=null){
+                    //每次editText有变化的时候，则移除上次发出的延迟线程
+                    handler.removeCallbacks(delayRun);
+                }
+                //延迟800ms，如果不再输入字符，则执行该线程的run方法
+                handler.postDelayed(delayRun, 800);
             }
         });
 
