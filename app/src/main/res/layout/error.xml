@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFF"
+        android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:background="#fff"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/error_return"
+            android:paddingLeft="10dp"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:background="#FFFFFF"
+            android:src="@drawable/other_back" />
+        <TextView
+            android:paddingLeft="15dp"
+            android:layout_gravity="center_vertical"
+            android:textSize="24sp"
+            android:text="待开发"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.7dp"
+        android:background="#dedede"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal|center_vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="此功能尚在开发"
+            android:textColor="#000"
+            android:textSize="50sp"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="116dp" />
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/gv_error"
+            android:layout_width="225dp"
+            android:layout_height="146dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/loadgif"
+            tools:layout_editor_absoluteX="93dp"
+            tools:layout_editor_absoluteY="419dp" />
+    </LinearLayout>
+</LinearLayout>

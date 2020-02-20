@@ -13,9 +13,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.reading.Activity.AllBooks;
@@ -31,10 +33,12 @@ import com.example.reading.adapter.MAdapter;
 import com.example.reading.adapter.MAdapter_seller;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
 import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
 import com.scwang.smartrefresh.layout.header.BezierRadarHeader;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 
 import org.json.JSONException;
@@ -45,6 +49,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import me.jessyan.autosize.internal.CustomAdapt;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -52,7 +57,7 @@ import wowo.kjt.library.onPageClickListener;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements CustomAdapt {
     HomefragmentBinding binding;
     private int phoneHeight = -1;
     String date1;
@@ -62,7 +67,9 @@ public class HomeFragment extends Fragment {
     private MAdapter mAdapter;
     private MAdapter_seller mAdapter_seller;
     private FestivalAdapter festivalAdapter;
-    private List<BookType> bookDetails;
+    List<BookDetails> bookDetails;
+    List<BookDetails> bookDetails2;
+    List<FestivalDetails> festivalDetails;
     List<String> urlList;
     private String time;
     private String Title;
@@ -100,6 +107,7 @@ public class HomeFragment extends Fragment {
         initView();
         initData();
         analysis();
+        setPullRefresher();
         return binding.getRoot();
     }
 
@@ -117,15 +125,23 @@ public class HomeFragment extends Fragment {
         binding.refreshLayout.setDisableContentWhenRefresh(true);
         //MAdapter
         mAdapter=new MAdapter(getActivity());
-        LinearLayoutManager im = new LinearLayoutManager(getContext());
-        im.setOrientation(LinearLayoutManager.HORIZONTAL);
-        binding.RecommendRecycleview.setLayoutManager(im);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false){
+            @Override
+            public boolean canScrollHorizontally() {
+                return false;
+            }
+        };
+        binding.RecommendRecycleview.setLayoutManager(layoutManager);
         binding.RecommendRecycleview.setAdapter(mAdapter);
         //MAdapter_seller
         mAdapter_seller = new MAdapter_seller(getActivity());
-        LinearLayoutManager im2 = new LinearLayoutManager(getContext());
-        im2.setOrientation(LinearLayoutManager.HORIZONTAL);
-        binding.BestSellerRecycleview.setLayoutManager(im2);
+        LinearLayoutManager layoutManager2 = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false){
+            @Override
+            public boolean canScrollHorizontally() {
+                return false;
+            }
+        };
+        binding.BestSellerRecycleview.setLayoutManager(layoutManager2);
         binding.BestSellerRecycleview.setAdapter(mAdapter_seller);
         //FestivalAdapter
         festivalAdapter = new FestivalAdapter(getActivity());
@@ -220,9 +236,9 @@ public class HomeFragment extends Fragment {
                 if(code==1){
                     if (popularBooks!=null){
                         Gson gson = new Gson();
-                        List<BookDetails> bookDetails = gson.fromJson(newBooks,new TypeToken<List<BookDetails>>() {}.getType());
+                        bookDetails = gson.fromJson(newBooks,new TypeToken<List<BookDetails>>() {}.getType());
                         mAdapter.setMyAdapter(bookDetails);
-                        List<BookDetails> bookDetails2 = gson.fromJson(popularBooks,new TypeToken<List<BookDetails>>() {}.getType());
+                        bookDetails2 = gson.fromJson(popularBooks,new TypeToken<List<BookDetails>>() {}.getType());
                         mAdapter_seller.setMAdapter_seller(bookDetails2);
                         Message message=Message.obtain();
                         message.what=200;
@@ -253,7 +269,7 @@ public class HomeFragment extends Fragment {
                         Log.d(TAG, "bookDtoList没数据拉");
                     }else{
                     Gson gson = new Gson();
-                    List<FestivalDetails> festivalDetails = gson.fromJson(bookDtoList,new TypeToken<List<FestivalDetails>>() {}.getType());
+                    festivalDetails = gson.fromJson(bookDtoList,new TypeToken<List<FestivalDetails>>() {}.getType());
                     festivalAdapter.setFestivalAdapter(festivalDetails);
                     Message message=Message.obtain();
                     message.what=210;
@@ -264,5 +280,31 @@ public class HomeFragment extends Fragment {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void setPullRefresher(){
+        binding.refreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                //在这里执行下拉刷新时的具体操作(网络请求、更新UI等)
+//                bookDetails.clear();
+//                bookDetails2.clear();
+//                festivalDetails.clear();
+                Toast.makeText(getContext(),"正在刷新",Toast.LENGTH_SHORT).show();
+//                analysis();
+                mAdapter_seller.notifyDataSetChanged();
+                binding.refreshLayout.finishRefresh(2000);
+            }
+        });
+    }
+
+    //需要改变适配尺寸的时候，在重写这两个方法
+    @Override
+    public boolean isBaseOnWidth() {
+        return false;
+    }
+    @Override
+    public float getSizeInDp() {
+        return 640;
     }
 }

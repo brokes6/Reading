@@ -118,7 +118,8 @@
                     android:layout_marginRight="@dimen/afc_5dp"
                     android:text="00:00"
                     android:textColor="@color/color_33"
-                    android:textSize="10sp" />
+                    android:textStyle="bold"
+                    android:textSize="14sp" />
 
                 <SeekBar
                     android:id="@+id/act_Progress"
@@ -143,7 +144,8 @@
                     android:layout_marginRight="@dimen/afc_10dp"
                     android:text="00:00"
                     android:textColor="@color/color_33"
-                    android:textSize="10sp" />
+                    android:textStyle="bold"
+                    android:textSize="14sp" />
             </LinearLayout>
             <!--播放控制按钮-->
             <LinearLayout

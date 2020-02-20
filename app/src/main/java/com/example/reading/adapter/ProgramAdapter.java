@@ -31,7 +31,7 @@ public class ProgramAdapter extends RecyclerView.Adapter<ProgramViewHolder>{
         inflater = LayoutInflater.from(context);
     }
     public void setProgramAdapter(List<ProgramBean> programBeans1) {
-        programBeans.clear();
+//        programBeans.clear();
         this.programBeans.addAll(programBeans1);
         Log.i(TAG, "ProgramAdapter开始设置"+this.programBeans.size());
     }
@@ -71,7 +71,17 @@ public class ProgramAdapter extends RecyclerView.Adapter<ProgramViewHolder>{
     public int getItemCount() {
         return programBeans.size();
     }
+
+    //下面两个方法提供给页面刷新和加载时调用
+    public void add(List<ProgramBean> programbeanlist){
+        //增加数据
+        int position = programBeans.size();
+        programBeans.addAll(position, programbeanlist);
+        notifyItemInserted(position);
+    }
+
 }
+
 
 
 class ProgramViewHolder extends RecyclerView.ViewHolder{

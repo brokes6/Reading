@@ -2,6 +2,7 @@ package com.example.reading.adapter;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.reading.Bean.VideoDetails;
 import com.example.reading.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,9 +54,20 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapterHolder>{
         holder.vdescription.setText("介绍: "+videoDetails2.getDescription());
         holder.jcVideoPlayerStandard.setUp(videoDetails2.getRurl(),JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL,videoDetails2.getTitle());
         Log.d(TAG, "Video_item_testHolder: -------------------"+videoDetails2.getRurl());
-//        if (TextUtils.isEmpty(videoDetails2.getRimg())){
-//
-//        }
+        if (TextUtils.isEmpty(videoDetails2.getImg())){
+            //空时
+            Log.d(TAG, "onBindViewHolder: 视频图片为:"+videoDetails2.getImg());
+            Picasso.with(mContext).cancelRequest(holder.jcVideoPlayerStandard.thumbImageView);
+            holder.jcVideoPlayerStandard.thumbImageView.setImageDrawable(mContext.getResources().
+                    getDrawable(R.mipmap.kong));//当图片为空时显示的图片
+        }else{
+            //这需要的图片是显示在视频没播放的情况下显示的图片
+            Picasso
+                    .with(mContext)
+                    .load(videoDetails2.getImg())
+                    .placeholder(mContext.getResources().getDrawable(R.mipmap.kong))//图片加载中显示
+                    .into(holder.jcVideoPlayerStandard.thumbImageView);
+        }
     }
 
 

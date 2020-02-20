@@ -5,14 +5,14 @@ public class VideoDetails {
     private String title;
     private String description;
     private String rurl;
-    private String rimg;
+    private String img;
 
-    public String getRimg() {
-        return rimg;
+    public String getImg() {
+        return img;
     }
 
-    public void setRimg(String rimg) {
-        this.rimg = rimg;
+    public void setImg(String img) {
+        this.img = img;
     }
 
     public String getTid() {

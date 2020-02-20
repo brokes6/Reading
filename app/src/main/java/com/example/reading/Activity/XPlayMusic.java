@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -53,9 +54,10 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import me.jessyan.autosize.internal.CustomAdapt;
 
 
-public class XPlayMusic extends XBaseActivity {
+public class XPlayMusic extends XBaseActivity implements CustomAdapt {
     private static final String TAG = "XPlayMusic";
     private Timer timer;//定时器
     private MediaPlayer mediaPlayer;
@@ -103,6 +105,8 @@ public class XPlayMusic extends XBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //设置竖屏
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         binding = DataBindingUtil.setContentView(this,R.layout.xplay_music);
         ActionBar actionBar=getSupportActionBar();
         if (actionBar!=null){
@@ -291,6 +295,14 @@ public class XPlayMusic extends XBaseActivity {
         }
         super.onDestroy();
     }
-
+    //需要改变适配尺寸的时候，在重写这两个方法
+    @Override
+    public boolean isBaseOnWidth() {
+        return false;
+    }
+    @Override
+    public float getSizeInDp() {
+        return 640;
+    }
 
 }
