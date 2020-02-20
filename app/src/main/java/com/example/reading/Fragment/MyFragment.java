@@ -2,6 +2,8 @@ package com.example.reading.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,8 @@ import com.example.reading.Bean.User;
 import com.example.reading.R;
 import com.example.reading.databinding.MyfragmentBinding;
 import com.example.reading.util.FileCacheUtil;
+import com.example.reading.util.RequestStatus;
+import com.weavey.loading.lib.LoadingLayout;
 
 import me.jessyan.autosize.internal.CustomAdapt;
 
@@ -24,6 +28,25 @@ public class MyFragment extends Fragment implements CustomAdapt {
     private User userData;
     MyfragmentBinding binding;
     private static final String TAG = "MyFragment";
+    private Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case RequestStatus.SUCCESS:
+                    binding.userName.setText(userData.getUsername());
+                    if (userData.getUimg()!=null){
+                        binding.userImg.setImageURL(userData.getUimg());
+                        binding.myload.setStatus(LoadingLayout.Success);
+                    }else{
+                        binding.userImg.setImageResource(R.mipmap.userimg);
+                        Log.d(TAG, "user"+"无头像");
+                    }
+                    break;
+                case RequestStatus.FAILURE:
+                    break;
+            }
+        }
+    };
     public static MyFragment newInstance(String param1) {
         MyFragment fragment = new MyFragment();
         Bundle args = new Bundle();
@@ -38,6 +61,7 @@ public class MyFragment extends Fragment implements CustomAdapt {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             binding = DataBindingUtil.inflate(inflater,R.layout.myfragment,container,false);
+            binding.myload.setStatus(LoadingLayout.Loading);
             userData= FileCacheUtil.getUser(getContext());
         Log.d(TAG, "onCreateView: "+userData);
             initView();
@@ -57,14 +81,13 @@ public class MyFragment extends Fragment implements CustomAdapt {
     private void initData(){
         if (userData.getUsername()==null){
             Log.d(TAG, "user无数据!");
+            Message mes=new Message();
+            mes.what=RequestStatus.FAILURE;
+            handler.sendMessage(mes);
         }else{
-            binding.userName.setText(userData.getUsername());
-            if (userData.getUimg()!=null){
-                binding.userImg.setImageURL(userData.getUimg());
-            }else{
-                binding.userImg.setImageResource(R.mipmap.userimg);
-                Log.d(TAG, "user"+"无头像");
-            }
+            Message mes=new Message();
+            mes.what=RequestStatus.SUCCESS;
+            handler.sendMessage(mes);
         }
     }
     //需要改变适配尺寸的时候，在重写这两个方法

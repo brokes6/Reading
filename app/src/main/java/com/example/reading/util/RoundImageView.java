@@ -151,6 +151,7 @@ public class RoundImageView extends ImageView {
                     setBitmap(bitmap);
                     setImageBitmap(bitmap);
                     System.out.println("图片设置好了啊");
+
                     break;
                 case NETWORK_ERROR:
                     Toast.makeText(getContext(),"网络连接失败", Toast.LENGTH_SHORT).show();
