@@ -66,6 +66,7 @@ public class CommunityFragment extends Fragment {
         }
         return view;
     }
+    //为什么呢
     private void initView(){
         recyclerView=view.findViewById(R.id.list_data);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
