@@ -15,6 +15,7 @@ public class RequestUrl {
 
     public static final String FIND_POST_POPULAR_COMMENT="http://117.48.205.198/xiaoyoudushu/findPostPopularComments";
 
+    public static final String SEARCH="http://117.48.205.198/xiaoyoudushu/search";
     public static final int NEW=100;
 
     public static final int POPULAR=200;

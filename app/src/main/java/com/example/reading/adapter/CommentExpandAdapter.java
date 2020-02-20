@@ -173,7 +173,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
 
 
     public void addTheCommentData(PostComment postComment){
-        if(PostComment!=null){
+        if(postComment!=null){
             commentBeanList.add(0,postComment);
             notifyDataSetChanged();
         }else {
