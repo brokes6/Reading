@@ -172,14 +172,9 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
     }
 
 
-    /**
-     * by moos on 2018/04/20
-     * func:评论成功后插入一条数据
-     * @param PostComment 新的评论数据
-     */
-    public void addTheCommentData(PostComment PostComment){
+    public void addTheCommentData(PostComment postComment){
         if(PostComment!=null){
-            commentBeanList.add(PostComment);
+            commentBeanList.add(0,postComment);
             notifyDataSetChanged();
         }else {
             throw new IllegalArgumentException("评论数据为空!");
@@ -228,7 +223,6 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
     }
     public void clearAll(){
         commentBeanList.clear();
-        Log.i(TAG, "clearAll: 数据长度"+commentBeanList.size());
         notifyDataSetChanged();
     }
 }

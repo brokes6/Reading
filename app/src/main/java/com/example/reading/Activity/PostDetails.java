@@ -33,6 +33,7 @@ import androidx.appcompat.app.ActionBar;
 import com.bumptech.glide.Glide;
 import com.example.reading.Bean.PostComment;
 import com.example.reading.Bean.Post;
+import com.example.reading.Bean.PostCommentVo;
 import com.example.reading.Bean.PostDetailsBean;
 import com.example.reading.Bean.ReplyDetailBean;
 import com.example.reading.Bean.User;
@@ -119,6 +120,9 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
     private Button loadButton;
     private int postUserId;
     private int position;
+    private int currentPage=1;
+    private int total=-1;
+    private int mode=RequestUrl.NEW;
     private List<String> spinnerData = new LinkedList<>(Arrays.asList("时间排序", "点赞排序"));
     private  Handler handler=new Handler(){
         @Override
@@ -276,7 +280,6 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
         //默认展开所有回复
         expandableListView.setAdapter(adapter);
         initExpandableListView();
-        getComments();
         progressBar=findViewById(R.id.progress);
         niceSpinner = findViewById(R.id.nice_spinner);
         niceSpinner.attachDataSource(spinnerData);
@@ -289,15 +292,15 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
                 switch (position){
                     case 0:
                         adapter.clearAll();
-                        commentFlag=false;
-                        commentPage=1;
-                        getComments();
+                        mode=RequestUrl.NEW;
+                        currentPage=1;
+                        getComments(mode);
                         break;
                     case 1:
                         adapter.clearAll();
-                        commentFlag=true;
-                        commentPage=1;
-                        getComments();
+                        mode=RequestUrl.POPULAR;
+                        currentPage=1;
+                        getComments(mode);
                         break;
                 }
             }
@@ -456,7 +459,9 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
                         handlerLove(postDetailsBean.getPid());
                     }
                 });
+                currentPage++;
                 commentsList.addAll(postDetailsBean.getPostCommentVo().getComments());
+                total=postDetailsBean.getPostCommentVo().getCount();
                 adapter.notifyDataSetChanged();
             }
 
@@ -545,99 +550,48 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
                     }
                 },params);
     }
-    private void getComments(){
-        final Request request =new Request.Builder()
-                .url(getRequestStr(2))
-                .build();
-        OkHttpClient okHttpClient = new OkHttpClient();
-        okHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                    e.printStackTrace();
-                    return;
-            }
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String responseStr = response.body().string();
-                Log.i(TAG, "onResponse: 正文"+responseStr);
-                try {
-                    JSONObject jsonObject = new JSONObject(responseStr);
-                    int code=jsonObject.getInt("code");
-                    String msg = jsonObject.getString("msg");
-                    if(code==0){
-                        Log.i(TAG, "onResponse: 返回评论失败:"+msg);
-                        Message message = new Message();
-                        commentsList=new ArrayList<>();
-                        message.what=PostTemplateInterface.NOTIFY_NOCOMMENT;
-                        handler.sendMessage(message);
-                        return;
-                    }
-                    Gson gson = new Gson();
-                    commentsList=gson.fromJson(jsonObject.getString("data"),new TypeToken<List<PostComment>>(){}.getType());
-                    Message message = new Message();
-                    message.what=PostTemplateInterface.NOTIFY;
-                    handler.sendMessage(message);
-                    commentPage++;
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-/*    private void handlerCollection(){
-        RequestBody requestBody=new FormBody.Builder()
-                .add("postId", String.valueOf(postId))
-                .add("token",userData.getToken())
-                .build();
-        Request request=new Request.Builder()
-                .post(requestBody)
-                .url(getRequestStr(3))
-                .build();
-        OkHttpClient client=new OkHttpClient();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-            }
+    private void getComments(int mode){
+        Map<String,String> params=UserUtil.createUserMap();
+        params.put("pid", String.valueOf(postId));
+        params.put("currentPage", String.valueOf(currentPage));
+       StandardRequestMangaer.getInstance()
+               .get(mode==RequestUrl.NEW?RequestUrl.FIND_POST_NEW_COMMENT:RequestUrl.FIND_POST_POPULAR_COMMENT,new BaseCallBack<PostCommentVo>(){
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String responseData =response.body().string();
-                Log.i(TAG, "onResponse: "+responseData);
-                JSONObject jsonObject= null;
-                try {
-                    jsonObject = new JSONObject(responseData);
-                    int code =jsonObject.getInt("code");
-                    String msg=jsonObject.getString("msg");
-                    if(code==0){
-                        return;
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }*/
-    private String getRequestStr(int mode){
-        String urlStr=null;
-        String token=null;
-        switch (mode){
-            case 1:urlStr=PostTemplateInterface.REQUEST_POST_DETAILS_STR+"?postId="+postId;
-                            break;
-            case 2:urlStr=(commentFlag?PostTemplateInterface.REQUEST_COMMENT_POPULAR_STR:PostTemplateInterface.REQUEST_COMMENT_NEW_STR)+"?startPage="+commentPage+"&postId="+postId;
-                            Log.i(TAG, "getRequestStr: postId="+postId);
-                            break;
-            case 3:urlStr=(collectionStatus==1?PostTemplateInterface.REQUEST_DELETE_COLLECTION:PostTemplateInterface.REQUEST_ADD_COLLECTION);
-                            return urlStr;
-            default:break;
-        }
-        if(token==null) {
-            return urlStr;
-        }
-        Log.i(TAG,urlStr);
-        return urlStr+"&token="+token;
-    }
+                   @Override
+                   protected void OnRequestBefore(Request request) {
 
+                   }
+
+                   @Override
+                   protected void onFailure(Call call) {
+                       Toast.makeText(PostDetails.this, "没有更多评论拉！", Toast.LENGTH_SHORT).show();
+                   }
+
+                   @Override
+                   protected void onSuccess(Call call, Response response, PostCommentVo postCommentVo) {
+                            commentsList.addAll(postCommentVo.getComments());
+                            total=postCommentVo.getCount();
+                            Toast.makeText(PostDetails.this, "获得评论成功！", Toast.LENGTH_SHORT).show();
+                            adapter.notifyDataSetChanged();
+                            currentPage++;
+                   }
+
+                   @Override
+                   protected void onResponse(Response response) {
+
+                   }
+
+                   @Override
+                   protected void onEror(Call call, int statusCode) {
+                       Toast.makeText(PostDetails.this, "网络请求出错", Toast.LENGTH_SHORT).show();
+                   }
+
+                   @Override
+                   protected void inProgress(int progress, long total, int id) {
+
+                   }
+               },params);
+    }
     @Override
     public void onBackPressed() {
         Intent intent=new Intent();
@@ -685,9 +639,10 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
 
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-                if (mostTimes.get() < 3) {
-                    getComments();
-                    mostTimes.getAndIncrement();
+                if (currentPage*10 <total) {
+                    Log.i(TAG, "onLoadMore: total="+total);
+                    Log.i(TAG, "onLoadMore: currentpage*10="+currentPage*10);
+                    getComments(mode);
                 }
                 refreshLayout.finishLoadMore(1000); //这个记得设置，否则一直转圈
             }
@@ -698,13 +653,10 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
                 super.onFooterFinish(footer, success);
                 if (net.get() == false) {
                     tv.setText("请检查网络设置");
-                } else if (mostTimes.get() >= 3) {
+                } else if (currentPage*10 >= total) {
                     tv.setText("没有更多消息拉");
                 } else {
                     tv.setText("加载完成");
-                    if (mostTimes.get() == 2) {
-                        mostTimes.getAndIncrement();
-                    }
                 }
             }
         });
@@ -726,6 +678,9 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         switch (requestCode){
             case CommunityFragment.SHOWIMAGEACTIVITY:
+                if(data==null){
+                    return;
+                }
                 String loveData=data.getStringExtra("loveNum");
                 String talkNumStr=data.getStringExtra("talkNum");
                 int status=data.getIntExtra("status",0);
