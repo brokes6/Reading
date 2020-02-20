@@ -28,13 +28,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import floatingactionbutton.FloatingActionsMenu;
 import me.jessyan.autosize.AutoSizeConfig;
 import okhttp3.Call;
 import okhttp3.Request;
 import okhttp3.Response;
 
 public class CommunityFragment extends Fragment {
-
+    private FloatingActionsMenu menu;
     private static final String TAG = "CommunityFragment";
     public static final int POSTDETAILS=1;
     public static final int SEARCHVIEW=2;
@@ -70,9 +71,20 @@ public class CommunityFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter=new NineGridAdapter(this);
         recyclerView.setAdapter(adapter);
+
+        final floatingactionbutton.FloatingActionButton actionA = view.findViewById(R.id.action_a);
+        actionA.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Intent intent_addPost = new Intent(getActivity(),addPost.class);
+//                intent_addPost.putExtra("oid",oid);
+//                startActivity(intent_addPost);
+            }
+        });
     }
     private void initData(){
         findPostByPage();
+
     }
 
     private void findPostByPage(){

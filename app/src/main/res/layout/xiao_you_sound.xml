@@ -82,7 +82,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="24sp"
-                    android:text="标题 | 标题"
+                    android:text="纯音乐  "
                     android:layout_toRightOf="@id/XLogin"
                     android:letterSpacing="0.05"
                     android:textColor="#fff"
@@ -95,7 +95,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="18sp"
                     android:background="@drawable/fillet_back_gray"
-                    android:text=" 类 型 "
+                    android:text=" 音乐 "
                     android:layout_below="@id/XTitle"
                     android:layout_toRightOf="@id/XLogin"
                     android:textColor="#FFFFFF" />
@@ -104,11 +104,11 @@
                     android:id="@+id/texttext"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="比如小明在上学的路上,此时他的位置可以用离家多少米或者是离学校多少米表示,就是利用不同的参照物。"
+                    android:text="很多人在实际生活中发现，在周围有白噪声播放的情况下，容易获得放松、专注的体验，因此将白噪声用作自己的工作、睡眠的背景乐，以提高工作效率、改善睡眠质量。"
                     android:layout_below="@id/XLogin"
                     android:padding="17dp"
                     android:textSize="16sp"
-                    android:lineSpacingExtra="25dp"
+                    android:lineSpacingExtra="20dp"
                     android:textColor="#FFFFFF"
                     android:maxLines="5" />
             </RelativeLayout>
