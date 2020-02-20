@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import androidx.annotation.Nullable;
 
 import com.example.reading.R;
-import com.example.reading.application.AppApplication;
+import com.example.reading.MainApplication;
 
 
 public class GifImageView extends ImageView {
@@ -21,7 +21,7 @@ public class GifImageView extends ImageView {
     private static Paint paint;
 
     static {
-        gifbmp = BitmapFactory.decodeResource(AppApplication.getContext().getResources(), R.drawable.gif_gaitubao_27x27);
+        gifbmp = BitmapFactory.decodeResource(MainApplication.getContext().getResources(), R.drawable.gif_gaitubao_27x27);
         paint = new Paint();
         paint.setColor(Color.parseColor("#469de6"));
         paint.setStyle(Paint.Style.FILL);

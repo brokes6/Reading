@@ -7,28 +7,22 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 
 import com.example.reading.Fragment.IntroduceFragment;
 import com.example.reading.Fragment.ProgramFragment;
-import com.example.reading.Fragment.VideoFragment;
 import com.example.reading.R;
 import com.example.reading.ToolClass.BaseActivity;
 import com.example.reading.databinding.XiaoYouSoundBinding;
 import com.google.android.material.appbar.AppBarLayout;
-import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.reading.Activity.ReadActivity.NUM_ITEMS;
-import static com.example.reading.application.AppApplication.getContext;
 
 /**
  * 小悠之声

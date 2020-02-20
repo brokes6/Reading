@@ -50,7 +50,6 @@ import com.example.reading.R;
 import com.example.reading.adapter.ShowImageAdapter;
 import com.example.reading.util.ImageUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.youth.banner.transformer.DepthPageTransformer;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -72,6 +71,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import wowo.kjt.library.transform.DepthPageTransformer;
 
 
 public class ShowImageActivity extends AppCompatActivity {

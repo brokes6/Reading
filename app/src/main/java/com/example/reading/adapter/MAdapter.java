@@ -21,9 +21,9 @@ import com.example.reading.Bean.BookDetails;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.content.ContentValues.TAG;
 
 public class MAdapter extends RecyclerView.Adapter<MyViewHolder>{
+    private static final String TAG = "MAdapter";
     private LayoutInflater inflater;
     private Context mContext;
 

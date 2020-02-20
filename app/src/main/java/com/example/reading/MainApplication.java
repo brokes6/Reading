@@ -1,4 +1,4 @@
-package com.example.reading.application;
+package com.example.reading;
 
 import android.app.Application;
 import android.content.Context;
@@ -15,15 +15,15 @@ import cn.jpush.android.api.JPushInterface;
  * 作者：HMY
  * 时间：2016/5/13
  */
-public class AppApplication extends Application {
-    private static final String TAG = "AppApplication";
+public class MainApplication extends Application {
+    private static final String TAG = "MainApplication";
     private static Context context;
     @Override
     public void onCreate() {
         super.onCreate();
         context=getApplicationContext();
-        JPushInterface.setDebugMode(false);
-        JPushInterface.init(this);
+/*        JPushInterface.setDebugMode(false);
+        JPushInterface.init(this);*/
         Log.i(TAG, "onCreate: 被调用");
         initImageLoader();
     }
