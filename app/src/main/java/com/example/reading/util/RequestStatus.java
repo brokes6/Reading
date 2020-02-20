@@ -11,4 +11,6 @@ public interface RequestStatus {
     public static final int NO_RESOURCE=300;
     public static final int NO_NETWORK=-1;
     public static final int INCREASE=500;
+    public static final int input=800;
+    public static final int Noinput=900;
 }

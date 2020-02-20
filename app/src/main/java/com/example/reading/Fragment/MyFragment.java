@@ -6,18 +6,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.example.reading.Activity.Set_up;
+import com.example.reading.Bean.User;
 import com.example.reading.R;
 import com.example.reading.databinding.MyfragmentBinding;
+import com.example.reading.util.FileCacheUtil;
 
 import me.jessyan.autosize.internal.CustomAdapt;
 
 public class MyFragment extends Fragment implements CustomAdapt {
     private View view;
+    private User userData;
     MyfragmentBinding binding;
     private static final String TAG = "MyFragment";
     public static MyFragment newInstance(String param1) {
@@ -33,12 +37,11 @@ public class MyFragment extends Fragment implements CustomAdapt {
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if(view==null) {
-            Log.d(TAG, "onCreateView: "+"MyFragment"+"开始构建");
             binding = DataBindingUtil.inflate(inflater,R.layout.myfragment,container,false);
+            userData= FileCacheUtil.getUser(getContext());
+        Log.d(TAG, "onCreateView: "+userData);
             initView();
             initData();
-        }
         return binding.getRoot();
     }
     private void initView(){
@@ -52,7 +55,17 @@ public class MyFragment extends Fragment implements CustomAdapt {
 
     }
     private void initData(){
-
+        if (userData.getUsername()==null){
+            Log.d(TAG, "user无数据!");
+        }else{
+            binding.userName.setText(userData.getUsername());
+            if (userData.getUimg()!=null){
+                binding.userImg.setImageURL(userData.getUimg());
+            }else{
+                binding.userImg.setImageResource(R.mipmap.userimg);
+                Log.d(TAG, "user"+"无头像");
+            }
+        }
     }
     //需要改变适配尺寸的时候，在重写这两个方法
     @Override

@@ -15,17 +15,21 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.example.reading.Bean.User;
 import com.example.reading.Fragment.AudioFrequency;
 import com.example.reading.Fragment.VideoFragment;
 import com.example.reading.R;
 import com.example.reading.ToolClass.BaseActivity;
 import com.example.reading.Bean.BookComment;
 import com.example.reading.databinding.ReadbookBinding;
+import com.example.reading.util.FileCacheUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
+
+import static com.example.reading.MainApplication.getContext;
 
 
 /**
@@ -40,9 +44,11 @@ public class ReadActivity extends BaseActivity {
     private String[] strings = new String[]{"音 频","视 频"};
     private List<Fragment> fragmentList = new ArrayList<Fragment>();
     BookComment bookComment = new BookComment();
+    private User userData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        userData= FileCacheUtil.getUser(getContext());
         //设置竖屏
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         binding = DataBindingUtil.setContentView(this,R.layout.readbook);
@@ -73,6 +79,11 @@ public class ReadActivity extends BaseActivity {
         Intent intent = getIntent();
         Log.d(TAG, "getDataId: 当前书籍id为:"+intent.getStringExtra("id"));
         return intent.getStringExtra("id");
+    }
+    public String gettoken(){
+        String token = userData.getToken();
+        Log.d(TAG, "gettoken: 当前用户的token为"+token);
+        return token;
     }
 
 

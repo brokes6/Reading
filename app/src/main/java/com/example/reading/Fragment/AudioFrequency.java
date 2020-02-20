@@ -73,13 +73,13 @@ public class AudioFrequency extends Fragment{
     private int position;
     private String video;
     int current = 0;
-    String date1;
-    String bid;
-    String img;
+    String date1,bid,img,token;
     private FragmentBackHandler backInterface;
     BookComment bookComment = new BookComment();
     ReadActivity activity;
     String music_path;
+    String url = "http://117.48.205.198/xiaoyoudushu/findBookById?";
+    String Aurl;
     public ArrayList<Map<String, Object>> list = new ArrayList<>();
     private Handler handler=new Handler(){
         @Override
@@ -96,6 +96,8 @@ public class AudioFrequency extends Fragment{
                     Log.d(TAG, "页面加载完成"+"当前页面信息为--"+"书名："+bookComment.getBname()+"--作者："+bookComment.getAuthor()+"--图片："+bookComment.getBimg());
                     break;
                 case RequestStatus.FAILURE:
+                    binding.loadingLayout.setStatus(LoadingLayout.Empty);
+                    EventBus.getDefault().post(new Video(null,null,1));
                     Toast.makeText(getContext(),"获取数据失败，请稍后尝试",Toast.LENGTH_SHORT).show();
                     break;
                 case RequestStatus.AUDIO:
@@ -318,9 +320,10 @@ public class AudioFrequency extends Fragment{
         new Thread(new Runnable() {
             @Override
             public void run() {
+                Aurl = url+"token="+token+"&"+"bid="+bid;
                 OkHttpClient okHttpClient=new OkHttpClient();
                 Request request=new Request.Builder()
-                        .url("http://117.48.205.198/xiaoyoudushu/findBookById?id="+bid)
+                        .url(Aurl)
                         .build();
                 try {
                     Response response = okHttpClient.newCall(request).execute();
@@ -363,9 +366,13 @@ public class AudioFrequency extends Fragment{
                         Message mes=new Message();
                         mes.what= RequestStatus.AUDIO;
                         handler.sendMessage(mes);
+                    }else{
+                        Message mes=new Message();
+                        mes.what= RequestStatus.FAILURE;
+                        handler.sendMessage(mes);
                     }
                     if (type ==200){
-                        //0为视频
+                        //200为视频
                         //获取视频
                         String BookVideoData = bookdata.getString("video");
                         JSONObject BookVideo = new JSONObject(BookVideoData);
@@ -377,6 +384,11 @@ public class AudioFrequency extends Fragment{
                         Message mes=new Message();
                         mes.what=RequestStatus.VIDEO;
                         handler.sendMessage(mes);
+                    }else{
+                        Message mes=new Message();
+                        mes.what= RequestStatus.FAILURE;
+                        handler.sendMessage(mes);
+                        return;
                     }
                     if (type ==0){
                         String bookname=bookdata.getString("bname");
@@ -393,6 +405,7 @@ public class AudioFrequency extends Fragment{
                     Message mes=new Message();
                     mes.what=RequestStatus.FAILURE;
                     handler.sendMessage(mes);
+                    return;
                 }
             }catch (JSONException e){
                 e.printStackTrace();
@@ -460,9 +473,12 @@ public class AudioFrequency extends Fragment{
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         bid = (((ReadActivity) activity).getDataId());
+        token = (((ReadActivity) activity).gettoken());
         if (bid !=null){
             Log.d(TAG, "activity返回的书籍id为"+bid);
+
         }else{
+            Toast.makeText(getContext(),"服务器出错",Toast.LENGTH_SHORT).show();
             Message mes=new Message();
             mes.what=RequestStatus.FAILURE;
             handler.sendMessage(mes);
