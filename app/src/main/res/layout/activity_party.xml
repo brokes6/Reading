@@ -124,7 +124,6 @@
                             android:maxLines="5" />
                     </RelativeLayout>
 
-
                     <TextView
                         android:layout_marginTop="5dp"
                         android:layout_marginLeft="5dp"

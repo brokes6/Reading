@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fab="http://schemas.android.com/tools">
+    xmlns:fab="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -11,40 +12,79 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#F3F3F3">
-
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/layout_top"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appbar"
+                android:background="#F3F3F3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
         <LinearLayout
+            app:layout_scrollFlags="scroll|snap"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal">
-            <TextView
-                android:id="@+id/titleTextView"
-                android:textSize="24sp"
-                android:text="社区"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@mipmap/readingbooklogin"/>
+
+                <TextView
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="3dp"
+                        android:padding="3dp"
+                        android:background="@drawable/fillet_background"
+                        android:layout_gravity="right|center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:text="读书是学习，摘抄是整理，写作是创造。　 ——吴晗"/>
+                    <TextView
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="3dp"
+                        android:padding="3dp"
+                        android:background="@drawable/fillet_background"
+                        android:layout_gravity="right|center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:text="书犹药也，善读之可以医愚。　——刘向"/>
+                    <TextView
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="3dp"
+                        android:padding="3dp"
+                        android:background="@drawable/fillet_background"
+                        android:layout_gravity="right|center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:text="学而不厌，诲人不倦。　——孔丘"/>
+            </LinearLayout>
         </LinearLayout>
+            </com.google.android.material.appbar.AppBarLayout>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:layout_marginTop="10dp"
-            android:paddingTop="20dp">
+            android:paddingTop="15dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list_data"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"/>
+                android:padding="5dp" />
             <floatingactionbutton.FloatingActionsMenu
                 android:id="@+id/multiple_actions"
                 android:layout_width="wrap_content"
@@ -65,7 +105,7 @@
                     android:scaleType="center"
                     fab:fab_colorPressed="@color/white_pressed"/>
             </floatingactionbutton.FloatingActionsMenu>
-        </RelativeLayout>
-
+            </RelativeLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </LinearLayout>
 </layout>
