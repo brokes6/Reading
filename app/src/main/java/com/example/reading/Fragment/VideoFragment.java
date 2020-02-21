@@ -1,10 +1,8 @@
 package com.example.reading.Fragment;
 
-import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.hardware.SensorManager;
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -27,8 +25,9 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.example.reading.Bean.BookResource;
 import com.example.reading.R;
-import com.example.reading.Bean.BookComment;
+import com.example.reading.Bean.BookDetailsBean;
 import com.example.reading.ToolClass.Video;
 import com.example.reading.databinding.VideoBinding;
 import com.example.reading.util.RequestStatus;
@@ -54,7 +53,7 @@ public class VideoFragment extends Fragment {
     private BottomSheetDialog dialog;
     VideoBinding binding;
     SensorManager sensorManager;
-    BookComment bookComment = new BookComment();
+    BookDetailsBean bookDetailsBean = new BookDetailsBean();
     String Vurl;
     String Vimg;
     int type = 1;
@@ -95,12 +94,6 @@ public class VideoFragment extends Fragment {
 
     }
     public void initData(){
-        binding.detailPageDoComment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showCommentDialog();
-            }
-        });
 
     }
     @Override
@@ -110,10 +103,10 @@ public class VideoFragment extends Fragment {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(Video data) {
-        Vurl=data.getVideo_path();
-        Vimg=data.getVideo_img();
-        type=data.getType();
+    public void onEventMainThread(BookResource video) {
+        Vurl=video.getUrl();
+        Vimg=video.getImg();
+        type=video.getType();
         Log.d(TAG, "当前传过来的type为"+type);
         if (Vurl !=null){
         if (type ==1){

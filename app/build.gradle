@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.reading"
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -95,4 +95,7 @@ dependencies {
     implementation project(':jiaozivideoplayer')
     //富文本编辑器
     implementation 'jp.wasabeef:richeditor-android:1.2.2'
+
+    implementation 'org.projectlombok:lombok:1.16.8'  //添加lombok依赖
+    implementation 'org.glassfish:javax.annotation:10.0-b28' //java注解
 }

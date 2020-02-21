@@ -35,6 +35,8 @@ import com.example.reading.util.UserUtil;
 import com.example.reading.view.StandardNineGridLayout;
 import com.example.reading.web.BaseCallBack;
 import com.example.reading.web.StandardRequestMangaer;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,11 +65,21 @@ public class NineGridAdapter extends RecyclerView.Adapter<NineGridAdapter.ViewHo
     private Fragment fragment;
     private View convertView;
     private List<Post> mList=new ArrayList<>();
+    private final ImageLoader imageLoader;
+    DisplayImageOptions options = new DisplayImageOptions.Builder()
+            .showStubImage(R.drawable.loading)          // 设置图片下载期间显示的图片
+            .showImageForEmptyUri(R.drawable.image_error)  // 设置图片Uri为空或是错误的时候显示的图片
+            .showImageOnFail(R.drawable.image_error)       // 设置图片加载或解码过程中发生错误显示的图片
+            .cacheInMemory(true)                        // 设置下载的图片是否缓存在内存中
+            .cacheOnDisk(true)                          // 设置下载的图片是否缓存在SD卡中
+            .build();                                   // 创建配置过得DisplayImageOption对象
+
     protected LayoutInflater inflater;
     public NineGridAdapter(Fragment fragment) {
         this.fragment=fragment;
         this.mContext = fragment.getContext();
         inflater = LayoutInflater.from(this.mContext);
+        imageLoader=ImageLoader.getInstance();
     }
     public void setList(List<Post> list) {
         mList.addAll(list);
@@ -89,7 +101,7 @@ public class NineGridAdapter extends RecyclerView.Adapter<NineGridAdapter.ViewHo
         String imgUrls=post.getImgurl();
         holder.content.setText(content);//设置内容
         holder.datetime.setText(DateTimeUtil.handlerDateTime(post.getPcreateTime()));//设置帖子时间
-        Glide.with(mContext).load(post.getUimg()).into(holder.uimg);//设置头像
+        imageLoader.displayImage(post.getUimg(),holder.uimg,options);
         holder.username.setText(post.getUsername());//设置用户名
         holder.postId=post.getPid();//
         holder.loveStatus=post.getLoveStatus();

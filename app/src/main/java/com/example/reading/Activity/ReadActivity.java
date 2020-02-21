@@ -15,12 +15,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.example.reading.Bean.BookComment;
 import com.example.reading.Bean.User;
 import com.example.reading.Fragment.AudioFrequency;
 import com.example.reading.Fragment.VideoFragment;
 import com.example.reading.R;
 import com.example.reading.ToolClass.BaseActivity;
-import com.example.reading.Bean.BookComment;
+import com.example.reading.Bean.BookDetailsBean;
+import com.example.reading.adapter.BookCommentAdapter;
 import com.example.reading.databinding.ReadbookBinding;
 import com.example.reading.util.FileCacheUtil;
 
@@ -43,12 +45,13 @@ public class ReadActivity extends BaseActivity {
     static final int NUM_ITEMS = 2;
     private String[] strings = new String[]{"音 频","视 频"};
     private List<Fragment> fragmentList = new ArrayList<Fragment>();
-    BookComment bookComment = new BookComment();
+    private List<BookComment> comments=new ArrayList<>();
     private User userData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userData= FileCacheUtil.getUser(getContext());
+        Log.i(TAG, "onCreate:"+userData.getAccount());
         //设置竖屏
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         binding = DataBindingUtil.setContentView(this,R.layout.readbook);
@@ -71,8 +74,11 @@ public class ReadActivity extends BaseActivity {
         MyAdapter fragmentAdater = new  MyAdapter(getSupportFragmentManager());
         binding.viewpager.setAdapter(fragmentAdater);
         binding.tabMode.setupWithViewPager(binding.viewpager);
+
     }
     public void initData(){
+        BookCommentAdapter bookCommentAdapter=new BookCommentAdapter(ReadActivity.this,comments);
+        binding.detailPageLvComment.setAdapter(bookCommentAdapter);
     }
 
     public String getDataId(){

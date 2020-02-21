@@ -28,15 +28,19 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.example.reading.Activity.ReadActivity;
+import com.example.reading.Bean.PostComment;
 import com.example.reading.R;
-import com.example.reading.Bean.BookComment;
+import com.example.reading.Bean.BookDetailsBean;
 import com.example.reading.ToolClass.Video;
+import com.example.reading.adapter.CommentExpandAdapter;
 import com.example.reading.databinding.AudioBinding;
 import com.example.reading.util.FragmentBackHandler;
 import com.example.reading.util.PostHitoryUtil;
 import com.example.reading.util.RequestStatus;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.weavey.loading.lib.LoadingLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -47,6 +51,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -69,16 +74,16 @@ public class AudioFrequency extends Fragment{
     private Timer timer;//定时器
     AudioBinding binding;
     private MediaPlayer mediaPlayer;
+    private CommentExpandAdapter commentExpandAdapter;
+    private List<PostComment> comments=new ArrayList<>();
     private boolean isSeekbarChaning;//互斥变量，防止进度条和定时器冲突。
     private int duration2;
     private int position;
-    private String video;
     int current = 0;
-    String date1,bid,img,token;
+    String date1,bid,token;
     private FragmentBackHandler backInterface;
-    BookComment bookComment = new BookComment();
+    BookDetailsBean bookDetailsBean = new BookDetailsBean();
     ReadActivity activity;
-    String music_path;
     String url = "http://117.48.205.198/xiaoyoudushu/findBookById?";
     String Aurl;
     public ArrayList<Map<String, Object>> list = new ArrayList<>();
@@ -88,9 +93,9 @@ public class AudioFrequency extends Fragment{
             switch (msg.what){
                 case RequestStatus.SUCCESS:
                     binding.loadingLayout.setStatus(LoadingLayout.Success);
-                    binding.BookName.setText(bookComment.getBname());
-                    binding.author.setText(bookComment.getAuthor());
-                    binding.authorBookimg.setImageURL(bookComment.getBimg());
+                    binding.BookName.setText(bookDetailsBean.getBname());
+                    binding.author.setText(bookDetailsBean.getAuthor());
+                    binding.authorBookimg.setImageURL(bookDetailsBean.getBimg());
                     binding.PlaybackOperation.setVisibility(View.GONE);
                     EventBus.getDefault().post(new Video(null,null,1));
                     Toast.makeText(getContext(),"该书籍暂无音频",Toast.LENGTH_SHORT).show();
@@ -102,17 +107,18 @@ public class AudioFrequency extends Fragment{
                     Toast.makeText(getContext(),"获取数据失败，请稍后尝试",Toast.LENGTH_SHORT).show();
                     break;
                 case RequestStatus.AUDIO:
-                    binding.BookName.setText(bookComment.getBname());
-                    binding.author.setText(bookComment.getAuthor());
-                    binding.authorBookimg.setImageURL(bookComment.getBimg());
+                    binding.BookName.setText(bookDetailsBean.getBname());
+                    binding.author.setText(bookDetailsBean.getAuthor());
+                    binding.authorBookimg.setImageURL(bookDetailsBean.getBimg());
+                    String musicPath=bookDetailsBean.getAudio().getUrl();
                     EventBus.getDefault().post(new Video(null,null,1));
                     Thread thread = new Thread(new Runnable() {
                         @Override
                         public void run() {
                             mediaPlayer = new MediaPlayer();
                             try {
-                                mediaPlayer.setDataSource(music_path);
-                                Log.d(TAG, "handleMessage: url为"+music_path);
+                                mediaPlayer.setDataSource(musicPath);
+                                Log.d(TAG, "handleMessage: url为"+musicPath);
                                 mediaPlayer.prepareAsync();
                                 mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                                     @Override
@@ -139,21 +145,21 @@ public class AudioFrequency extends Fragment{
                     break;
                 case RequestStatus.VIDEO:
                     binding.loadingLayout.setStatus(LoadingLayout.Empty);
-                    EventBus.getDefault().post(new Video(video,video_img,0));
+                    EventBus.getDefault().post(bookDetailsBean.getVideo());
                     PostHitoryUtil.saveSearchHistory(String.valueOf(bid),getActivity());
                     break;
                 case RequestStatus.AUDIO_AND_VIDEO:
-                    binding.BookName.setText(bookComment.getBname());
-                    binding.author.setText(bookComment.getAuthor());
-                    binding.authorBookimg.setImageURL(bookComment.getBimg());
-                    EventBus.getDefault().post(new Video(video,video_img,0));
+                    String musicPath1=bookDetailsBean.getAudio().getUrl();
+                    binding.BookName.setText(bookDetailsBean.getBname());
+                    binding.author.setText(bookDetailsBean.getAuthor());
+                    binding.authorBookimg.setImageURL(bookDetailsBean.getBimg());
+                    EventBus.getDefault().post(bookDetailsBean.getVideo());
                     Thread thread1 = new Thread(new Runnable() {
                         @Override
                         public void run() {
                             mediaPlayer = new MediaPlayer();
                             try {
-                                mediaPlayer.setDataSource(music_path);
-                                Log.d(TAG, "handleMessage: url为"+music_path);
+                                mediaPlayer.setDataSource(musicPath1);
                                 mediaPlayer.prepareAsync();
                                 mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                                     @Override
@@ -234,18 +240,14 @@ public class AudioFrequency extends Fragment{
                 showSingleAlertDialog(getView());
             }
         });
+        /*commentExpandAdapter=new CommentExpandAdapter(getContext(),)*//*
+        binding.detailPageLvComment.setAdapter();*/
     }
     public void initData(){
-        binding.detailPageDoComment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showCommentDialog();
-            }
-        });
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void Hhhh(BookComment bookComment) {
+    public void Hhhh(BookDetailsBean bookDetailsBean) {
 
     }
 
@@ -260,7 +262,7 @@ public class AudioFrequency extends Fragment{
         super.onDestroy();
     }
     public void play(){
-        if (bookComment.getMusic_path()==null){
+        if (bookDetailsBean.getAudio().getUrl()==null){
 
         }
         if (mediaPlayer.isPlaying()){
@@ -387,72 +389,32 @@ public class AudioFrequency extends Fragment{
                 code = object.getInt("code");
                 if (code==1) {
                     String data = object.getString("data");
-                    JSONObject bookdata = new JSONObject(data);
-                    type = bookdata.getInt("type");
+                    Gson gson=new Gson();
+                    bookDetailsBean=gson.fromJson(data,new TypeToken<BookDetailsBean>(){}.getType());
+                    int type=bookDetailsBean.getType();
                     Log.d(TAG, "JsonJX: 当前type为"+type);
+                    Message mes=new Message();
                     switch (type){
                         case 100:
                             //100为音频
                             //获取音频
-                            String BookAudioData = bookdata.getString("audio");
-                            JSONObject BookAudio = new JSONObject(BookAudioData);
-                            music_path=BookAudio.getString("url");
-                            //获取数据
-                            String bookname=bookdata.getString("bname");
-                            String bookauthor=bookdata.getString("author");
-                            String bookimg=bookdata.getString("bimg");
-                            bookComment.setAuthor(bookauthor);
-                            bookComment.setBimg(bookimg);
-                            bookComment.setBname(bookname);
-                            Message mes=new Message();
                             mes.what= RequestStatus.AUDIO;
                             handler.sendMessage(mes);
                             break;
                         case 200:
                             //200为视频
                             //获取视频
-                            String BookVideoData = bookdata.getString("video");
-                            JSONObject BookVideo = new JSONObject(BookVideoData);
-                            video = BookVideo.getString("url");
-                            video_img = BookVideo.getString("img");
-                            bookComment.setImg(video_img);
-                            bookComment.setVideo_path(video);
-                            Message mes2=new Message();
-                            mes2.what=RequestStatus.VIDEO;
-                            handler.sendMessage(mes2);
+                            mes.what=RequestStatus.VIDEO;
+                            handler.sendMessage(mes);
                             break;
                         case 300:
                             //视频
-                            String BookVideoData3 = bookdata.getString("video");
-                            JSONObject BookVideo3 = new JSONObject(BookVideoData3);
-                            video = BookVideo3.getString("url");
-                            video_img = BookVideo3.getString("img");
-                            bookComment.setImg(video_img);
-                            bookComment.setVideo_path(video);
-                            //音频
-                            String BookAudioData3 = bookdata.getString("audio");
-                            JSONObject BookAudio3 = new JSONObject(BookAudioData3);
-                            music_path=BookAudio3.getString("url");
-                            String bookname3=bookdata.getString("bname");
-                            String bookauthor3=bookdata.getString("author");
-                            String bookimg3=bookdata.getString("bimg");
-                            bookComment.setAuthor(bookauthor3);
-                            bookComment.setBimg(bookimg3);
-                            bookComment.setBname(bookname3);
-                            Message mes3=new Message();
-                            mes3.what=RequestStatus.AUDIO_AND_VIDEO;
-                            handler.sendMessage(mes3);
+                            mes.what=RequestStatus.AUDIO_AND_VIDEO;
+                            handler.sendMessage(mes);
                             break;
                         case 0:
-                            String bookname4=bookdata.getString("bname");
-                            String bookauthor4=bookdata.getString("author");
-                            String bookimg4=bookdata.getString("bimg");
-                            bookComment.setAuthor(bookauthor4);
-                            bookComment.setBimg(bookimg4);
-                            bookComment.setBname(bookname4);
-                            Message mes4=new Message();
-                            mes4.what=RequestStatus.SUCCESS;
-                            handler.sendMessage(mes4);
+                            mes.what=RequestStatus.SUCCESS;
+                            handler.sendMessage(mes);
                     }
                 }else{
                     Message mes=new Message();
@@ -473,54 +435,6 @@ public class AudioFrequency extends Fragment{
 
 
 
-    /**
-     *2019/10/16
-     * 方法：弹出评论框
-     */
-    private void showCommentDialog(){
-        dialog = new BottomSheetDialog(getContext(),R.style.BottomSheetEdit);
-        final View commentView = LayoutInflater.from(getContext()).inflate(R.layout.comment_dialog_layout,null);
-        final EditText commentText = (EditText) commentView.findViewById(R.id.dialog_comment_et);
-        final Button bt_comment = (Button) commentView.findViewById(R.id.dialog_comment_bt);
-        dialog.setContentView(commentView);
-        View parent = (View) commentView.getParent();
-        BottomSheetBehavior behavior = BottomSheetBehavior.from(parent);
-        commentView.measure(0,0);
-        behavior.setPeekHeight(commentView.getMeasuredHeight());
-        bt_comment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String commentContent = commentText.getText().toString().trim();
-                //后期需要检查token的值 查看是否被更改了喔
-                if(!TextUtils.isEmpty(commentContent)){
-                    //
-                    dialog.dismiss();
-                }else {
-                    Toast.makeText(getActivity(),"评论内容不能为空",Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-        commentText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(!TextUtils.isEmpty(charSequence) && charSequence.length()>2){
-                    bt_comment.setBackgroundColor(Color.parseColor("#FFB568"));
-                }else {
-                    bt_comment.setBackgroundColor(Color.parseColor("#D8D8D8"));
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-        dialog.show();
-    }
 
     @Override
     public void onAttach(Activity activity) {

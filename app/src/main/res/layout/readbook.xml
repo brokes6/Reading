@@ -34,9 +34,120 @@
             app:tabTextColor="#A3A3A3"
             app:tabIndicatorFullWidth="false"
             />
-        <androidx.viewpager.widget.ViewPager
+        <com.example.reading.view.AutoFitViewPager
             android:id="@+id/viewpager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/fillet_background"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:orientation="horizontal">
+                <TextView
+                    android:padding="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="精彩评论---"/>
+            </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#F3F3F3"/>
+                <com.example.reading.view.CommentExpandableListView
+                    android:id="@+id/detail_page_lv_comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:divider="@null"
+                    android:listSelector="@android:color/transparent"
+                    android:scrollbars="none" />
+        </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white"
+        android:elevation="2dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+        <TextView
+            android:id="@+id/detail_page_do_comment"
+            android:layout_width="0dp"
+            android:layout_height="34dp"
+            android:layout_weight="1"
+            android:textColor="#B6B6B6"
+            android:textSize="12sp"
+            android:text="说点什么吧..."
+            android:background="@drawable/comment_bt_selector"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="22dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="18dp"/>
+        <LinearLayout
+            android:id="@+id/loveLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/loveNum"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/thumbs_up_white"/>
+            <TextView
+                android:id="@+id/loveNumStr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#9A9A9A"
+                android:textSize="14sp"
+                android:layout_marginLeft="10dp"
+                android:text="0"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/collectionLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/collection"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/shocang_text"
+                android:layout_marginLeft="20dp" />
+            <TextView
+                android:id="@+id/collectionStr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#9A9A9A"
+                android:textSize="14sp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="14dp"
+                android:text="未收藏"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginRight="10dp"
+            android:id="@+id/comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/comment_picture"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/comment_white"/>
+                <TextView
+                    android:id="@+id/commentStr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#9A9A9A"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="10dp"
+                    android:text="0"/>
+        </LinearLayout>
+    </LinearLayout>
     </LinearLayout>
 </layout>

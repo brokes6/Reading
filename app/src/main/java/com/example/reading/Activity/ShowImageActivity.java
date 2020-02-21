@@ -1,26 +1,18 @@
 package com.example.reading.Activity;
 
 import android.animation.LayoutTransition;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.service.autofill.UserData;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -29,7 +21,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
@@ -38,40 +29,24 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.CustomViewTarget;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.example.reading.Bean.Post;
-import com.example.reading.Picture.LocalCacheUtils;
 import com.example.reading.Picture.MemoryCacheUtils;
 import com.example.reading.R;
 import com.example.reading.ToolClass.BaseActivity;
 import com.example.reading.adapter.ShowImageAdapter;
 import com.example.reading.util.ImageUtils;
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 import wowo.kjt.library.transform.DepthPageTransformer;
 
 
@@ -79,10 +54,6 @@ public class ShowImageActivity extends BaseActivity {
     public static final int GET_DATA_SUCCESS = 1;
     public static final int NETWORK_ERROR = 2;
     public static final int SERVER_ERROR = 3;
-    //---两个缓存方法----
-    private LocalCacheUtils mLocalCacheUtils;
-    private MemoryCacheUtils mMemoryCacheUtils;
-    //----
     private static final String TAG = "ShowImageActivity";
     private ViewPager viewPager;
     private TextView picture_text;
@@ -157,8 +128,6 @@ public class ShowImageActivity extends BaseActivity {
                 onBackPressed();
             }
         });
-        mMemoryCacheUtils = MemoryCacheUtils.getInstance();
-        mLocalCacheUtils = LocalCacheUtils.getInstance();
     }
     private void initData(){
         Bundle bundle=getIntent().getExtras();

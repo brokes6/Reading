@@ -11,10 +11,15 @@ public class RequestUrl {
 
     public static final String HANDLER_POST_LOVE="http://117.48.205.198/xiaoyoudushu/handlerPostLove";
 
+    public static final String HANDLER_BOOK_LOVE="http://117.48.205.198/xiaoyoudushu/handlerLoveBookComment";
+
     public static final String FIND_POST_NEW_COMMENT="http://117.48.205.198/xiaoyoudushu/findPostNewComments";
 
     public static final String FIND_POST_POPULAR_COMMENT="http://117.48.205.198/xiaoyoudushu/findPostPopularComments";
 
+    public static final String FIND_BOOK_NEW_COMMENT="http://117.48.205.198/xiaoyoudushu/findBookNewComments";
+
+    public static final String FIND_BOOK_POPULAR_COMMENT="http://117.48.205.198/xiaoyoudushu/findBookPopularComments";
     public static final String SEARCH="http://117.48.205.198/xiaoyoudushu/search";
     public static final int NEW=100;
 

@@ -2,7 +2,6 @@ package com.example.reading.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-import com.example.reading.Bean.PostComment;
-import com.example.reading.Bean.ReplyDetailBean;
+import com.example.reading.Bean.BookComment;
 import com.example.reading.Picture.MyImageView;
 import com.example.reading.R;
 import com.example.reading.constant.RequestUrl;
@@ -25,17 +22,11 @@ import com.example.reading.web.StandardRequestMangaer;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -44,9 +35,9 @@ import okhttp3.Response;
  * Desc: 评论与回复列表的适配器
  */
 
-public class CommentExpandAdapter extends BaseExpandableListAdapter {
+public class BookCommentAdapter extends BaseExpandableListAdapter {
     private static final String TAG = "CommentExpandAdapter";
-    private List<PostComment> commentBeanList=new ArrayList<>();
+    private List<BookComment> commentBeanList=new ArrayList<>();
     private static final int REPLYNUM=3;
     private Context context;
     private int pageIndex = 1;
@@ -58,13 +49,13 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
             .cacheInMemory(true)                        // 设置下载的图片是否缓存在内存中
             .cacheOnDisk(true)                          // 设置下载的图片是否缓存在SD卡中
             .build();
-    public CommentExpandAdapter(Context context, List<PostComment> commentBeanList) {
+    public BookCommentAdapter(Context context, List<BookComment> commentBeanList) {
         this.context = context;
         this.commentBeanList = commentBeanList;
         imageLoader=ImageLoader.getInstance();
     }
 
-    public void setCommentBeanList(List<PostComment> commentBeanList) {
+    public void setCommentBeanList(List<BookComment> commentBeanList) {
         if(commentBeanList==null){
             this.commentBeanList=commentBeanList;
         }else {
@@ -72,7 +63,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
         }
         notifyDataSetChanged();
     }
-    public List<PostComment> getCommentBeanList() {
+    public List<BookComment> getCommentBeanList() {
         return commentBeanList;
     }
     @Override
@@ -109,7 +100,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(final int groupPosition, boolean isExpand, View convertView, ViewGroup viewGroup) {
         final GroupHolder groupHolder;
-        final PostComment bean=commentBeanList.get(groupPosition);
+        final BookComment bean=commentBeanList.get(groupPosition);
         if(convertView == null){
             convertView = LayoutInflater.from(context).inflate(R.layout.comment_item_layout, viewGroup, false);
             groupHolder = new GroupHolder(convertView);
@@ -144,7 +135,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
                     groupHolder.iv_like.setColorFilter(Color.parseColor("#FF5C5C"));
                     groupHolder.loveNum.setText(String.valueOf(Integer.valueOf(groupHolder.loveNum.getText().toString())+1));
                 }
-                handlerPostCommentNum(bean.getCid());
+                handlerBookCommentNum(bean.getCid());
             }
 
         });
@@ -180,9 +171,9 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
     }
 
 
-    public void addTheCommentData(PostComment postComment){
-        if(postComment!=null){
-            commentBeanList.add(0,postComment);
+    public void addTheCommentData(BookComment BookComment){
+        if(BookComment!=null){
+            commentBeanList.add(0,BookComment);
             notifyDataSetChanged();
         }else {
             throw new IllegalArgumentException("评论数据为空!");
@@ -192,11 +183,11 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
 
 
 
-    private void handlerPostCommentNum(int cid){
+    private void handlerBookCommentNum(int cid){
         Map<String,String> params= UserUtil.createUserMap();
         params.put("cid", String.valueOf(cid));
         StandardRequestMangaer.getInstance()
-                .post(RequestUrl.HANDLER_POST_COMMENT_LOVE,new BaseCallBack<String>(){
+                .post(RequestUrl.HANDLER_BOOK_LOVE,new BaseCallBack<String>(){
 
                     @Override
                     protected void OnRequestBefore(Request request) {
