@@ -339,9 +339,9 @@ public class AudioFrequency extends Fragment{
         });
 
         alertDialog2 = alertBuilder.create();
-        //设置AlertDialog长度
-        alertDialog2.getWindow().setLayout(300,200);
         alertDialog2.show();
+        //设置AlertDialog长度
+        alertDialog2.getWindow().setLayout(950,900);
 
     }
     private void setPlayerSpeed(float speed){

@@ -82,6 +82,7 @@ public class addPost extends BaseActivity implements View.OnClickListener {
     List<LoadFileVo> fileList = new ArrayList<>();
     private int tagId;
     private AlertDialog alertDialog2;
+    private AlertDialog alertDialog3;
     LoadPicAdapter adapter = null;
     private LinearLayout loadLayout;
     private TextView loadTextView;
@@ -249,7 +250,7 @@ public class addPost extends BaseActivity implements View.OnClickListener {
                         }
                         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.N) {
                             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                            imageUri= FileProvider.getUriForFile(addPost.this,"com.example.bottomnavigationabar2.fileprovider",file);
+                            imageUri= FileProvider.getUriForFile(addPost.this,"com.example.reading.fileprovider",file);
                             intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
                         }else{
                             imageUri = Uri.fromFile(file);
@@ -262,10 +263,9 @@ public class addPost extends BaseActivity implements View.OnClickListener {
             }
         });
         alertDialog2 = dlg.create();
-        //设置AlertDialog长度
-        alertDialog2.getWindow().setLayout(300,200);
         alertDialog2.show();
-
+        //设置AlertDialog长度
+        alertDialog2.getWindow().setLayout(950,650);
     }
 
     @Override
@@ -277,7 +277,7 @@ public class addPost extends BaseActivity implements View.OnClickListener {
                     intent.setType("image/*");
                     startActivityForResult(intent, 0); // 打开相册
                 } else {
-                    Toast.makeText(this, "You denied the permission", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "您没有同意权限", Toast.LENGTH_SHORT).show();
                 }
                 break;
             default:
@@ -536,7 +536,10 @@ public class addPost extends BaseActivity implements View.OnClickListener {
                         finish();
                     }
                 });
-                dialog.show();
+                alertDialog3 = dialog.create();
+                alertDialog3.show();
+                //设置AlertDialog长度
+                alertDialog3.getWindow().setLayout(950,650);
             }
         });
         rvPic = findViewById(R.id.rvPic);
@@ -581,7 +584,10 @@ public class addPost extends BaseActivity implements View.OnClickListener {
                 finish();
             }
         });
-        dialog.show();
+        alertDialog3 = dialog.create();
+        alertDialog3.show();
+        //设置AlertDialog长度
+        alertDialog3.getWindow().setLayout(950,650);
     }
 
 
@@ -591,7 +597,6 @@ public class addPost extends BaseActivity implements View.OnClickListener {
      */
     private void initEditor() {
         mEditor = findViewById(R.id.re_main_editor);
-
         mEditor.setEditorHeight(120);
         //输入框显示字体的大小
         mEditor.setEditorFontSize(18);
@@ -599,9 +604,6 @@ public class addPost extends BaseActivity implements View.OnClickListener {
         mEditor.setEditorFontColor(Color.BLACK);
         //输入框背景设置
         mEditor.setEditorBackgroundColor(Color.WHITE);
-        //mEditor.setBackgroundColor(Color.BLUE);
-        //mEditor.setBackgroundResource(R.drawable.bg);
-        //mEditor.setBackground("https://raw.githubusercontent.com/wasabeef/art/master/chip.jpg");
         //输入框文本padding
         mEditor.setPadding(10, 10, 10, 10);
         //输入提示文本

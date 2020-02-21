@@ -8,10 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.reading.Activity.Party;
 import com.example.reading.Activity.addPost;
 import com.example.reading.Bean.Post;
 import com.example.reading.R;
@@ -20,6 +22,10 @@ import com.example.reading.constant.RequestUrl;
 import com.example.reading.util.UserUtil;
 import com.example.reading.web.BaseCallBack;
 import com.example.reading.web.StandardRequestMangaer;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -43,9 +49,11 @@ public class CommunityFragment extends Fragment {
     public static final int SHOWIMAGEACTIVITY=3;
     private List<Post> postList=new ArrayList<>();
     private View view;
+    SmartRefreshLayout smartRefreshLayout;
     private RecyclerView recyclerView;
     private NineGridAdapter adapter;
     private int oid;
+    int Page = 1;
     private AtomicInteger integer=new AtomicInteger(1);
     public static CommunityFragment newInstance(String param1) {
         CommunityFragment fragment = new CommunityFragment();
@@ -70,11 +78,28 @@ public class CommunityFragment extends Fragment {
     }
     //为什么呢
     private void initView(){
+        smartRefreshLayout = view.findViewById(R.id.refreshLayout);
+        smartRefreshLayout.setEnableRefresh(false);
+        //设置 Footer 为 经典样式
+        smartRefreshLayout.setRefreshFooter(new ClassicsFooter(getContext()));
+
         recyclerView=view.findViewById(R.id.list_data);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter=new NineGridAdapter(this);
         recyclerView.setAdapter(adapter);
-
+        //上拉刷新事件监听
+        smartRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+                ++Page;
+                /**
+                *上拉加载的逻辑
+                 **/
+                smartRefreshLayout.finishLoadMore(true);//加载完成
+                Log.d(TAG, "onLoadMore: 添加更多完成");
+            }
+        });
+        //悬浮按钮
         final floatingactionbutton.FloatingActionButton actionA = view.findViewById(R.id.action_a);
         actionA.setOnClickListener(new View.OnClickListener() {
             @Override

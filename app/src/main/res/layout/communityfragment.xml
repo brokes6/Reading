@@ -12,6 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#F3F3F3">
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/refreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#F3F3F3">
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/layout_top"
             android:layout_width="match_parent"
@@ -107,5 +112,6 @@
             </floatingactionbutton.FloatingActionsMenu>
             </RelativeLayout>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
     </LinearLayout>
 </layout>
