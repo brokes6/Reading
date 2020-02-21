@@ -20,8 +20,8 @@
             <ImageView
                 android:id="@+id/set_back"
                 android:paddingLeft="10dp"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
                 android:background="#FFFFFF"
@@ -30,7 +30,7 @@
             <TextView
                 android:paddingLeft="15dp"
                 android:layout_gravity="center_vertical"
-                android:textSize="24sp"
+                android:textSize="17sp"
                 android:text="设置"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -60,7 +60,7 @@
                 <TextView
                     android:paddingLeft="20dp"
                     android:text="消息提示"
-                    android:textSize="22sp"
+                    android:textSize="17sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -76,8 +76,8 @@
                     android:paddingRight="10dp"
                     android:layout_gravity="right|center_vertical"
                     android:src="@drawable/inside"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="24dp"
+                    android:layout_height="24dp" />
             </LinearLayout>
         </LinearLayout>
         //部分2
@@ -99,7 +99,7 @@
                 <TextView
                     android:paddingLeft="20dp"
                     android:text="图片模式"
-                    android:textSize="22sp"
+                    android:textSize="17sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -115,8 +115,8 @@
                     android:paddingRight="10dp"
                     android:layout_gravity="right|center_vertical"
                     android:src="@drawable/inside"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="24dp"
+                    android:layout_height="24dp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -144,7 +144,7 @@
                 <TextView
                     android:paddingLeft="20dp"
                     android:text="清理缓存"
-                    android:textSize="22sp"
+                    android:textSize="17sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -160,8 +160,8 @@
                     android:paddingRight="10dp"
                     android:layout_gravity="right|center_vertical"
                     android:src="@drawable/inside"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="24dp"
+                    android:layout_height="24dp" />
             </LinearLayout>
         </LinearLayout>
         //部分4
@@ -183,7 +183,7 @@
                 <TextView
                     android:paddingLeft="20dp"
                     android:text="帮助于反馈"
-                    android:textSize="22sp"
+                    android:textSize="17sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -199,8 +199,8 @@
                     android:paddingRight="10dp"
                     android:layout_gravity="right|center_vertical"
                     android:src="@drawable/inside"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="24dp"
+                    android:layout_height="24dp" />
             </LinearLayout>
         </LinearLayout>
         //部分5
@@ -222,7 +222,7 @@
                 <TextView
                     android:paddingLeft="20dp"
                     android:text="用户协议"
-                    android:textSize="22sp"
+                    android:textSize="17sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -238,8 +238,8 @@
                     android:paddingRight="10dp"
                     android:layout_gravity="right|center_vertical"
                     android:src="@drawable/inside"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="24dp"
+                    android:layout_height="24dp" />
             </LinearLayout>
         </LinearLayout>
         //部分6
@@ -261,7 +261,7 @@
                 <TextView
                     android:paddingLeft="20dp"
                     android:text="隐私政策"
-                    android:textSize="22sp"
+                    android:textSize="17sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -277,8 +277,8 @@
                     android:paddingRight="10dp"
                     android:layout_gravity="right|center_vertical"
                     android:src="@drawable/inside"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="24dp"
+                    android:layout_height="24dp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -293,7 +293,7 @@
             android:layout_height="55dp"
             android:background="#fff"
             android:text="退出登录"
-            android:textSize="22dp"
+            android:textSize="20dp"
             android:gravity="center"
             android:textColor="#FF0000" />
     </LinearLayout>

@@ -13,4 +13,5 @@ public interface RequestStatus {
     public static final int INCREASE=500;
     public static final int input=800;
     public static final int Noinput=900;
+    public static final int AUDIO_AND_VIDEO=1000;
 }

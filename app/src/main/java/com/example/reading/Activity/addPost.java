@@ -40,11 +40,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.reading.Bean.LoadFileVo;
+import com.example.reading.Bean.User;
 import com.example.reading.MainActivity;
 import com.example.reading.R;
 import com.example.reading.ToolClass.BaseActivity;
 import com.example.reading.ToolClass.ColorPickerView;
-import com.example.reading.ToolClass.RichEditor;
 import com.example.reading.adapter.LoadPicAdapter;
 import com.example.reading.util.FileCacheUtil;
 
@@ -57,6 +57,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import jp.wasabeef.richeditor.RichEditor;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -66,6 +67,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+
+import static com.example.reading.MainApplication.getContext;
 
 public class addPost extends BaseActivity implements View.OnClickListener {
 
@@ -78,6 +81,7 @@ public class addPost extends BaseActivity implements View.OnClickListener {
     private StringBuilder builder = new StringBuilder();
     List<LoadFileVo> fileList = new ArrayList<>();
     private int tagId;
+    private AlertDialog alertDialog2;
     LoadPicAdapter adapter = null;
     private LinearLayout loadLayout;
     private TextView loadTextView;
@@ -157,7 +161,7 @@ public class addPost extends BaseActivity implements View.OnClickListener {
     private int mFoldedViewMeasureHeight;
 
     private File file;
-
+    private User userData;
     private Handler handler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -188,6 +192,7 @@ public class addPost extends BaseActivity implements View.OnClickListener {
         if (actionbar != null) {
             actionbar.hide();
         }
+        userData= FileCacheUtil.getUser(getContext());
         initView();
         initAdapter();
         initData();
@@ -255,8 +260,12 @@ public class addPost extends BaseActivity implements View.OnClickListener {
                     }
                 }
             }
-        }).create();
-        dlg.show();
+        });
+        alertDialog2 = dlg.create();
+        //设置AlertDialog长度
+        alertDialog2.getWindow().setLayout(300,200);
+        alertDialog2.show();
+
     }
 
     @Override
@@ -383,7 +392,7 @@ public class addPost extends BaseActivity implements View.OnClickListener {
                     .addFormDataPart("file",name,RequestBody.create(MediaType.parse("application/octet-stream"),file))
                     .build();
             final Request request = new Request.Builder()
-                    .url("http://106.54.134.17/app/addPostImg")
+                    .url("http://117.48.205.198/xiaoyoudushu/addBanner?")
                     .post(body)
                     .build();
             OkHttpClient okHttpClient = new OkHttpClient();
@@ -473,10 +482,9 @@ public class addPost extends BaseActivity implements View.OnClickListener {
                     .add("content", mEditor.getHtml())
                     .add("imgUrl",imgUrl)
                     .add("token", token)
-                    .add("tagId", String.valueOf(tagId))
                     .build();
             final Request request = new Request.Builder()
-                    .url("http://106.54.134.17/app/post").post(body)
+                    .url("http://117.48.205.198/xiaoyoudushu/addPost?").post(body)
                     .build();
             OkHttpClient okHttpClient = new OkHttpClient();
             okHttpClient.newCall(request).enqueue(new Callback() {
@@ -899,7 +907,6 @@ public class addPost extends BaseActivity implements View.OnClickListener {
         return  image;
     }
     private void initData(){
-        token= FileCacheUtil.getUser(this).getToken();
-        tagId=getIntent().getIntExtra("oid",-1);
+        token = userData.getToken();
     }
 }

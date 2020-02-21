@@ -93,7 +93,6 @@ public class AudioFrequency extends Fragment{
                     binding.PlaybackOperation.setVisibility(View.GONE);
                     EventBus.getDefault().post(new Video(null,null,1));
                     Toast.makeText(getContext(),"该书籍暂无音频",Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "页面加载完成"+"当前页面信息为--"+"书名："+bookComment.getBname()+"--作者："+bookComment.getAuthor()+"--图片："+bookComment.getBimg());
                     break;
                 case RequestStatus.FAILURE:
                     binding.loadingLayout.setStatus(LoadingLayout.Empty);
@@ -138,6 +137,41 @@ public class AudioFrequency extends Fragment{
                 case RequestStatus.VIDEO:
                     binding.loadingLayout.setStatus(LoadingLayout.Empty);
                     EventBus.getDefault().post(new Video(video,video_img,0));
+                    break;
+                case RequestStatus.AUDIO_AND_VIDEO:
+                    binding.BookName.setText(bookComment.getBname());
+                    binding.author.setText(bookComment.getAuthor());
+                    binding.authorBookimg.setImageURL(bookComment.getBimg());
+                    EventBus.getDefault().post(new Video(video,video_img,0));
+                    Thread thread1 = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mediaPlayer = new MediaPlayer();
+                            try {
+                                mediaPlayer.setDataSource(music_path);
+                                Log.d(TAG, "handleMessage: url为"+music_path);
+                                mediaPlayer.prepareAsync();
+                                mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                                    @Override
+                                    public void onPrepared(MediaPlayer mp) {
+                                        binding.loadingLayout.setStatus(LoadingLayout.Success);
+                                    }
+                                });
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            duration2 = mediaPlayer.getDuration() / 1000;
+                            position = mediaPlayer.getCurrentPosition();
+                            binding.tvStart.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    binding.tvStart.setText(calculateTime(position / 1000));
+                                    binding.tvEnd.setText(calculateTime(duration2));
+                                }
+                            });
+                        }
+                    });
+                    thread1.start();
                     break;
             }
         }
@@ -305,7 +339,10 @@ public class AudioFrequency extends Fragment{
         });
 
         alertDialog2 = alertBuilder.create();
+        //设置AlertDialog长度
+        alertDialog2.getWindow().setLayout(300,200);
         alertDialog2.show();
+
     }
     private void setPlayerSpeed(float speed){
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
@@ -348,58 +385,69 @@ public class AudioFrequency extends Fragment{
                     JSONObject bookdata = new JSONObject(data);
                     type = bookdata.getInt("type");
                     Log.d(TAG, "JsonJX: 当前type为"+type);
-                    if (type ==100){
-                        //100为音频
-                        //获取音频
-                        String BookAudioData = bookdata.getString("audio");
-                        JSONObject BookAudio = new JSONObject(BookAudioData);
-                        Log.d(TAG, "audio数据为"+BookAudioData);
-                        music_path=BookAudio.getString("url");
-                        Log.d(TAG, "音频url为"+music_path);
-                        //获取数据
-                        String bookname=bookdata.getString("bname");
-                        String bookauthor=bookdata.getString("author");
-                        String bookimg=bookdata.getString("bimg");
-                        bookComment.setAuthor(bookauthor);
-                        bookComment.setBimg(bookimg);
-                        bookComment.setBname(bookname);
-                        Message mes=new Message();
-                        mes.what= RequestStatus.AUDIO;
-                        handler.sendMessage(mes);
-                    }else{
-                        Message mes=new Message();
-                        mes.what= RequestStatus.FAILURE;
-                        handler.sendMessage(mes);
-                    }
-                    if (type ==200){
-                        //200为视频
-                        //获取视频
-                        String BookVideoData = bookdata.getString("video");
-                        JSONObject BookVideo = new JSONObject(BookVideoData);
-                        Log.d(TAG, "video数据为"+BookVideoData);
-                        video = BookVideo.getString("url");
-                        video_img = BookVideo.getString("img");
-                        bookComment.setImg(video_img);
-                        bookComment.setVideo_path(video);
-                        Message mes=new Message();
-                        mes.what=RequestStatus.VIDEO;
-                        handler.sendMessage(mes);
-                    }else{
-                        Message mes=new Message();
-                        mes.what= RequestStatus.FAILURE;
-                        handler.sendMessage(mes);
-                        return;
-                    }
-                    if (type ==0){
-                        String bookname=bookdata.getString("bname");
-                        String bookauthor=bookdata.getString("author");
-                        String bookimg=bookdata.getString("bimg");
-                        bookComment.setAuthor(bookauthor);
-                        bookComment.setBimg(bookimg);
-                        bookComment.setBname(bookname);
-                        Message mes=new Message();
-                        mes.what=RequestStatus.SUCCESS;
-                        handler.sendMessage(mes);
+                    switch (type){
+                        case 100:
+                            //100为音频
+                            //获取音频
+                            String BookAudioData = bookdata.getString("audio");
+                            JSONObject BookAudio = new JSONObject(BookAudioData);
+                            music_path=BookAudio.getString("url");
+                            //获取数据
+                            String bookname=bookdata.getString("bname");
+                            String bookauthor=bookdata.getString("author");
+                            String bookimg=bookdata.getString("bimg");
+                            bookComment.setAuthor(bookauthor);
+                            bookComment.setBimg(bookimg);
+                            bookComment.setBname(bookname);
+                            Message mes=new Message();
+                            mes.what= RequestStatus.AUDIO;
+                            handler.sendMessage(mes);
+                            break;
+                        case 200:
+                            //200为视频
+                            //获取视频
+                            String BookVideoData = bookdata.getString("video");
+                            JSONObject BookVideo = new JSONObject(BookVideoData);
+                            video = BookVideo.getString("url");
+                            video_img = BookVideo.getString("img");
+                            bookComment.setImg(video_img);
+                            bookComment.setVideo_path(video);
+                            Message mes2=new Message();
+                            mes2.what=RequestStatus.VIDEO;
+                            handler.sendMessage(mes2);
+                            break;
+                        case 300:
+                            //视频
+                            String BookVideoData3 = bookdata.getString("video");
+                            JSONObject BookVideo3 = new JSONObject(BookVideoData3);
+                            video = BookVideo3.getString("url");
+                            video_img = BookVideo3.getString("img");
+                            bookComment.setImg(video_img);
+                            bookComment.setVideo_path(video);
+                            //音频
+                            String BookAudioData3 = bookdata.getString("audio");
+                            JSONObject BookAudio3 = new JSONObject(BookAudioData3);
+                            music_path=BookAudio3.getString("url");
+                            String bookname3=bookdata.getString("bname");
+                            String bookauthor3=bookdata.getString("author");
+                            String bookimg3=bookdata.getString("bimg");
+                            bookComment.setAuthor(bookauthor3);
+                            bookComment.setBimg(bookimg3);
+                            bookComment.setBname(bookname3);
+                            Message mes3=new Message();
+                            mes3.what=RequestStatus.AUDIO_AND_VIDEO;
+                            handler.sendMessage(mes3);
+                            break;
+                        case 0:
+                            String bookname4=bookdata.getString("bname");
+                            String bookauthor4=bookdata.getString("author");
+                            String bookimg4=bookdata.getString("bimg");
+                            bookComment.setAuthor(bookauthor4);
+                            bookComment.setBimg(bookimg4);
+                            bookComment.setBname(bookname4);
+                            Message mes4=new Message();
+                            mes4.what=RequestStatus.SUCCESS;
+                            handler.sendMessage(mes4);
                     }
                 }else{
                     Message mes=new Message();
