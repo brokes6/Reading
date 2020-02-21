@@ -24,6 +24,7 @@ import com.bumptech.glide.Glide;
 import com.example.reading.Activity.AllBooks;
 import com.example.reading.Activity.Party;
 import com.example.reading.Activity.SearchActivity;
+import com.example.reading.Activity.UserFeedBack;
 import com.example.reading.Activity.XiaoYouSound;
 import com.example.reading.Bean.BookDetails;
 import com.example.reading.R;
@@ -156,6 +157,13 @@ public class HomeFragment extends Fragment implements CustomAdapt {
             public void onClick(View v) {
                 Log.i(TAG, "onClick: 开始跳转");
                 Intent intent=new Intent(getContext(), SearchActivity.class);
+                startActivity(intent);
+            }
+        });
+        binding.userfeedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getContext(), UserFeedBack.class);
                 startActivity(intent);
             }
         });

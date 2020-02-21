@@ -52,12 +52,13 @@ public class PostHitoryUtil {
         }else {
             //之前未添加过
             Log.i(TAG, "saveSearchHistory: 我来拉");
-            editor.putString(SEARCH_HISTORY, inputText + ",");
+            editor.putString(SEARCH_HISTORY, inputText);
             editor.commit();
         }
     }
     public static String getSearchHistory(Context context){
         SharedPreferences sharedPreferences=context.getSharedPreferences(PREFERENCE_NAME,Context.MODE_PRIVATE);
+        Log.d(TAG, "getSearchHistory: 返回的id为"+sharedPreferences.getString(SEARCH_HISTORY,""));
         return sharedPreferences.getString(SEARCH_HISTORY,"");
     }
     public static boolean deleteAllHistory(Context context){

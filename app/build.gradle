@@ -76,7 +76,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.7'
     //模糊背景
     implementation 'com.github.javaexception:FuzzyBackground:v1.0'
-    compile 'net.qiujuer.genius:blur:2.0.0-beta4'
+    implementation 'net.qiujuer.genius:blur:2.0.0-beta4'
     //图片上传
     implementation group: 'com.nostra13.universalimageloader', name: 'universal-image-loader', version: '1.9.5'
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view:3.10.0'
@@ -88,7 +88,7 @@ dependencies {
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-21'
     //网络加载图片
     implementation 'com.squareup.picasso:picasso:2.5.2'
-    
+
     implementation 'org.projectlombok:lombok:1.16.8'  //添加lombok依赖
     implementation 'org.glassfish:javax.annotation:10.0-b28' //java注解
     //引入Module

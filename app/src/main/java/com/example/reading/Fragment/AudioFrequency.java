@@ -33,6 +33,7 @@ import com.example.reading.Bean.BookComment;
 import com.example.reading.ToolClass.Video;
 import com.example.reading.databinding.AudioBinding;
 import com.example.reading.util.FragmentBackHandler;
+import com.example.reading.util.PostHitoryUtil;
 import com.example.reading.util.RequestStatus;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -93,6 +94,7 @@ public class AudioFrequency extends Fragment{
                     binding.PlaybackOperation.setVisibility(View.GONE);
                     EventBus.getDefault().post(new Video(null,null,1));
                     Toast.makeText(getContext(),"该书籍暂无音频",Toast.LENGTH_SHORT).show();
+                    PostHitoryUtil.saveSearchHistory(String.valueOf(bid),getActivity());
                     break;
                 case RequestStatus.FAILURE:
                     binding.loadingLayout.setStatus(LoadingLayout.Empty);
@@ -133,10 +135,12 @@ public class AudioFrequency extends Fragment{
                         }
                     });
                     thread.start();
+                    PostHitoryUtil.saveSearchHistory(String.valueOf(bid),getActivity());
                     break;
                 case RequestStatus.VIDEO:
                     binding.loadingLayout.setStatus(LoadingLayout.Empty);
                     EventBus.getDefault().post(new Video(video,video_img,0));
+                    PostHitoryUtil.saveSearchHistory(String.valueOf(bid),getActivity());
                     break;
                 case RequestStatus.AUDIO_AND_VIDEO:
                     binding.BookName.setText(bookComment.getBname());
@@ -172,6 +176,7 @@ public class AudioFrequency extends Fragment{
                         }
                     });
                     thread1.start();
+                    PostHitoryUtil.saveSearchHistory(String.valueOf(bid),getActivity());
                     break;
             }
         }

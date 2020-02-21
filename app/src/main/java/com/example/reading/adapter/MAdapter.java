@@ -26,7 +26,6 @@ public class MAdapter extends RecyclerView.Adapter<MyViewHolder>{
     private static final String TAG = "MAdapter";
     private LayoutInflater inflater;
     private Context mContext;
-
     private List<BookDetails> bookDetails=new ArrayList<>();
     //创建构造参数
     public MAdapter(Context context){

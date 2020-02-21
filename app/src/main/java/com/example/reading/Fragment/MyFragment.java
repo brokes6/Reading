@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
+import com.example.reading.Activity.History;
 import com.example.reading.Activity.Set_up;
 import com.example.reading.Bean.User;
 import com.example.reading.R;
@@ -63,12 +64,18 @@ public class MyFragment extends Fragment implements CustomAdapt {
             binding = DataBindingUtil.inflate(inflater,R.layout.myfragment,container,false);
             binding.myload.setStatus(LoadingLayout.Loading);
             userData= FileCacheUtil.getUser(getContext());
-        Log.d(TAG, "onCreateView: "+userData);
             initView();
             initData();
         return binding.getRoot();
     }
     private void initView(){
+        binding.myhistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), History.class);
+                startActivity(intent);
+            }
+        });
         binding.setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
