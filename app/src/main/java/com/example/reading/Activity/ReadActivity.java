@@ -14,8 +14,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.reading.Bean.BookComment;
+import com.example.reading.Bean.BookCommentVo;
 import com.example.reading.Bean.User;
 import com.example.reading.Fragment.AudioFrequency;
 import com.example.reading.Fragment.VideoFragment;
@@ -45,8 +47,9 @@ public class ReadActivity extends BaseActivity {
     static final int NUM_ITEMS = 2;
     private String[] strings = new String[]{"音 频","视 频"};
     private List<Fragment> fragmentList = new ArrayList<Fragment>();
-    private List<BookComment> comments=new ArrayList<>();
+    private List<BookComment> bookComments=new ArrayList<>();
     private User userData;
+    private BookCommentAdapter bookCommentAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +80,7 @@ public class ReadActivity extends BaseActivity {
 
     }
     public void initData(){
-        BookCommentAdapter bookCommentAdapter=new BookCommentAdapter(ReadActivity.this,comments);
+        bookCommentAdapter=new BookCommentAdapter(ReadActivity.this,bookComments);
         binding.detailPageLvComment.setAdapter(bookCommentAdapter);
     }
 
@@ -138,4 +141,13 @@ public class ReadActivity extends BaseActivity {
         super.onConfigurationChanged(newConfig);
     }
 
+    public void handlerComments(BookCommentVo commentVo){
+        List<BookComment>comments=commentVo.getComments();
+        if (comments==null||comments.size()==0){
+            Log.i(TAG, "handlerComments:暂时没有更多评论");
+            return;
+        }
+        bookComments.addAll(comments);
+        bookCommentAdapter.notifyDataSetChanged();
+    }
 }

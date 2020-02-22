@@ -18,4 +18,5 @@ public class BookDetailsBean {
     private int commentNum;
     private BookResource video;
     private BookResource audio;
+    private BookCommentVo commentVo;
 }

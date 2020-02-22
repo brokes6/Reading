@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BookCommentVo {
-    private List<BookComment> commentList;
+    private List<BookComment> comments;
 
     private int count;
 }
