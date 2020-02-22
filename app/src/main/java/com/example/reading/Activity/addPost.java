@@ -20,6 +20,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -31,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
@@ -45,8 +47,13 @@ import com.example.reading.MainActivity;
 import com.example.reading.R;
 import com.example.reading.ToolClass.BaseActivity;
 import com.example.reading.ToolClass.ColorPickerView;
+/*import com.example.reading.adapter.LoadPicAdapter;*/
 import com.example.reading.adapter.LoadPicAdapter;
+import com.example.reading.constant.RequestUrl;
 import com.example.reading.util.FileCacheUtil;
+import com.example.reading.util.UserUtil;
+import com.example.reading.web.BaseCallBack;
+import com.example.reading.web.StandardRequestMangaer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -55,9 +62,13 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import jp.wasabeef.richeditor.RichEditor;
+import me.nereo.multi_image_selector.MultiImageSelector;
+import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -74,24 +85,16 @@ public class addPost extends BaseActivity implements View.OnClickListener {
 
     private static final String TAG = "addPost";
     public static final int SHOW_TOAST=3;
-    public static final int CHOOSE_PHOTO = 2;
     public static final int SET_OK = 1;
-    public static final String PICTURE_FILE="temp.jpg";
-    private String imgString = "";
-    private StringBuilder builder = new StringBuilder();
-    List<LoadFileVo> fileList = new ArrayList<>();
-    private int tagId;
-    private AlertDialog alertDialog2;
+    private List<String> imageList=new ArrayList<>();
     private AlertDialog alertDialog3;
-    LoadPicAdapter adapter = null;
+    private LoadPicAdapter adapter;
     private LinearLayout loadLayout;
     private TextView loadTextView;
     RecyclerView rvPic;
     private Button sendButton;
     TextView tvNum;
-    boolean isRequestHttp = false;
-    private Uri imageUri=null;
-    private String token;
+    private StringBuilder stringBuilder=new StringBuilder();
     //文本编辑器
     private RichEditor mEditor;
     //加粗按钮
@@ -196,319 +199,30 @@ public class addPost extends BaseActivity implements View.OnClickListener {
         userData= FileCacheUtil.getUser(getContext());
         initView();
         initAdapter();
-        initData();
         initClickListener();
     }
     //initAdapter方法
     private void initAdapter() {
-        fileList.add(new LoadFileVo());
-        adapter = new LoadPicAdapter(this, fileList, 9);
+        imageList.add(null);
+        adapter=new LoadPicAdapter(this,imageList);
         rvPic.setAdapter(adapter);
         rvPic.setLayoutManager(new GridLayoutManager(this, 3));
         adapter.setListener(new LoadPicAdapter.OnItemClickListener() {
             @Override
             public void click(View view, int positon) {
-                if (fileList.size() > 9) {
+                if (imageList.size() > 9) {
                     Toast.makeText(addPost.this, "一次最多上传9张图片！", Toast.LENGTH_SHORT).show();
                 } else {
-                    selectPic();  //调用加载图片方法
+                    Log.i(TAG, "click: 选择图片");
+                    selectPic(10-imageList.size());  //调用加载图片方法
                 }
 
             }
             @Override
             public void del(View view) {
-                tvNum.setText((fileList.size() - 1) + "/9");
+                tvNum.setText((imageList.size() - 1) + "/9");
             }
         });
-    }
-    //自定义方法selectPic
-    private void selectPic() {
-        //动态请求权限，除此之外还需进行Androidmanifest.xml中进行请求
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-        }
-        final CharSequence[] items = {"相册", "拍照"};
-        AlertDialog.Builder dlg = new AlertDialog.Builder(addPost.this);
-        dlg.setTitle("添加图片");
-        dlg.setItems(items, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-                // 这里item是根据选择的方式，
-                if (item == 0) {
-                    if (ContextCompat.checkSelfPermission(addPost.this,Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(addPost.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
-                    } else {
-                        Intent intent = new Intent(Intent.ACTION_PICK);
-                        intent.setType("image/*");
-                        startActivityForResult(intent,  0); // 打开相册
-                    }
-                } else {
-                    try {
-                        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                        file=cratephotofile();
-                        if(!file.getParentFile().exists()){
-                            file.getParentFile().mkdir();
-                        }
-                        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.N) {
-                            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                            imageUri= FileProvider.getUriForFile(addPost.this,"com.example.reading.fileprovider",file);
-                            intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
-                        }else{
-                            imageUri = Uri.fromFile(file);
-                        }
-                        startActivityForResult(intent,1);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-        alertDialog2 = dlg.create();
-        alertDialog2.show();
-        //设置AlertDialog长度
-        alertDialog2.getWindow().setLayout(950,650);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case 1:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Intent intent = new Intent(Intent.ACTION_PICK);
-                    intent.setType("image/*");
-                    startActivityForResult(intent, 0); // 打开相册
-                } else {
-                    Toast.makeText(this, "您没有同意权限", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            default:
-        }
-    }
-    @TargetApi(19)
-    private void handleImageOnKitKat(Intent data) {
-        String imagePath = null;
-        Uri uri = data.getData();
-        if (DocumentsContract.isDocumentUri(this, uri)) {
-            // 如果是document类型的Uri，则通过document id处理
-            String docId = DocumentsContract.getDocumentId(uri);
-            if ("com.android.providers.media.documents".equals(uri.getAuthority())) {
-                String id = docId.split(":")[1]; // 解析出数字格式的id
-                String selection = MediaStore.Images.Media._ID + "=" + id;
-                imagePath = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
-            } else if ("com.android.providers.downloads.documents".equals(uri.
-                    getAuthority())) {
-                Log.i(TAG, "handleImageOnKitKat: 文档");
-                Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(docId));
-                imagePath = getImagePath(contentUri, null);
-            }
-        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
-            Log.i(TAG, "handleImageOnKitKat: content");
-            // 如果是content类型的Uri，则使用普通方式处理
-            imagePath = getImagePath(uri, null);
-        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
-            Log.i(TAG, "handleImageOnKitKat: 文件");
-            // 如果是file类型的Uri，直接获取图片路径即可
-            imagePath = uri.getPath();
-        }
-        displayImage(imagePath); // 根据图片路径显示图片
-    }
-    private void handleImageBeforeKitKat(Intent data) {
-        Uri uri = data.getData();
-        String imagePath = getImagePath(uri, null);
-        displayImage(imagePath);
-    }
-    private String getImagePath(Uri uri, String selection) {
-        String path = null;
-        // 通过Uri和selection来获取真实的图片路径
-        Cursor cursor = getContentResolver().query(uri, null, selection, null, null);
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                path = cursor.getString(cursor.getColumnIndex(MediaStore.
-                        Images.Media.DATA));
-            }
-            cursor.close();
-        }
-        return path;
-    }
-
-    private void displayImage(String imagePath) {
-        if (imagePath != null) {
-            file=new File(imagePath);
-            Log.i(TAG, "displayImage: 相册选择="+file.length());
-            netUploadImg();
-        } else {
-            Toast.makeText(this, "failed to get image", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
-    public String getSDPath() {
-        File sdDir = null;
-        boolean sdCardExsit = Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
-        if (sdCardExsit) {
-            sdDir = Environment.getExternalStorageDirectory();
-        }
-        return sdDir.toString();
-    }
-
-    private String getPhotoFileName() {
-        Date date = new Date(System.currentTimeMillis());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("'IMG'_yyyyMMdd_HHmmss");
-        return dateFormat.format(date) + ".jpg";
-    }
-
-    //重写onActivityResult方法
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode==0){
-            Toast.makeText(this,"返回发帖页面",Toast.LENGTH_SHORT);
-            return;
-        }
-        if (requestCode == 1) {
-            Log.i(TAG, "onActivityResult: "+file.length());
-            netUploadImg();
-        }
-        if (requestCode == 0) {
-            Log.i(TAG, "onActivityResult: 11");
-            if (Build.VERSION.SDK_INT >= 19) {
-                // 4.4及以上系统使用这个方法处理图片
-                handleImageOnKitKat(data);
-            } else {
-                // 4.4以下系统使用这个方法处理图片
-                handleImageBeforeKitKat(data);
-            }
-        }
-
-    }
-    //一张张图片轮流上传
-    public void netUploadImg(){
-        loadLayout.setVisibility(View.VISIBLE);
-        try {
-            MediaType type =MediaType.parse("image/*");
-            String name=file.getName();
-            Log.i(TAG, "netUploadImg: "+name);
-            name=name.substring(name.lastIndexOf(".")+1);
-            RequestBody body=new MultipartBody.Builder()
-                    .setType(MultipartBody.FORM)
-                    .addFormDataPart("file",name,RequestBody.create(MediaType.parse("application/octet-stream"),file))
-                    .build();
-            final Request request = new Request.Builder()
-                    .url("http://117.48.205.198/xiaoyoudushu/addBanner?")
-                    .post(body)
-                    .build();
-            OkHttpClient okHttpClient = new OkHttpClient();
-            okHttpClient.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    e.printStackTrace();
-                    Log.d(TAG, "onFailure:失败呃");
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    String urls = response.body().string();
-                    Log.i(TAG, "onResponse:urls"+urls);
-                    int index1 = urls.indexOf("http");
-                    int index2 = urls.lastIndexOf("\"");
-                    urls = (String) urls.subSequence(index1, index2);
-                    Log.i(TAG, "onResponse: " + urls);
-                    builder.append(urls + ",");
-                    adapter.getHolder().ivPic.setImageURL(urls);
-                    setNum();
-                    if(adapter.fileList.size()<9){
-                        fileList.add(new LoadFileVo());
-                    }
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-            isRequestHttp = true;
-            showShortToast("上传图片请求异常！");
-
-        }
-    }
-
-    private void showShortToast(String msg) {
-        Message message=new Message();
-        message.obj=msg;
-        message.what=SHOW_TOAST;
-        handler.sendMessage(message);
-    }
-
-    public static String bitmapToBase64(Bitmap bitmap) {
-        String result = null;
-        ByteArrayOutputStream baos = null;
-        try {
-            if (bitmap != null) {
-                baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-
-                baos.flush();
-                baos.close();
-
-                byte[] bitmapBytes = baos.toByteArray();
-                result = Base64.encodeToString(bitmapBytes, Base64.DEFAULT);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (baos != null) {
-                    baos.flush();
-                    baos.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return result;
-    }
-
-    public void setNum() {
-        Message message = Message.obtain();
-        message.arg1 = fileList.size();
-        message.obj = tvNum;
-        message.what = 1;
-        handler.sendMessage(message);
-    }
-    //暂时有问题 服务器图片长度设置过小 弄大点
-    public void netUploadPost(String token) throws FileNotFoundException {//用jsonOject方式转string传递其他参数
-        try {
-            String imgUrl=builder.toString();
-            if(!imgUrl.trim().equals("")) {
-                imgUrl = imgUrl.substring(0, imgUrl.length() - 1);
-                System.out.println("imgurl=="+imgUrl);
-            }
-            FormBody body = new FormBody.Builder()
-                    .add("content", mEditor.getHtml())
-                    .add("imgUrl",imgUrl)
-                    .add("token", token)
-                    .build();
-            final Request request = new Request.Builder()
-                    .url("http://117.48.205.198/xiaoyoudushu/addPost?").post(body)
-                    .build();
-            OkHttpClient okHttpClient = new OkHttpClient();
-            okHttpClient.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    e.printStackTrace();
-                    Log.d(TAG, "onFailure:失败呃");
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    Log.i(TAG, "onResponse: 发帖情况" + response.body().string());
-                    showShortToast("发帖成功！");
-                    Intent intent = new Intent(addPost.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-            isRequestHttp = true;
-            showShortToast("上传图片请求异常！");
-
-        }
     }
     /**
      * 初始化View
@@ -551,12 +265,14 @@ public class addPost extends BaseActivity implements View.OnClickListener {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //跳转完成后，需要调用重新刷新
-                try {
-                    netUploadPost(token);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                };
+                String content=mEditor.getHtml();
+                if (TextUtils.isEmpty(content)){
+                    Toast.makeText(addPost.this, "内容不能为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                String imgurl=stringBuilder.substring(0,stringBuilder.length()-1);
+                Log.i(TAG, "onClick: imgurl"+imgurl);
+                uploadPost(content,imgurl);
             }
         });
         initEditor();
@@ -899,16 +615,114 @@ public class addPost extends BaseActivity implements View.OnClickListener {
         return animator;
     }
 
-    public File  cratephotofile() throws IOException {//返回一个File类的文件
-        String name=new SimpleDateFormat("YYYYMMdd_HHmmss").format(new Date());
-//年月日小时分秒
-        File stordir=Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        //获得公共目录下的图片文件路径
-        File image=File.createTempFile(name,".jpeg",stordir);
-        //1：字首2：后缀3：在哪个目录下
-        return  image;
+
+    public void selectPic(int size){
+        MultiImageSelector.create()
+                .showCamera(true)
+                .count(size)
+                .multi()
+                .start(this,1);
+
     }
-    private void initData(){
-        token = userData.getToken();
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==RESULT_OK){
+            switch (requestCode){
+                case 1:
+                    imageList.remove(null);
+                    imageList.addAll(data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT));
+                    uploadImage();
+                    Log.i(TAG, "onActivityResult: 值"+imageList);
+                    adapter.notifyDataSetChanged();
+                    String numStr=String.valueOf(imageList.size())+"/9";
+                    tvNum.setText(numStr);
+                    if (imageList.size()<9){
+                        Log.i(TAG, "onActivityResult: 添加新的选择");
+                        imageList.add(null);
+                    }
+            }
+        }
+    }
+    private void uploadImage() {
+        Map<String, String> params = UserUtil.createUserMap();
+        for (String path : imageList) {
+            File file=new File(path);
+            StandardRequestMangaer.getInstance().postImage(RequestUrl.UPLOAD_IMG, new BaseCallBack<String>() {
+
+                @Override
+                protected void OnRequestBefore(Request request) {
+                    /*loadLayout.setVisibility(View.VISIBLE);*/
+                }
+
+                @Override
+                protected void onFailure(Call call) {
+
+                }
+
+                @Override
+                protected void onSuccess(Call call, Response response, String s) {
+                    Log.i(TAG, "onSuccess: 图片路径:"+s);
+                    Toast.makeText(addPost.this, "上传成功！"+s, Toast.LENGTH_SHORT).show();
+                    stringBuilder.append(s+",");
+                }
+
+                @Override
+                protected void onResponse(Response response) {
+
+                }
+
+                @Override
+                protected void onEror(Call call, int statusCode) {
+
+                }
+
+                @Override
+                protected void inProgress(int progress, long total, int id) {
+
+                }
+            }, "file",file,params);
+        }
+    }
+    private void uploadPost(String content,String imgurl){
+        Map<String,String> map=UserUtil.createUserMap();
+        map.put("content",content);
+        map.put("imgurl",imgurl);
+        StandardRequestMangaer.getInstance()
+                .post(RequestUrl.ADD_POST, new BaseCallBack<String>(){
+                    @Override
+                    protected void OnRequestBefore(Request request) {
+                        Log.i(TAG, "OnRequestBefore: 上传帖子");
+                    }
+
+                    @Override
+                    protected void onFailure(Call call) {
+                        Toast.makeText(addPost.this, "上传帖子失败了", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    protected void onSuccess(Call call, Response response, String s) {
+                        Toast.makeText(addPost.this, "上传帖子成功！", Toast.LENGTH_SHORT).show();
+                        Intent intent=new Intent(addPost.this,PostDetails.class);
+                        startActivity(intent);
+                        finish();
+                    }
+
+                    @Override
+                    protected void onResponse(Response response) {
+
+                    }
+
+                    @Override
+                    protected void onEror(Call call, int statusCode) {
+
+                    }
+
+                    @Override
+                    protected void inProgress(int progress, long total, int id) {
+
+                    }
+                },map);
     }
 }

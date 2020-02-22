@@ -17,6 +17,7 @@ import com.example.reading.Activity.PostDetails;
 import com.example.reading.Activity.ShowImageActivity;
 import com.example.reading.Fragment.CommunityFragment;
 import com.example.reading.adapter.NineGridAdapter;
+import com.example.reading.util.ImageLoaderUtil;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
@@ -49,44 +50,44 @@ public class StandardNineGridLayout extends NineGridLayout {
     @Override
     protected boolean displayOneImage(final ImageView imageView, String url, final int parentWidth) {
 
-//        ImageLoaderUtil.displayImage(mContext, imageView, url, ImageLoaderUtil.getPhotoImageOption(), new ImageLoadingListener() {
-//            @Override
-//            public void onLoadingStarted(String imageUri, View view) {
-//
-//            }
-//
-//            @Override
-//            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-//
-//            }
-//
-//            @Override
-//            public void onLoadingComplete(String imageUri, View view, Bitmap bitmap) {
-//                Log.i(TAG, "onLoadingComplete: imageUri="+imageUri);
-//                Log.i(TAG, "onLoadingComplete: bitmap="+bitmap);
-//                int w = bitmap.getWidth();
-//                int h = bitmap.getHeight();
-//
-//                int newW;
-//                int newH;
-//                if (h > w * MAX_W_H_RATIO) {//h:w = 5:3
-//                    newW = parentWidth / 2;
-//                    newH = newW * 5 / 3;
-//                } else if (h < w) {//h:w = 2:3
-//                    newW = parentWidth * 2 / 3;
-//                    newH = newW * 2 / 3;
-//                } else {//newH:h = newW :w
-//                    newW = parentWidth / 2;
-//                    newH = h * newW / w;
-//                }
-//                setOneImageLayoutParams(imageView, newW, newH);
-//            }
-//
-//            @Override
-//            public void onLoadingCancelled(String imageUri, View view) {
-//
-//            }
-//        });
+        ImageLoaderUtil.displayImage(mContext, imageView, url, ImageLoaderUtil.getPhotoImageOption(), new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap bitmap) {
+                Log.i(TAG, "onLoadingComplete: imageUri="+imageUri);
+                Log.i(TAG, "onLoadingComplete: bitmap="+bitmap);
+                int w = bitmap.getWidth();
+                int h = bitmap.getHeight();
+
+                int newW;
+                int newH;
+                if (h > w * MAX_W_H_RATIO) {//h:w = 5:3
+                    newW = parentWidth / 2;
+                    newH = newW * 5 / 3;
+                } else if (h < w) {//h:w = 2:3
+                    newW = parentWidth * 2 / 3;
+                    newH = newW * 2 / 3;
+                } else {//newH:h = newW :w
+                    newW = parentWidth / 2;
+                    newH = h * newW / w;
+                }
+                setOneImageLayoutParams(imageView, newW, newH);
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+
+            }
+        });
         return false;
     }
 

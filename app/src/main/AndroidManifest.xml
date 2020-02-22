@@ -25,7 +25,8 @@
         <activity android:name=".Activity.SearchActivity" />
         <activity android:name=".Activity.ShowImageActivity" />
         <activity android:name=".Activity.PostDetails" />
-        <activity android:name=".Activity.addPost" />
+        <activity android:name=".Activity.addPost">
+        </activity>
         <activity
             android:name=".Activity.Party"
             android:configChanges="orientation|screenSize|keyboardHidden"

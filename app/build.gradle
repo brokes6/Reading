@@ -98,4 +98,6 @@ dependencies {
 
     implementation 'org.projectlombok:lombok:1.16.8'  //添加lombok依赖
     implementation 'org.glassfish:javax.annotation:10.0-b28' //java注解
+
+    compile 'com.github.lovetuzitong:MultiImageSelector:1.2'
 }

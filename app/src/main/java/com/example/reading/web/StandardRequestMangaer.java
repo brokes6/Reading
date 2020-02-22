@@ -2,6 +2,7 @@ package com.example.reading.web;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -32,6 +33,7 @@ import okhttp3.internal.http.HttpMethod;
  * 对okhttp的封装
  */
 public class StandardRequestMangaer {
+    private static final String TAG = "StandardRequestMangaer";
     private static final String GET="GET";
     private static final String POST="POST";
 
@@ -73,7 +75,12 @@ public class StandardRequestMangaer {
     }
 
     public void postImage(String url, BaseCallBack baseCallBack,String filekey, File file,Map<String,String>params){
-
+        Param[]paramArr=fromMapToParams(params);
+        try {
+            postAsyn(url,baseCallBack,file,filekey,paramArr);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     /*********************************
      * 内部的方法
@@ -127,10 +134,16 @@ public class StandardRequestMangaer {
                 if(response.isSuccessful()){
                     try {
                         JSONObject jsonObject=new JSONObject(result);
+                        Log.i(TAG, "onResponse: JSON数据为:"+jsonObject);
                         int code=jsonObject.getInt("code");
                         if (code==1){
                             if (callBack.getMType()==String.class){
-                                callBackSuccess(callBack,call,response,jsonObject.getString("msg"));
+                                try {
+                                    callBackSuccess(callBack,call,response,jsonObject.getString("data"));
+                                }catch (JSONException e){
+                                    callBackSuccess(callBack,call,response,jsonObject.getString("msg"));
+                                }
+                                ;
                             }else {
                                 Object object = mGson.fromJson(jsonObject.getString("data"), callBack.getMType());
                                 callBackSuccess(callBack, call, response, object);
