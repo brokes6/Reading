@@ -8,7 +8,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class HistoryBean {
-    private int bid;
+    private String bid;
     private String bname;
     private String bimg;
     private String author;

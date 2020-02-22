@@ -56,6 +56,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryViewHolder>{
             public void onClick(View v) {
                 Intent intent=new Intent(mContext, ReadActivity.class);
                 intent.putExtra("id",historyBean1.getBid());
+                Log.d(TAG, "onClick: 点击的书籍id为"+historyBean1.getBid());
                 mContext.startActivity(intent);
             }
         });

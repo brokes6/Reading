@@ -181,7 +181,13 @@ public class HomeFragment extends Fragment implements CustomAdapt {
                 .useAngleGalleryStyle()
                 .setDataFromUrl((ArrayList<String>) urlList)
                 .startLoop();
-
+        binding.BestSsellerAllBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), AllBooks.class);
+                startActivity(intent);
+            }
+        });
         binding.AllBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

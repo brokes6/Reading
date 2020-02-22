@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BookDetailsBean {
-    private int bid;
+    private String bid;
     private int type;
     private String rurl;
     private String bimg;

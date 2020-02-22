@@ -42,6 +42,7 @@
                 </LinearLayout>
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/history_view"
+                    android:padding="5dp"
                     android:minHeight="120dp"
                     android:background="#F3F3F3"
                     android:layout_width="match_parent"
