@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     android:layout_marginTop="5dp"
+    android:padding="5dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:background="@drawable/fillet_background"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <LinearLayout
@@ -48,10 +50,5 @@
                 android:text="测试介绍" />
         </RelativeLayout>
     </LinearLayout>
-        <TextView
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#BDBDBD"/>
 
 </LinearLayout>

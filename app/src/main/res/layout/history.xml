@@ -43,6 +43,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/history_view"
                     android:minHeight="120dp"
+                    android:background="#F3F3F3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                 </androidx.recyclerview.widget.RecyclerView>

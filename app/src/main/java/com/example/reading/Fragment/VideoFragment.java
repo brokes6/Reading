@@ -68,6 +68,7 @@ public class VideoFragment extends Fragment {
                     Glide.with(getActivity()).load(Vimg).into(binding.playerListVideo.thumbImageView);
                     break;
                 case RequestStatus.FAILURE:
+                    binding.playerListVideo.setVisibility(View.GONE);
                     binding.loading.setStatus(LoadingLayout.Empty);
                     break;
             }
@@ -103,26 +104,21 @@ public class VideoFragment extends Fragment {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMainThread(BookResource video) {
-        Vurl=video.getUrl();
-        Vimg=video.getImg();
+    public void onEventMainThread(Video video) {
+        //我这里是对的
+        Vurl=video.getVideo_path();
+        Vimg=video.getVideo_img();
         type=video.getType();
-        Log.d(TAG, "当前传过来的type为"+type);
+        Log.d(TAG, "传过来的type为"+type);
         if (Vurl !=null){
         if (type ==1){
             Message mes=new Message();
             mes.what= RequestStatus.FAILURE;
             handler.sendMessage(mes);
         }else{
-        /**
-         * 参数1：视频路径
-         * 参数2：播放器类型
-         * 参数3：视频标题  可为空
-         */
         Message mes=new Message();
         mes.what= RequestStatus.SUCCESS;
-        handler.sendMessage(mes);
-            }
+        handler.sendMessage(mes); }
         }else{
             Message mes=new Message();
             mes.what= RequestStatus.FAILURE;

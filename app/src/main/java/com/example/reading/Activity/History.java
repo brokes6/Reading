@@ -13,6 +13,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.reading.Bean.BookDetailsBean;
 import com.example.reading.Bean.HistoryBean;
 import com.example.reading.Bean.User;
 import com.example.reading.R;
@@ -30,6 +31,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import okhttp3.Call;
@@ -43,12 +46,14 @@ import static com.example.reading.MainApplication.getContext;
 public class History extends BaseActivity {
     private static final String TAG = "History";
     HistoryBinding binding;
+    List<HistoryBean> historyBeanList = new ArrayList<>();
+    BookDetailsBean bookDetailsBean = new BookDetailsBean();
     String url = "http://117.48.205.198/xiaoyoudushu/findBookById?";
     String Aurl;
     String token;
     HistoryAdapter historyAdapter;
     private User userData;
-    int code;
+    int code,Page = 0;
     String bookid;
     Handler handler = new Handler(){
         @Override
@@ -58,7 +63,7 @@ public class History extends BaseActivity {
                     historyAdapter.notifyDataSetChanged();
                     break;
                 case RequestStatus.FAILURE:
-
+                    Toast.makeText(History.this,"服务器未响应，请稍后在尝试！",Toast.LENGTH_SHORT).show();
                     break;
             }
         }
@@ -93,54 +98,66 @@ public class History extends BaseActivity {
     }
     private void findHistoryIdDetails(){
         bookid= PostHitoryUtil.getSearchHistory(History.this);
-        token = userData.getToken();
-        Log.d(TAG, "findHistoryIdDetails: 历史书籍id为"+bookid);
-        if(bookid.trim().equals("")){
-            Toast.makeText(this, "你还没有浏览历史喔", Toast.LENGTH_SHORT).show();
-            Message message=new Message();
-            message.what= RequestStatus.NO_RESOURCE;
-            handler.sendMessage(message);
-            return;
-        }
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Aurl = url+"token="+token+"&"+"bid="+bookid;
-                Request request=new Request.Builder()
-                        .url(Aurl)
-                        .build();
-                OkHttpClient client=new OkHttpClient();
-                client.newCall(request).enqueue(new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        Message message=new Message();
-                        message.what=RequestStatus.FAILURE;
-                        handler.sendMessage(message);
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        String BookData=response.body().string();
-                        try {
-                            JSONObject object=new JSONObject(BookData);
-                            code = object.getInt("code");
-                            if (code==1){
-                                String data = object.getString("data");
-                                Log.d(TAG, "onResponse: 历史书籍数据为"+data);
-                                Gson gson = new Gson();
-                                List<HistoryBean> historyBeanList=gson.fromJson(data,new TypeToken<List<HistoryBean>>(){}.getType());
-                                historyAdapter.setHistory(historyBeanList);
-                                Message message=new Message();
-                                message.what=RequestStatus.SUCCESS;
-                                handler.sendMessage(message);
-                            }
-                        }catch (JSONException e){
-                            e.printStackTrace();
-                        }
-                    }
-                });
+        List<String> list= Arrays.asList(bookid.split(","));
+        for (int i=0;i<list.size();i++) {
+            Log.d(TAG, "返回的书籍历史id为--" + list.get(i));
+            int index = i;
+            token = userData.getToken();
+            if (bookid.trim().equals("")) {
+                Toast.makeText(this, "你还没有浏览历史喔", Toast.LENGTH_SHORT).show();
+                Message message = new Message();
+                message.what = RequestStatus.NO_RESOURCE;
+                handler.sendMessage(message);
+                return;
             }
-        }).start();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Aurl =url+"token="+token+"&"+"bid="+list.get(index);
+                    Request request = new Request.Builder()
+                            .url(Aurl)
+                            .build();
+                    OkHttpClient client = new OkHttpClient();
+                    client.newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            Message message = new Message();
+                            message.what = RequestStatus.FAILURE;
+                            handler.sendMessage(message);
+                        }
 
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            String BookData = response.body().string();
+                            try {
+                                JSONObject object = new JSONObject(BookData);
+                                code = object.getInt("code");
+                                if (code == 1) {
+                                    String data = object.getString("data");
+                                    Gson gson = new Gson();
+                                    bookDetailsBean = gson.fromJson(data, new TypeToken<BookDetailsBean>() {}.getType());
+                                    HistoryBean historyBean = new HistoryBean();
+                                    historyBean.setBid(bookDetailsBean.getBid());
+                                    historyBean.setBname(bookDetailsBean.getBname());
+                                    historyBean.setBimg(bookDetailsBean.getBimg());
+                                    historyBean.setAuthor(bookDetailsBean.getAuthor());
+                                    historyBeanList.add(historyBean);
+                                    historyAdapter.setHistory(historyBeanList);
+                                    Message message = new Message();
+                                    message.what = RequestStatus.SUCCESS;
+                                    handler.sendMessage(message);
+                                }else{
+                                    Message message = new Message();
+                                    message.what = RequestStatus.FAILURE;
+                                    handler.sendMessage(message);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }).start();
+        }
     }
 }

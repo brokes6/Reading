@@ -98,7 +98,7 @@ public class AudioFrequency extends Fragment{
                     binding.authorBookimg.setImageURL(bookDetailsBean.getBimg());
                     binding.PlaybackOperation.setVisibility(View.GONE);
                     EventBus.getDefault().post(new Video(null,null,1));
-                    Toast.makeText(getContext(),"该书籍暂无音频",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),"该书籍暂无音频,视频",Toast.LENGTH_SHORT).show();
                     PostHitoryUtil.saveSearchHistory(String.valueOf(bid),getActivity());
                     break;
                 case RequestStatus.FAILURE:
@@ -396,19 +396,17 @@ public class AudioFrequency extends Fragment{
                     Message mes=new Message();
                     switch (type){
                         case 100:
-                            //100为音频
                             //获取音频
                             mes.what= RequestStatus.AUDIO;
                             handler.sendMessage(mes);
                             break;
                         case 200:
-                            //200为视频
                             //获取视频
                             mes.what=RequestStatus.VIDEO;
                             handler.sendMessage(mes);
                             break;
                         case 300:
-                            //视频
+                            //视频和音频
                             mes.what=RequestStatus.AUDIO_AND_VIDEO;
                             handler.sendMessage(mes);
                             break;

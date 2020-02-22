@@ -52,7 +52,7 @@ public class PostHitoryUtil {
         }else {
             //之前未添加过
             Log.i(TAG, "saveSearchHistory: 我来拉");
-            editor.putString(SEARCH_HISTORY, inputText);
+            editor.putString(SEARCH_HISTORY, inputText+",");
             editor.commit();
         }
     }
