@@ -144,6 +144,7 @@ public class ReadActivity extends BaseActivity {
     public void handlerComments(BookCommentVo commentVo){
         List<BookComment>comments=commentVo.getComments();
         if (comments==null||comments.size()==0){
+            //1
             Log.i(TAG, "handlerComments:暂时没有更多评论");
             return;
         }
