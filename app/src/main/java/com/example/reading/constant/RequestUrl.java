@@ -26,6 +26,7 @@ public class RequestUrl {
     public static final String FIND_BOOK_POPULAR_COMMENT="http://117.48.205.198/xiaoyoudushu/findBookPopularComments";
     public static final String SEARCH="http://117.48.205.198/xiaoyoudushu/search";
     public static final int NEW=100;
-
+    public static final String FIND_ROTATION="http://117.48.205.198/xiaoyoudushu/findSpecialPicturesByType?type=100";
+    public static final String ADD_USER_IMG="http://117.48.205.198/xiaoyoudushu/uploadImg";
     public static final int POPULAR=200;
 }

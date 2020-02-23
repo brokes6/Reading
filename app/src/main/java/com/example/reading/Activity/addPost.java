@@ -264,7 +264,8 @@ public class addPost extends BaseActivity implements View.OnClickListener {
                     Toast.makeText(addPost.this, "内容不能为空", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                String imgurl=stringBuilder.substring(0,stringBuilder.length()-1);
+//                String imgurl=stringBuilder.substring(0,stringBuilder.length()-1);
+                String imgurl = userData.getUimg();
                 Log.i(TAG, "onClick: imgurl"+imgurl);
                 uploadPost(content,imgurl);
             }
@@ -628,7 +629,7 @@ public class addPost extends BaseActivity implements View.OnClickListener {
                     imageList.remove(null);
                     imageList.addAll(data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT));
                     uploadImage();
-                    Log.i(TAG, "onActivityResult: 值"+imageList);
+                    Log.d(TAG, "onActivityResult: 值"+imageList);
                     adapter.notifyDataSetChanged();
                     String numStr=String.valueOf(imageList.size())+"/9";
                     tvNum.setText(numStr);

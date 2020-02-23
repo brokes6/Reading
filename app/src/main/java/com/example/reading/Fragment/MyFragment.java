@@ -33,19 +33,30 @@ import androidx.fragment.app.Fragment;
 
 import com.example.reading.Activity.History;
 import com.example.reading.Activity.LoginActivity;
+import com.example.reading.Activity.PostDetails;
 import com.example.reading.Activity.Set_up;
 import com.example.reading.Bean.User;
 import com.example.reading.R;
+import com.example.reading.constant.RequestUrl;
 import com.example.reading.databinding.MyfragmentBinding;
 import com.example.reading.util.FileCacheUtil;
 import com.example.reading.util.RequestStatus;
+import com.example.reading.util.UserUtil;
+import com.example.reading.web.BaseCallBack;
+import com.example.reading.web.StandardRequestMangaer;
 import com.weavey.loading.lib.LoadingLayout;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
+import java.util.Map;
+import me.nereo.multi_image_selector.MultiImageSelector;
+import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 import me.jessyan.autosize.internal.CustomAdapt;
+import okhttp3.Call;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -58,6 +69,7 @@ public class MyFragment extends Fragment implements CustomAdapt,View.OnClickList
     public static final int TAKE_PHOTO =1;
     public static final int CHOOSE_PHOTO=2;
     private Uri imageUri;
+    byte[] userimgurl;
     private static final String TAG = "MyFragment";
     private Handler handler=new Handler(){
         @Override
@@ -206,11 +218,10 @@ public class MyFragment extends Fragment implements CustomAdapt,View.OnClickList
                 if(resultCode==RESULT_OK){
                     try {
                         Bitmap bitmap= BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream(imageUri));
+                        userimgurl = bitmapToByte(bitmap);
                         String ans=imageUri.toString();
                         userData.setUimg(ans);
-                        Log.d(TAG, "displayImage: 更换的图片为-------"+imageUri);
                         FileCacheUtil.updateUser(userData, getContext());
-//                        muserOperator.updateImage(bean);
                         binding.userImg.setImageBitmap(bitmap);
                     }catch (FileNotFoundException e){
                         e.printStackTrace();
@@ -253,6 +264,12 @@ public class MyFragment extends Fragment implements CustomAdapt,View.OnClickList
                 return null;
             }
         }
+    }
+    private static byte[] bitmapToByte(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] imgBytes = baos.toByteArray();
+        return imgBytes;
     }
 
     @TargetApi(19)
@@ -301,22 +318,47 @@ public class MyFragment extends Fragment implements CustomAdapt,View.OnClickList
     private void displayImage(String imagePath) {
         if(imagePath!=null)
         {
-            //Bitmap bitmap= BitmapFactory.decodeFile(imagePath);
-            //imageView.setImageBitmap(bitmap);
+            Bitmap bitmap= BitmapFactory.decodeFile(imagePath);
             Uri ans=getImageContentUri(getContext(),imagePath);
             String bf=ans.toString();
-            userData.setUimg(imagePath);
-            Log.d(TAG, "displayImage: 更换的图片为-------"+imagePath);
-            FileCacheUtil.updateUser(userData, getContext());
-
             binding.userImg.setImageURI(ans);
+            adduserimg(imagePath);
         }
         else
         {
             Toast.makeText(getContext(),"获取图片失败", Toast.LENGTH_SHORT).show();
         }
     }
+    private void adduserimg(String s){
+        Map<String,String> params= UserUtil.createUserMap();
+        File file=new File(s);
+        Log.d(TAG, "adduserimg: ---------"+file);
+        StandardRequestMangaer.getInstance().postImage(RequestUrl.ADD_USER_IMG, new BaseCallBack<String>() {
+            @Override
+            protected void OnRequestBefore(Request request) { }
 
+            @Override
+            protected void onFailure(Call call) { }
+
+            @Override
+            protected void onSuccess(Call call, Response response, String s) {
+                Log.i(TAG, "onSuccess: 图片路径:"+s);
+                userData.setUimg(s);
+                FileCacheUtil.updateUser(userData, getContext());
+                Toast.makeText(getContext(),"设置头像成功!",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            protected void onResponse(Response response) { }
+
+            @Override
+            protected void onEror(Call call, int statusCode) {
+                Log.d(TAG, "错误"); }
+
+            @Override
+            protected void inProgress(int progress, long total, int id) { }
+        },"file",file,params);
+    }
     //需要改变适配尺寸的时候，在重写这两个方法
     @Override
     public boolean isBaseOnWidth() {

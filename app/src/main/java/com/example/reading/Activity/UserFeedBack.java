@@ -64,7 +64,6 @@ public class UserFeedBack extends BaseActivity {
         username = userData.getUsername();
         token = userData.getToken();
         userimg = userData.getUimg();
-//        userimg = "http://117.48.205.198/xiaoyoudushu_resource/post_img/06c183cca19e4aa687bc98a01d579208.jpg";
         postData = "nickname=" + username + "&avatar="+ userimg + "&openid=" + token;
         Log.d(TAG, "initView:用户信息为"+postData);
     }

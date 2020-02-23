@@ -279,8 +279,10 @@ public class ReadActivity extends BaseActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if(!TextUtils.isEmpty(charSequence) && charSequence.length()>2){
                     bt_comment.setBackgroundColor(Color.parseColor("#FFB568"));
+                    bt_comment.setEnabled(true);
                 }else {
                     bt_comment.setBackgroundColor(Color.parseColor("#D8D8D8"));
+                    bt_comment.setEnabled(false);
                 }
             }
 

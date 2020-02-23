@@ -99,6 +99,7 @@ public class AudioFrequency extends Fragment{
                     binding.PlaybackOperation.setVisibility(View.GONE);
                     EventBus.getDefault().post(new Video(null,null,1));
                     Toast.makeText(getContext(),"该书籍暂无音频,视频",Toast.LENGTH_SHORT).show();
+                    binding.authorBookimg.setEnabled(false);
                     PostHitoryUtil.saveSearchHistory(String.valueOf(bid),getActivity());
                     break;
                 case RequestStatus.FAILURE:

@@ -110,6 +110,7 @@ public class HomeFragment extends Fragment implements CustomAdapt,View.OnClickLi
         initView();
         initData();
         analysis();
+        initRotationChart();
         setPullRefresher();
         return binding.getRoot();
     }
@@ -192,6 +193,9 @@ public class HomeFragment extends Fragment implements CustomAdapt,View.OnClickLi
                 startActivity(intent5);
                 break;
         }
+    }
+    private void initRotationChart(){
+
     }
 
 
