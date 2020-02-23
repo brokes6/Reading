@@ -28,7 +28,7 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/file_back_light_grey"
-        android:gravity="center"
+        android:gravity="center|left"
         android:layout_gravity="center" />
     </LinearLayout>
 

@@ -118,12 +118,6 @@ public class ReadActivity extends BaseActivity {
             return strings[position];
         }
     }
-//    @Override
-//    public void onBackPressed() {
-//        if (!BackHandlerHelper.handleBackPress(this)) {
-//            super.onBackPressed();
-//        }
-//    }
     @Override
     public void onBackPressed() {
         if (JCVideoPlayer.backPress()){

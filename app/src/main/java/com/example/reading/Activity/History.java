@@ -86,6 +86,12 @@ public class History extends BaseActivity {
         findHistoryIdDetails();
     }
     private void initView(){
+        binding.setBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         historyAdapter = new HistoryAdapter(History.this);
         LinearLayoutManager im3 = new LinearLayoutManager(getContext());
         im3.setOrientation(LinearLayoutManager.VERTICAL);

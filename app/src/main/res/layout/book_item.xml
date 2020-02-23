@@ -5,7 +5,9 @@
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="10dp">
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:paddingRight="10dp">
 
         <com.example.reading.util.RoundImageView
             android:id="@+id/book1_img"

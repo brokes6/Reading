@@ -60,7 +60,7 @@ import wowo.kjt.library.onPageClickListener;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class HomeFragment extends Fragment implements CustomAdapt {
+public class HomeFragment extends Fragment implements CustomAdapt,View.OnClickListener {
     HomefragmentBinding binding;
     private int phoneHeight = -1;
     String date1;
@@ -128,23 +128,15 @@ public class HomeFragment extends Fragment implements CustomAdapt {
         binding.refreshLayout.setDisableContentWhenRefresh(true);
         //MAdapter
         mAdapter=new MAdapter(getActivity());
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false){
-            @Override
-            public boolean canScrollHorizontally() {
-                return false;
-            }
-        };
-        binding.RecommendRecycleview.setLayoutManager(layoutManager);
+        LinearLayoutManager im = new LinearLayoutManager(getContext());
+        im.setOrientation(LinearLayoutManager.HORIZONTAL);
+        binding.RecommendRecycleview.setLayoutManager(im);
         binding.RecommendRecycleview.setAdapter(mAdapter);
         //MAdapter_seller
         mAdapter_seller = new MAdapter_seller(getActivity());
-        LinearLayoutManager layoutManager2 = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false){
-            @Override
-            public boolean canScrollHorizontally() {
-                return false;
-            }
-        };
-        binding.BestSellerRecycleview.setLayoutManager(layoutManager2);
+        LinearLayoutManager im2 = new LinearLayoutManager(getContext());
+        im2.setOrientation(LinearLayoutManager.HORIZONTAL);
+        binding.BestSellerRecycleview.setLayoutManager(im2);
         binding.BestSellerRecycleview.setAdapter(mAdapter_seller);
         //FestivalAdapter
         festivalAdapter = new FestivalAdapter(getActivity());
@@ -152,21 +144,6 @@ public class HomeFragment extends Fragment implements CustomAdapt {
         im3.setOrientation(LinearLayoutManager.VERTICAL);
         binding.festivalRecycleview.setLayoutManager(im3);
         binding.festivalRecycleview.setAdapter(festivalAdapter);
-        binding.searchBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i(TAG, "onClick: 开始跳转");
-                Intent intent=new Intent(getContext(), SearchActivity.class);
-                startActivity(intent);
-            }
-        });
-        binding.userfeedback.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(getContext(), UserFeedBack.class);
-                startActivity(intent);
-            }
-        });
     }
 
     private void initData() {
@@ -181,34 +158,40 @@ public class HomeFragment extends Fragment implements CustomAdapt {
                 .useAngleGalleryStyle()
                 .setDataFromUrl((ArrayList<String>) urlList)
                 .startLoop();
-        binding.BestSsellerAllBook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), AllBooks.class);
+        binding.searchBox.setOnClickListener(this);
+        binding.userfeedback.setOnClickListener(this);
+        binding.BestSsellerAllBook.setOnClickListener(this);
+        binding.AllBook.setOnClickListener(this);
+        binding.xiaoyou.setOnClickListener(this);
+        binding.party.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.search_box:
+                Log.i(TAG, "onClick: 开始跳转");
+                Intent intent=new Intent(getContext(), SearchActivity.class);
                 startActivity(intent);
-            }
-        });
-        binding.AllBook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), AllBooks.class);
-                startActivity(intent);
-            }
-        });
-        binding.xiaoyou.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(),XiaoYouSound.class);
-                startActivity(intent);
-            }
-        });
-        binding.party.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), Party.class);
-                startActivity(intent);
-            }
-        });
+                break;
+            case R.id.userfeedback:
+                Intent intent1=new Intent(getContext(), UserFeedBack.class);
+                startActivity(intent1);
+                break;
+            case R.id.BestSseller_AllBook:
+            case R.id.AllBook:
+                Intent intent2 = new Intent(getContext(), AllBooks.class);
+                startActivity(intent2);
+                break;
+            case R.id.xiaoyou:
+                Intent intent4 = new Intent(getContext(),XiaoYouSound.class);
+                startActivity(intent4);
+                break;
+            case R.id.party:
+                Intent intent5 = new Intent(getContext(), Party.class);
+                startActivity(intent5);
+                break;
+        }
     }
 
 
@@ -225,7 +208,6 @@ public class HomeFragment extends Fragment implements CustomAdapt {
                 Request request = new Request.Builder()
                         .url("http://117.48.205.198/xiaoyoudushu/findBooksByDate?time="+time)
                         .build();
-                Log.d(TAG, "url为"+"http://117.48.205.198/xiaoyoudushu/findBooksByDate?time="+time);
                 /**
                  * 节气推送
                  */
@@ -253,9 +235,7 @@ public class HomeFragment extends Fragment implements CustomAdapt {
                 String data = object.getString("data");
                 JSONObject Data1 = new JSONObject(data);
                 String newBooks = Data1.getString("newBooks");
-                Log.d(TAG, "newBook数据为 :"+newBooks);
                 String popularBooks = Data1.getString("popularBooks");
-                Log.d(TAG, "popularBooks数据为 :"+popularBooks);
                 code = object.getInt("code");
                 if(code==1){
                     if (popularBooks!=null){
@@ -268,7 +248,6 @@ public class HomeFragment extends Fragment implements CustomAdapt {
                         message.what=200;
                         handler.sendMessage(message);
                     }else{
-                        Log.d(TAG, "暂无数据！");
                         Toast.makeText(getContext(),"获取数据失败",Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -290,7 +269,7 @@ public class HomeFragment extends Fragment implements CustomAdapt {
                 scode = object.getInt("code");
                 if (code==1){
                     if (bookDtoList==null){
-                        Log.d(TAG, "bookDtoList没数据拉");
+
                     }else{
                     Gson gson = new Gson();
                     festivalDetails = gson.fromJson(bookDtoList,new TypeToken<List<FestivalDetails>>() {}.getType());
