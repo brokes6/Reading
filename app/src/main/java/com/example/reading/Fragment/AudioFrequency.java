@@ -391,7 +391,7 @@ public class AudioFrequency extends Fragment{
                     String data = object.getString("data");
                     Gson gson=new Gson();
                     bookDetailsBean=gson.fromJson(data,new TypeToken<BookDetailsBean>(){}.getType());
-                    ((ReadActivity)getContext()).handlerComments(bookDetailsBean.getCommentVo());
+                    ((ReadActivity)getContext()).handlerComments(bookDetailsBean);
                     int type=bookDetailsBean.getType();
                     Log.d(TAG, "JsonJX: 当前type为"+type);
                     Message mes=new Message();

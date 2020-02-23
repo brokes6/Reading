@@ -7,12 +7,14 @@ public class RequestUrl {
 
     public static final String ADD_POST_COMMENT="http://117.48.205.198/xiaoyoudushu/addPostComment";
 
+    public static final String ADD_BOOK_COMMENT="http://117.48.205.198/xiaoyoudushu/addBookComment";
     public static final String ADD_POST="http://117.48.205.198/xiaoyoudushu/addPost";
     public static final String HANDLER_POST_COMMENT_LOVE="http://117.48.205.198/xiaoyoudushu/handlerLovePostComment";
 
+    public static final String HANDLER_BOOK_COMMENT_LOVE="http://117.48.205.198/xiaoyoudushu/handlerLoveBookComment";
     public static final String HANDLER_POST_LOVE="http://117.48.205.198/xiaoyoudushu/handlerPostLove";
 
-    public static final String HANDLER_BOOK_LOVE="http://117.48.205.198/xiaoyoudushu/handlerLoveBookComment";
+    public static final String HANDLER_BOOK_LOVE="http://117.48.205.198/xiaoyoudushu/handlerLoveBook";
 
     public static final String FIND_POST_NEW_COMMENT="http://117.48.205.198/xiaoyoudushu/findPostNewComments";
 

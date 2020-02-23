@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BookDetailsBean {
-    private String bid;
+    private int  bid;
     private int type;
     private String rurl;
     private String bimg;
@@ -16,6 +16,7 @@ public class BookDetailsBean {
     private int loveNum;
     private int forwardNum;
     private int commentNum;
+    private int loveStatus;
     private BookResource video;
     private BookResource audio;
     private BookCommentVo commentVo;

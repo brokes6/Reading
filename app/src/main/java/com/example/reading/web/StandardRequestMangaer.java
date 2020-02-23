@@ -165,7 +165,12 @@ public class StandardRequestMangaer {
                         });
                     }
                 }else {
-                    callBack.onEror(call,response.code());
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callBack.onEror(call,response.code());
+                        }
+                    });
                 }
             }
         });

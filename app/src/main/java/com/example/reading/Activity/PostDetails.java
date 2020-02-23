@@ -530,7 +530,7 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
                     protected void onSuccess(Call call, Response response, String s) {
                         loadLayout.setVisibility(View.GONE);
                         Toast.makeText(PostDetails.this, s, Toast.LENGTH_SHORT).show();
-                        adapter.addTheCommentData(new PostComment("刚刚",content,"测试","http://image.biaobaiju.com/uploads/20180803/23/1533308847-sJINRfclxg.jpeg"));
+                        adapter.addTheCommentData(new PostComment("刚刚",content,"测试","http://image.biaobaiju.com/uploads/20180803/23/1533308847-sJINRfclxg.jpeg",Integer.valueOf(s)));
                         commentStr.setText(String.valueOf(Integer.valueOf(commentStr.getText().toString())+1));
                     }
 

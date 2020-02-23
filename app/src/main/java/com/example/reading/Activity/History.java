@@ -137,7 +137,7 @@ public class History extends BaseActivity {
                                     Gson gson = new Gson();
                                     bookDetailsBean = gson.fromJson(data, new TypeToken<BookDetailsBean>() {}.getType());
                                     HistoryBean historyBean = new HistoryBean();
-                                    historyBean.setBid(bookDetailsBean.getBid());
+                                    historyBean.setBid(String.valueOf(bookDetailsBean.getBid()));
                                     historyBean.setBname(bookDetailsBean.getBname());
                                     historyBean.setBimg(bookDetailsBean.getBimg());
                                     historyBean.setAuthor(bookDetailsBean.getAuthor());

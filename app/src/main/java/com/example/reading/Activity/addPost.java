@@ -705,6 +705,7 @@ public class addPost extends BaseActivity implements View.OnClickListener {
                     protected void onSuccess(Call call, Response response, String s) {
                         Toast.makeText(addPost.this, "上传帖子成功！", Toast.LENGTH_SHORT).show();
                         Intent intent=new Intent(addPost.this,PostDetails.class);
+                        intent.putExtra("postId",Integer.valueOf(s));
                         startActivity(intent);
                         finish();
                     }

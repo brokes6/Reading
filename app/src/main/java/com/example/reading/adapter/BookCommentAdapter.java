@@ -187,7 +187,7 @@ public class BookCommentAdapter extends BaseExpandableListAdapter {
         Map<String,String> params= UserUtil.createUserMap();
         params.put("cid", String.valueOf(cid));
         StandardRequestMangaer.getInstance()
-                .post(RequestUrl.HANDLER_BOOK_LOVE,new BaseCallBack<String>(){
+                .post(RequestUrl.HANDLER_BOOK_COMMENT_LOVE,new BaseCallBack<String>(){
 
                     @Override
                     protected void OnRequestBefore(Request request) {
