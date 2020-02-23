@@ -6,35 +6,15 @@
     android:id="@+id/totalLayout">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="35dp"
         android:gravity="center_vertical"
-        android:orientation="vertical">
-        <LinearLayout
-            android:layout_marginTop="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/resultType"
-                android:text="书籍 "
-                android:paddingLeft="3dp"
-                android:paddingRight="3dp"
-                android:textSize="16sp"
-                android:textColor="#FFFFFF"
-                android:background="@drawable/fillet_back_gray"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="7dp"
-                android:layout_gravity="center_vertical" />
-        </LinearLayout>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#F3F3F3"/>
+        android:orientation="horizontal">
+
         <LinearLayout
             android:layout_marginTop="7dp"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:orientation="horizontal">
             <LinearLayout
                 android:layout_width="0dp"
@@ -53,8 +33,20 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:layout_weight="1.5"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/resultType"
+                    android:text="书籍 "
+                    android:paddingLeft="3dp"
+                    android:paddingRight="3dp"
+                    android:textSize="16sp"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/fillet_back_gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_gravity="center_vertical" />
 
                 <ImageView
                     android:id="@+id/search_history_item_img"

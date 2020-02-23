@@ -5,16 +5,26 @@ import androidx.databinding.DataBindingUtil;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.example.reading.Bean.User;
 import com.example.reading.R;
 import com.example.reading.ToolClass.BaseActivity;
 import com.example.reading.databinding.UserFeedBackBinding;
+import com.example.reading.util.FileCacheUtil;
+
+import static com.example.reading.MainApplication.getContext;
 
 public class UserFeedBack extends BaseActivity {
     UserFeedBackBinding binding;
+    String postData;
+    private User userData;
+    String token,username,userimg,url="https://support.qq.com/product/127287";
+    private static final String TAG = "UserFeedBack";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +38,7 @@ public class UserFeedBack extends BaseActivity {
         if (actionbar != null) {
             actionbar.hide();
         }
+        userData= FileCacheUtil.getUser(getContext());
         initView();
         initWebView();
     }
@@ -39,7 +50,9 @@ public class UserFeedBack extends BaseActivity {
                 return true;
             }
         });
-        binding.webView.loadUrl("https://support.qq.com/product/127287");
+        binding.webView.getSettings().setJavaScriptEnabled(true);
+        binding.webView.getSettings().setDomStorageEnabled(true);
+        binding.webView.postUrl(url,postData.getBytes());
         binding.titleBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,6 +61,21 @@ public class UserFeedBack extends BaseActivity {
         });
     }
     private void initView(){
+        username = userData.getUsername();
+        token = userData.getToken();
+        userimg = userData.getUimg();
+//        userimg = "http://117.48.205.198/xiaoyoudushu_resource/post_img/06c183cca19e4aa687bc98a01d579208.jpg";
+        postData = "nickname=" + username + "&avatar="+ userimg + "&openid=" + token;
+        Log.d(TAG, "initView:用户信息为"+postData);
+    }
 
+    @Override
+    public boolean
+    onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && binding.webView.canGoBack()) {
+            binding.webView.goBack();//返回上个页面
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);//退出H5界面
     }
 }

@@ -32,12 +32,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import me.jessyan.autosize.internal.CustomAdapt;
 import okhttp3.Call;
 import okhttp3.Request;
 import okhttp3.Response;
 
 
-public class SearchActivity extends BaseActivity {
+public class SearchActivity extends BaseActivity implements CustomAdapt {
     private static final String TAG = "SearchActivity";
     private SearchView searchView;
     private LinearLayout historyLayout;
@@ -192,5 +193,13 @@ public class SearchActivity extends BaseActivity {
 
                     }
                 },params);
+    }
+    @Override
+    public boolean isBaseOnWidth() {
+        return false;
+    }
+    @Override
+    public float getSizeInDp() {
+        return 640;
     }
 }

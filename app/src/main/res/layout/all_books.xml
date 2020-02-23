@@ -30,8 +30,8 @@
                 <ImageView
                     android:id="@+id/history_back"
                     android:paddingLeft="10dp"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
                     android:layout_gravity="left"
                     android:layout_margin="5dp"
                     android:background="#FFFFFF"

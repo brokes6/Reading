@@ -391,14 +391,15 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if(!TextUtils.isEmpty(charSequence) && charSequence.length()>2){
                     bt_comment.setBackgroundColor(Color.parseColor("#FFB568"));
+                    bt_comment.setEnabled(true);
                 }else {
+                    bt_comment.setEnabled(false);
                     bt_comment.setBackgroundColor(Color.parseColor("#D8D8D8"));
                 }
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-
             }
         });
         dialog.show();
@@ -510,8 +511,7 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
         Map<String,String> params=UserUtil.createUserMap();
         params.put("cpid", String.valueOf(postId));
         params.put("content",content);
-        StandardRequestMangaer.getInstance()
-                .post(RequestUrl.ADD_POST_COMMENT,new BaseCallBack<String>(){
+        StandardRequestMangaer.getInstance().post(RequestUrl.ADD_POST_COMMENT,new BaseCallBack<String>(){
 
                     @Override
                     protected void OnRequestBefore(Request request) {
@@ -554,8 +554,7 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
         Map<String,String> params=UserUtil.createUserMap();
         params.put("pid", String.valueOf(postId));
         params.put("currentPage", String.valueOf(currentPage));
-       StandardRequestMangaer.getInstance()
-               .get(mode==RequestUrl.NEW?RequestUrl.FIND_POST_NEW_COMMENT:RequestUrl.FIND_POST_POPULAR_COMMENT,new BaseCallBack<PostCommentVo>(){
+       StandardRequestMangaer.getInstance().get(mode==RequestUrl.NEW?RequestUrl.FIND_POST_NEW_COMMENT:RequestUrl.FIND_POST_POPULAR_COMMENT,new BaseCallBack<PostCommentVo>(){
 
                    @Override
                    protected void OnRequestBefore(Request request) {
@@ -610,8 +609,6 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
         final AtomicInteger mostTimes = new AtomicInteger(0);//假设只有三屏数据
         //设置多监听器，包括顶部下拉刷新、底部上滑刷新
         refreshLayout.setOnMultiPurposeListener(new SimpleMultiPurposeListener(){
-
-
             @Override
             public void onStateChanged(@NonNull RefreshLayout refreshLayout, @NonNull RefreshState oldState, @NonNull RefreshState newState) {
                 switch (newState) {

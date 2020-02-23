@@ -64,8 +64,7 @@ public class LoginActivity extends BaseActivity implements CustomAdapt {
     private final long DELAY = 1000; // in ms
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
-    private static String[] PERMISSIONS_STORAGE = {
-            "android.permission.READ_EXTERNAL_STORAGE",
+    private static String[] PERMISSIONS_STORAGE = {"android.permission.READ_EXTERNAL_STORAGE",
             "android.permission.WRITE_EXTERNAL_STORAGE" };
     //权限
     private Handler handler = new Handler() {
