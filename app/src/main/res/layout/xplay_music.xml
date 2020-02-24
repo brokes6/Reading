@@ -89,11 +89,11 @@
                 android:visibility="visible">
                 <!--定时-->
                 <TextView
-                    android:id="@+id/audio_speed"
+                    android:id="@+id/audio_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/afc_5dp"
-
+                    android:text="00:00"
                     android:textColor="@color/color_33"
                     android:textSize="@dimen/afc_16sp" />
 
@@ -160,10 +160,10 @@
 
                 <ImageView
                     android:id="@+id/audio_timing"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
                     android:padding="@dimen/afc_5dp"
-                    android:src="@mipmap/audio_timing" />
+                    android:src="@mipmap/xpalytime" />
 
 
 
@@ -179,10 +179,9 @@
 
                 <ImageView
                     android:id="@+id/act_audio_player_audion_listId"
-                    android:layout_width="wrap_content"
+                    android:layout_width="24dp"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/afc_5dp"
-                    android:src="@mipmap/audio_list" />
+                    android:padding="@dimen/afc_5dp" />
             </LinearLayout>
         </LinearLayout>
 

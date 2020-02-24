@@ -46,7 +46,7 @@
                 <TextView
                     android:id="@+id/titleTextView"
                     android:textSize="18sp"
-                    android:text="浏览历史"
+                    android:text="全部书籍"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </LinearLayout>

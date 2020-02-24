@@ -1,11 +1,10 @@
 package com.example.reading.Activity;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import android.animation.ObjectAnimator;
-import android.content.Context;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
@@ -13,31 +12,24 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
-import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
-import android.renderscript.Allocation;
-import android.renderscript.Element;
-import android.renderscript.RenderScript;
-import android.renderscript.ScriptIntrinsicBlur;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.view.animation.LinearInterpolator;
-import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.reading.R;
-import com.example.reading.ToolClass.BaseActivity;
 import com.example.reading.ToolClass.XBaseActivity;
 import com.example.reading.databinding.XplayMusicBinding;
 import com.example.reading.util.FastBlurUtil;
 import com.example.reading.util.RequestStatus;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.qzs.android.fuzzybackgroundlibrary.Fuzzy_Background;
 import com.weavey.loading.lib.LoadingLayout;
 
@@ -45,19 +37,13 @@ import com.weavey.loading.lib.LoadingLayout;
 import net.qiujuer.genius.blur.StackBlur;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import me.jessyan.autosize.internal.CustomAdapt;
 
 
-public class XPlayMusic extends XBaseActivity implements CustomAdapt {
+public class XPlayMusic extends XBaseActivity implements CustomAdapt,View.OnClickListener {
     private static final String TAG = "XPlayMusic";
     private Timer timer;//定时器
     private MediaPlayer mediaPlayer;
@@ -161,7 +147,7 @@ public class XPlayMusic extends XBaseActivity implements CustomAdapt {
         Log.d(TAG, "initView: 返回的图片为"+ximg);
         xurl = intent.getStringExtra("url");
         title = intent.getStringExtra("name");
-
+        binding.audioTime.setVisibility(View.GONE);
         binding.actSuspend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -199,6 +185,65 @@ public class XPlayMusic extends XBaseActivity implements CustomAdapt {
         mCircleAnimator.setRepeatCount(-1);
         mCircleAnimator.setRepeatMode(ObjectAnimator.RESTART);
 
+        binding.audioTiming.setOnClickListener(this);
+
+    }
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.audio_timing:
+                //1、使用Dialog、设置style
+                final Dialog dialog = new Dialog(this,R.style.DialogTheme);
+                View view = View.inflate(this,R.layout.timing_dialog,null);
+                dialog.setContentView(view);
+                Window window = dialog.getWindow();
+                //设置弹出位置
+                window.setGravity(Gravity.BOTTOM);
+                //设置弹出动画
+                window.setWindowAnimations(R.style.main_menu_animStyle);
+                //设置对话框大小
+                window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                dialog.show();
+                dialog.findViewById(R.id.time5).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        play();
+                        countDown(300000);
+                        dialog.dismiss();
+                    }
+                });
+                dialog.findViewById(R.id.time10).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        play();
+                        countDown(600000);
+                        dialog.dismiss();
+                    }
+                });
+                dialog.findViewById(R.id.time20).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        play();
+                        countDown(1200000);
+                        dialog.dismiss();
+                    }
+                });
+                dialog.findViewById(R.id.time30).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        play();
+                        countDown(1800000);
+                        dialog.dismiss();
+                    }
+                });
+                dialog.findViewById(R.id.time_cancel).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                break;
+        }
     }
 
     public void play(){
@@ -229,6 +274,20 @@ public class XPlayMusic extends XBaseActivity implements CustomAdapt {
         }
     }
 
+    private void countDown(int num) {
+        CountDownTimer timer = new CountDownTimer(num, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                binding.audioTime.setVisibility(View.VISIBLE);
+                binding.audioTime.setText("正在倒计时");
+            }
+            @Override
+            public void onFinish() {
+                Toast.makeText(XPlayMusic.this,"倒计时已到!",Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }.start();
+    }
 
     //计算播放时间（将数值转换为时间）
     public String calculateTime(int time){
