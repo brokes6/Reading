@@ -12,9 +12,11 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -209,7 +211,7 @@ public class AudioFrequency extends Fragment{
         return binding.getRoot();
     }
     public void initView(){
-        binding.authorBookimg.setOnClickListener(new View.OnClickListener() {
+        binding.xpaly.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 play();
@@ -268,9 +270,13 @@ public class AudioFrequency extends Fragment{
         }
         if (mediaPlayer.isPlaying()){
             mediaPlayer.pause();
+            binding.xpaly.setImageResource(R.mipmap.xpause);
+            binding.xplayText.setText("播放");
             Toast.makeText(getContext(),"停止播放",Toast.LENGTH_SHORT).show();
         }else{
             mediaPlayer.start();
+            binding.xpaly.setImageResource(R.mipmap.xxplay);
+            binding.xplayText.setText("暂停");
             int duration = mediaPlayer.getDuration();//获取音乐总时间
             binding.seekBar.setMax(duration);//将音乐总时间设置为Seekbar的最大值
             timer = new Timer();//时间监听器

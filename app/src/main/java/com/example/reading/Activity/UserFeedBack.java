@@ -3,6 +3,8 @@ package com.example.reading.Activity;
 import androidx.appcompat.app.ActionBar;
 import androidx.databinding.DataBindingUtil;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -59,6 +61,28 @@ public class UserFeedBack extends BaseActivity {
                 finish();
             }
         });
+        WebViewClient webViewClient = new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                super.shouldOverrideUrlLoading(view, url);
+
+                if (url == null) {
+                    return  false;
+                }
+                try {
+                    if (url.startsWith("weixin://")) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        view.getContext().startActivity(intent);
+                        return true;
+                    }
+                } catch (Exception e) {
+                    return false;
+                }
+                view.loadUrl(url);
+                return true;
+            }
+        };
+        binding.webView.setWebViewClient(webViewClient);
     }
     private void initView(){
         username = userData.getUsername();

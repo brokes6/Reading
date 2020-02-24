@@ -104,47 +104,6 @@
                                 android:orientation="horizontal">
 
                                 <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="1"
-                                    android:gravity="center"
-                                    android:orientation="vertical">
-
-                                    <de.hdodenhof.circleimageview.CircleImageView
-                                        android:layout_width="24dp"
-                                        android:layout_height="24dp"
-                                        android:src="@drawable/playlist" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="5dp"
-                                        android:textColor="#8F8F8F"
-                                        android:textSize="12sp"
-                                        android:text="播放列表" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="1"
-                                    android:gravity="center"
-                                    android:orientation="vertical">
-
-                                    <de.hdodenhof.circleimageview.CircleImageView
-                                        android:layout_width="24dp"
-                                        android:layout_height="24dp"
-                                        android:src="@drawable/timing" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="5dp"
-                                        android:textColor="#8F8F8F"
-                                        android:textSize="12sp"
-                                        android:text="定时" />
-                                </LinearLayout>
-                                <LinearLayout
                                     android:id="@+id/double_speed"
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
@@ -166,6 +125,29 @@
                                         android:textSize="12sp"
                                         android:text="倍速" />
                                 </LinearLayout>
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:orientation="vertical">
+
+                                    <de.hdodenhof.circleimageview.CircleImageView
+                                        android:id="@+id/xpaly"
+                                        android:layout_width="24dp"
+                                        android:layout_height="24dp"
+                                        android:src="@mipmap/xxplay" />
+
+                                    <TextView
+                                        android:id="@+id/xplay_text"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="5dp"
+                                        android:textColor="#8F8F8F"
+                                        android:textSize="12sp"
+                                        android:text="播放" />
+                                </LinearLayout>
+
 
                                 <LinearLayout
                                     android:layout_width="0dp"
