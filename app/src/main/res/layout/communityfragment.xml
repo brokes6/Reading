@@ -7,10 +7,12 @@
 
     </data>
 
-    <LinearLayout
+    <com.weavey.loading.lib.LoadingLayout
+        android:id="@+id/loading"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:isFirstVisible="true"
         android:background="#F3F3F3">
         <com.scwang.smartrefresh.layout.SmartRefreshLayout
             android:id="@+id/refreshLayout"
@@ -113,5 +115,5 @@
             </RelativeLayout>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
         </com.scwang.smartrefresh.layout.SmartRefreshLayout>
-    </LinearLayout>
+    </com.weavey.loading.lib.LoadingLayout>
 </layout>

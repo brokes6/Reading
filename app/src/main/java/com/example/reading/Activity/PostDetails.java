@@ -38,11 +38,13 @@ import com.example.reading.Bean.PostDetailsBean;
 import com.example.reading.Bean.ReplyDetailBean;
 import com.example.reading.Bean.User;
 import com.example.reading.Fragment.CommunityFragment;
+import com.example.reading.MainActivity;
 import com.example.reading.Picture.MyImageView;
 import com.example.reading.R;
 import com.example.reading.ToolClass.BaseActivity;
 import com.example.reading.adapter.CommentExpandAdapter;
 import com.example.reading.constant.RequestUrl;
+import com.example.reading.util.ActivityCollector;
 import com.example.reading.util.DateTimeUtil;
 import com.example.reading.util.FileCacheUtil;
 import com.example.reading.util.NetWorkUtil;
@@ -65,6 +67,7 @@ import com.scwang.smartrefresh.layout.constant.RefreshState;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.SimpleMultiPurposeListener;
+import com.weavey.loading.lib.LoadingLayout;
 
 import org.angmarch.views.NiceSpinner;
 import org.json.JSONException;
@@ -123,6 +126,7 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
     private int currentPage=1;
     private int total=-1;
     private int mode=RequestUrl.NEW;
+    LoadingLayout loadingLayout;
     private List<String> spinnerData = new LinkedList<>(Arrays.asList("时间排序", "点赞排序"));
     private  Handler handler=new Handler(){
         @Override
@@ -176,8 +180,7 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
                         collection.setImageDrawable(getResources().getDrawable(R.mipmap.shocang));
                         collectionStr.setText("未收藏");
                     }
-                    contentLayout.setVisibility(View.VISIBLE);
-                    loadLayout.setVisibility(View.GONE);
+                    loadingLayout.setStatus(LoadingLayout.Success);
                     standardNineGridLayout.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -188,6 +191,7 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
                     });
                     PostHitoryUtil.saveSearchHistory(String.valueOf(postId),PostDetails.this);break;
                 case PostTemplateInterface.CANCEL_PROGRESS:
+                    //
                     progressBar.setVisibility(View.GONE);
                     break;
                 case PostTemplateInterface.NOTIFY:
@@ -224,9 +228,8 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
                     adapter.notifyDataSetChanged();
                     break;
                 case PostTemplateInterface.NO_NETWORK:
-                        loadTextView.setText("网络不稳定，请重新刷新试试");
-                        loadButton.setVisibility(View.VISIBLE);
-                        loadButton.setClickable(true);
+                    Toast.makeText(PostDetails.this,"服务器未响应，请检测网络",Toast.LENGTH_SHORT).show();
+                    loadingLayout.setStatus(LoadingLayout.Error);
                         break;
                 case PostTemplateInterface.NOTIFY_REPLY:
                     Toast.makeText(PostDetails.this,"回复成功",Toast.LENGTH_SHORT).show();
@@ -411,9 +414,7 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
 
             @Override
             protected void OnRequestBefore(Request request) {
-                loadButton.setVisibility(View.GONE);
-                Log.i(TAG, "OnRequestBefore: 正在加载");
-                loadTextView.setText("网络波动...加载中...");
+                loadingLayout.setStatus(LoadingLayout.Loading);
             }
 
             @Override
@@ -423,8 +424,7 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
 
             @Override
             protected void onSuccess(Call call, Response response, PostDetailsBean postDetailsBean) {
-                contentLayout.setVisibility(View.VISIBLE);
-                loadLayout.setVisibility(View.GONE);
+                loadingLayout.setStatus(LoadingLayout.Success);
                 Log.i(TAG, "onSuccess: 获得帖子详细信息成功！"+postDetailsBean);
                 Glide.with(PostDetails.this).load(postDetailsBean.getUimg()).into(userImg);
                 username.setText(postDetailsBean.getUsername());
@@ -515,20 +515,18 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
 
                     @Override
                     protected void OnRequestBefore(Request request) {
-                        loadLayout.setVisibility(View.VISIBLE);
-                        loadButton.setVisibility(View.GONE);
-                        Log.i(TAG, "OnRequestBefore: 正在加载");
-                        loadTextView.setText("---正在上传评论中---");
+                        loadingLayout.setStatus(LoadingLayout.Loading);
                     }
 
                     @Override
                     protected void onFailure(Call call) {
-                        loadTextView.setText("遇到未知原因,上传评论失败,请稍后重试");
+                        Toast.makeText(PostDetails.this,"服务器未响应，请检测网络",Toast.LENGTH_SHORT).show();
+                        loadingLayout.setStatus(LoadingLayout.Error);
                     }
 
                     @Override
                     protected void onSuccess(Call call, Response response, String s) {
-                        loadLayout.setVisibility(View.GONE);
+                        loadingLayout.setStatus(LoadingLayout.Success);
                         Toast.makeText(PostDetails.this, s, Toast.LENGTH_SHORT).show();
                         adapter.addTheCommentData(new PostComment("刚刚",content,"测试","http://image.biaobaiju.com/uploads/20180803/23/1533308847-sJINRfclxg.jpeg",Integer.valueOf(s)));
                         commentStr.setText(String.valueOf(Integer.valueOf(commentStr.getText().toString())+1));
@@ -657,18 +655,17 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
                 }
             }
         });
-        refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-                Log.i(TAG, "onLoadMore: 下拉加载");
-                refreshLayout.autoLoadMore();
-            }
-        });
+//        refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+//            @Override
+//            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+//                Log.i(TAG, "onLoadMore: 下拉加载");
+//                refreshLayout.autoLoadMore();
+//            }
+//        });
     }
     private void initLoadLayout(){
-        loadLayout=findViewById(R.id.loadLayout);
-        loadTextView=findViewById(R.id.loadTextView);
-        loadButton=findViewById(R.id.loadButton);
+        loadingLayout = findViewById(R.id.loading);
+        loadingLayout.setStatus(LoadingLayout.Loading);
     }
 
     @Override

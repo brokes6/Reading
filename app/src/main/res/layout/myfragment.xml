@@ -7,7 +7,7 @@
     </data>
 
     <com.weavey.loading.lib.LoadingLayout
-        android:id="@+id/myload"
+        android:id="@+id/loading"
         app:isFirstVisible="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

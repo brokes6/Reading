@@ -144,11 +144,11 @@ public class ProgramFragment extends Fragment {
                     }else{
                         Gson gson = new Gson();
                         if (Page>1){
-                            programBindings = gson.fromJson(musicPrograms,new TypeToken<List<ProgramBean>>(){}.getType());
-                            Log.d(TAG, "小悠之声开始添加数据--"+musicPrograms);
-                            Message message=Message.obtain();
-                            message.what=RequestStatus.INCREASE;
-                            handler.sendMessage(message);
+//                            programBindings = gson.fromJson(musicPrograms,new TypeToken<List<ProgramBean>>(){}.getType());
+//                            Log.d(TAG, "小悠之声开始添加数据--"+musicPrograms);
+//                            Message message=Message.obtain();
+//                            message.what=RequestStatus.INCREASE;
+//                            handler.sendMessage(message);
                         }
                         List<ProgramBean> programBinding1s = gson.fromJson(musicPrograms,new TypeToken<List<ProgramBean>>(){}.getType());
                         programAdapter.setProgramAdapter(programBinding1s);

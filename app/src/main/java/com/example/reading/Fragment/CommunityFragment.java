@@ -26,6 +26,7 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+import com.weavey.loading.lib.LoadingLayout;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -52,6 +53,7 @@ public class CommunityFragment extends Fragment {
     SmartRefreshLayout smartRefreshLayout;
     private RecyclerView recyclerView;
     private NineGridAdapter adapter;
+    LoadingLayout loading;
     private int oid;
     int Page = 1;
     private AtomicInteger integer=new AtomicInteger(1);
@@ -78,6 +80,8 @@ public class CommunityFragment extends Fragment {
     }
     //为什么呢
     private void initView(){
+        loading = view.findViewById(R.id.loading);
+        loading.setStatus(LoadingLayout.Loading);
         smartRefreshLayout = view.findViewById(R.id.refreshLayout);
         smartRefreshLayout.setEnableRefresh(false);
         //设置 Footer 为 经典样式
@@ -92,9 +96,8 @@ public class CommunityFragment extends Fragment {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
                 ++Page;
-                /**
-                *上拉加载的逻辑
-                 **/
+                findPostByPage(Page);
+                adapter.notifyDataSetChanged();
                 smartRefreshLayout.finishLoadMore(true);//加载完成
                 Log.d(TAG, "onLoadMore: 添加更多完成");
             }
@@ -111,13 +114,13 @@ public class CommunityFragment extends Fragment {
         });
     }
     private void initData(){
-        findPostByPage();
+        findPostByPage(Page);
 
     }
 
-    private void findPostByPage(){
+    private void findPostByPage(int page){
         Map<String,String> map= UserUtil.createUserMap();
-        map.put("currentPage", String.valueOf(integer));
+        map.put("currentPage", String.valueOf(page));
         StandardRequestMangaer.getInstance().get(RequestUrl.FIND_POST, new BaseCallBack<List<Post>>(){
 
             @Override
@@ -137,6 +140,7 @@ public class CommunityFragment extends Fragment {
                 adapter.notifyDataSetChanged();
                 Log.i(TAG, "onSuccess: 获得帖子数据成功！");
                 integer.incrementAndGet();
+                loading.setStatus(LoadingLayout.Success);
             }
 
             @Override
@@ -159,7 +163,6 @@ public class CommunityFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.i(TAG, "onActivityResult: 饭盒了");
         if (requestCode==CommunityFragment.POSTDETAILS){
             if (data!=null){
                 int position=data.getIntExtra("position",-1);

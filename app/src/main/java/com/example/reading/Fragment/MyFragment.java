@@ -79,7 +79,7 @@ public class MyFragment extends Fragment implements CustomAdapt,View.OnClickList
                     binding.userName.setText(userData.getUsername());
                     if (userData.getUimg()!=null){
                         binding.userImg.setImageURL(userData.getUimg());
-                        binding.myload.setStatus(LoadingLayout.Success);
+                        binding.loading.setStatus(LoadingLayout.Success);
                     }else{
                         binding.userImg.setImageResource(R.mipmap.userimg);
                         Log.d(TAG, "user"+"无头像");
@@ -104,7 +104,7 @@ public class MyFragment extends Fragment implements CustomAdapt,View.OnClickList
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             binding = DataBindingUtil.inflate(inflater,R.layout.myfragment,container,false);
-            binding.myload.setStatus(LoadingLayout.Loading);
+            binding.loading.setStatus(LoadingLayout.Loading);
             userData= FileCacheUtil.getUser(getContext());
             initView();
             initData();
@@ -154,6 +154,7 @@ public class MyFragment extends Fragment implements CustomAdapt,View.OnClickList
         tv_select_gallery.setOnClickListener(new View.OnClickListener() {// 在相册中选取
             @Override
             public void onClick(View v) {
+                binding.loading.setStatus(LoadingLayout.Loading);
                 if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
                 } else {
@@ -165,6 +166,7 @@ public class MyFragment extends Fragment implements CustomAdapt,View.OnClickList
         tv_select_camera.setOnClickListener(new View.OnClickListener() {// 调用照相机
             @Override
             public void onClick(View v) {
+                binding.loading.setStatus(LoadingLayout.Loading);
                 File outputImage =new File(getContext().getExternalCacheDir(),"output_image.jpg");
                 try {
                     if(outputImage.exists()){
@@ -345,6 +347,7 @@ public class MyFragment extends Fragment implements CustomAdapt,View.OnClickList
                 Log.i(TAG, "onSuccess: 图片路径:"+s);
                 userData.setUimg(s);
                 FileCacheUtil.updateUser(userData, getContext());
+                binding.loading.setStatus(LoadingLayout.Success);
                 Toast.makeText(getContext(),"设置头像成功!",Toast.LENGTH_SHORT).show();
             }
 

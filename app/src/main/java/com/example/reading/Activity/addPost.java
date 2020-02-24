@@ -54,6 +54,7 @@ import com.example.reading.util.FileCacheUtil;
 import com.example.reading.util.UserUtil;
 import com.example.reading.web.BaseCallBack;
 import com.example.reading.web.StandardRequestMangaer;
+import com.weavey.loading.lib.LoadingLayout;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -160,6 +161,7 @@ public class addPost extends BaseActivity implements View.OnClickListener {
 
     private File file;
     private User userData;
+    LoadingLayout loadingLayout;
     private Handler handler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -222,6 +224,7 @@ public class addPost extends BaseActivity implements View.OnClickListener {
      * 初始化View
      */
     private void initView() {
+        //返回
         ImageView back = findViewById(R.id.title_back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -247,7 +250,7 @@ public class addPost extends BaseActivity implements View.OnClickListener {
                 alertDialog3 = dialog.create();
                 alertDialog3.show();
                 //设置AlertDialog长度
-                alertDialog3.getWindow().setLayout(950,650);
+                alertDialog3.getWindow().setLayout(950,550);
             }
         });
         rvPic = findViewById(R.id.rvPic);
@@ -298,7 +301,7 @@ public class addPost extends BaseActivity implements View.OnClickListener {
         alertDialog3 = dialog.create();
         alertDialog3.show();
         //设置AlertDialog长度
-        alertDialog3.getWindow().setLayout(950,650);
+        alertDialog3.getWindow().setLayout(950,550);
     }
 
 
