@@ -27,13 +27,18 @@ import com.example.reading.Activity.SearchActivity;
 import com.example.reading.Activity.UserFeedBack;
 import com.example.reading.Activity.XiaoYouSound;
 import com.example.reading.Bean.BookDetails;
+import com.example.reading.Bean.RotationBean;
 import com.example.reading.R;
 import com.example.reading.Bean.BookType;
 import com.example.reading.Bean.FestivalDetails;
+import com.example.reading.constant.RequestUrl;
 import com.example.reading.databinding.HomefragmentBinding;
 import com.example.reading.adapter.FestivalAdapter;
 import com.example.reading.adapter.MAdapter;
 import com.example.reading.adapter.MAdapter_seller;
+import com.example.reading.util.UserUtil;
+import com.example.reading.web.BaseCallBack;
+import com.example.reading.web.StandardRequestMangaer;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -51,8 +56,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 import me.jessyan.autosize.internal.CustomAdapt;
+import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -110,16 +117,12 @@ public class HomeFragment extends Fragment implements CustomAdapt,View.OnClickLi
         initView();
         initData();
         analysis();
-        initRotationChart();
         setPullRefresher();
         return binding.getRoot();
     }
 
     private void initView() {
         urlList = new ArrayList<>();
-        urlList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1542627042541&di=3ad9deeefff266e76d1f5d57a58f63d1&imgtype=0&src=http%3A%2F%2Fpic.90sjimg.com%2Fdesign%2F00%2F69%2F99%2F66%2F9fce5755f081660431464492a9aeb003.jpg");
-        urlList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1542627042539&di=95bd41d43c335e74863d9bb540361906&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F019a0558be22d6a801219c77d0578a.jpg%402o.jpg");
-        urlList.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1542627042539&di=cdd54bffd2aac448c70ae6b416a004d4&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F01edb3555ea8100000009af0ba36f5.jpg%401280w_1l_2o_100sh.jpg");
         //向下刷新
         binding.scroll.setVerticalScrollBarEnabled(false);
         //设置 Header式
@@ -148,6 +151,15 @@ public class HomeFragment extends Fragment implements CustomAdapt,View.OnClickLi
     }
 
     private void initData() {
+        initRotationChart();
+        binding.searchBox.setOnClickListener(this);
+        binding.userfeedback.setOnClickListener(this);
+        binding.BestSsellerAllBook.setOnClickListener(this);
+        binding.AllBook.setOnClickListener(this);
+        binding.xiaoyou.setOnClickListener(this);
+        binding.party.setOnClickListener(this);
+    }
+    public void initBanner(){
         binding.galleryBanner
                 .setDuration(2000)
                 .setOnPageClickListener(new onPageClickListener() {
@@ -159,12 +171,6 @@ public class HomeFragment extends Fragment implements CustomAdapt,View.OnClickLi
                 .useAngleGalleryStyle()
                 .setDataFromUrl((ArrayList<String>) urlList)
                 .startLoop();
-        binding.searchBox.setOnClickListener(this);
-        binding.userfeedback.setOnClickListener(this);
-        binding.BestSsellerAllBook.setOnClickListener(this);
-        binding.AllBook.setOnClickListener(this);
-        binding.xiaoyou.setOnClickListener(this);
-        binding.party.setOnClickListener(this);
     }
 
     @Override
@@ -195,7 +201,44 @@ public class HomeFragment extends Fragment implements CustomAdapt,View.OnClickLi
         }
     }
     private void initRotationChart(){
+        Map<String,String> map= UserUtil.createUserMap();
+        map.clear();
+        map.put("type","100");
+        StandardRequestMangaer.getInstance().get(RequestUrl.FIND_ROTATION, new BaseCallBack<List<RotationBean>>(){
 
+            @Override
+            protected void OnRequestBefore(Request request) {
+                Log.d(TAG, "OnRequestBefore: 1");
+            }
+
+            @Override
+            protected void onFailure(Call call) {
+                Toast.makeText(getContext(),"轮播图获取失败，请稍后尝试!",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            protected void onSuccess(Call call, Response response, List<RotationBean> rotationBeans) {
+                urlList.clear();
+                for (int i=0;i<rotationBeans.size();i++){
+                    urlList.add(rotationBeans.get(i).getUrl());
+                }
+                initBanner();
+            }
+
+            @Override
+            protected void onResponse(Response response) {
+            }
+
+            @Override
+            protected void onEror(Call call, int statusCode) {
+
+            }
+
+            @Override
+            protected void inProgress(int progress, long total, int id) {
+
+            }
+        },map);
     }
 
 
