@@ -2,6 +2,7 @@ package com.example.reading.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     private Context mcontext;
     private LayoutInflater inflater;
     private List<SearchResult> searchResultList=new ArrayList<SearchResult>();
+    private static final String TAG = "SearchResultAdapter";
     public SearchResultAdapter(Context context) {
         mcontext=context;
         inflater=LayoutInflater.from(context);
@@ -60,6 +62,8 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
                     Intent intent=null;
                     if (result.getType().equals("BOOK")){
                         intent=new Intent(mcontext, ReadActivity.class);
+                        intent.putExtra("id",String.valueOf(result.getId()));
+                        Log.d(TAG, "onClick: ---------------------------------"+result.getId());
                         mcontext.startActivity(intent);
                     }else if(result.getType().equals("POST")){
                         holder.resultType.setText("帖子");

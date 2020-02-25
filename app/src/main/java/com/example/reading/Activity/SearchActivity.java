@@ -169,6 +169,7 @@ public class SearchActivity extends BaseActivity implements CustomAdapt {
 
                     @Override
                     protected void onSuccess(Call call, Response response, List<SearchResult> searchResults) {
+                        Log.d(TAG, "onSuccess: -----------------------"+searchResults);
                         searchResultAdapter.setSearchResultList(searchResults);
                         searchResultAdapter.notifyDataSetChanged();
                         Toast.makeText(SearchActivity.this, "搜索成功", Toast.LENGTH_SHORT).show();
