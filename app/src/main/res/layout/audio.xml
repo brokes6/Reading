@@ -136,7 +136,7 @@
                                         android:id="@+id/xpaly"
                                         android:layout_width="24dp"
                                         android:layout_height="24dp"
-                                        android:src="@mipmap/xxplay" />
+                                        android:src="@mipmap/xpause" />
 
                                     <TextView
                                         android:id="@+id/xplay_text"
@@ -157,6 +157,7 @@
                                     android:orientation="vertical">
 
                                     <de.hdodenhof.circleimageview.CircleImageView
+                                        android:id="@+id/download"
                                         android:layout_width="24dp"
                                         android:layout_height="24dp"
                                         android:src="@drawable/download" />

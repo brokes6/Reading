@@ -98,7 +98,6 @@ public class BaseActivity extends AppCompatActivity{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         // 销毁活动时，将其从管理器中移除
         ActivityCollector.removeActivity(this);
     }

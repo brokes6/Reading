@@ -1,24 +1,23 @@
 package com.example.reading.Fragment;
 
 import android.app.Activity;
+import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.MediaPlayer;
 import android.media.PlaybackParams;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.Toast;
@@ -39,7 +38,6 @@ import com.example.reading.databinding.AudioBinding;
 import com.example.reading.util.FragmentBackHandler;
 import com.example.reading.util.PostHitoryUtil;
 import com.example.reading.util.RequestStatus;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -66,10 +64,12 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 /**
  * 阅读书籍页面
  */
-public class AudioFrequency extends Fragment{
+public class AudioFrequency extends Fragment implements View.OnClickListener{
     int  type;
     String video_img;
     int code;
+    //广播
+    private BroadcastReceiver broadcastReceiver;
     private ProgressBar progressBar;
     private BottomSheetDialog dialog;
     private AlertDialog alertDialog2;
@@ -82,7 +82,7 @@ public class AudioFrequency extends Fragment{
     private int duration2;
     private int position;
     int current = 0;
-    String date1,bid,token;
+    String date1,bid,token,xurl,xname;
     private FragmentBackHandler backInterface;
     BookDetailsBean bookDetailsBean = new BookDetailsBean();
     ReadActivity activity;
@@ -134,13 +134,9 @@ public class AudioFrequency extends Fragment{
                             }
                             duration2 = mediaPlayer.getDuration() / 1000;
                             position = mediaPlayer.getCurrentPosition();
-                            binding.tvStart.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    binding.tvStart.setText(calculateTime(position / 1000));
-                                    binding.tvEnd.setText(calculateTime(duration2));
-                                }
-                            });
+                            binding.tvStart.setText(calculateTime(position / 1000));
+                            binding.tvEnd.setText(calculateTime(duration2));
+
                         }
                     });
                     thread.start();
@@ -175,13 +171,9 @@ public class AudioFrequency extends Fragment{
                             }
                             duration2 = mediaPlayer.getDuration() / 1000;
                             position = mediaPlayer.getCurrentPosition();
-                            binding.tvStart.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    binding.tvStart.setText(calculateTime(position / 1000));
-                                    binding.tvEnd.setText(calculateTime(duration2));
-                                }
-                            });
+                            binding.tvStart.setText(calculateTime(position / 1000));
+                            binding.tvEnd.setText(calculateTime(duration2));
+
                         }
                     });
                     thread1.start();
@@ -211,12 +203,8 @@ public class AudioFrequency extends Fragment{
         return binding.getRoot();
     }
     public void initView(){
-        binding.xpaly.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                play();
-            }
-        });
+        binding.xpaly.setOnClickListener(this);
+        binding.download.setOnClickListener(this);
         //绑定监听器，监听拖动到指定位置
         binding.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -237,14 +225,7 @@ public class AudioFrequency extends Fragment{
                 binding.tvStart.setText(calculateTime(mediaPlayer.getCurrentPosition() / 1000));
             }
         });
-        binding.doubleSpeed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showSingleAlertDialog(getView());
-            }
-        });
-        /*commentExpandAdapter=new CommentExpandAdapter(getContext(),)*//*
-        binding.detailPageLvComment.setAdapter();*/
+        binding.doubleSpeed.setOnClickListener(this);
     }
     public void initData(){
     }
@@ -252,6 +233,53 @@ public class AudioFrequency extends Fragment{
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void Hhhh(BookDetailsBean bookDetailsBean) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.double_speed:
+                showSingleAlertDialog(getView());
+                break;
+            case R.id.xpaly:
+                play();
+                break;
+            case R.id.download:
+                new Thread(new Runnable(){
+                    @Override
+                    public void run() {
+                        //创建下载任务,downloadUrl就是下载链接
+                        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(xurl));
+                        //指定下载路径和下载文件名
+                        request.setDestinationInExternalPublicDir("/download/", xname);
+                        //获取下载管理器
+                        DownloadManager downloadManager= (DownloadManager) getContext().getSystemService(Context.DOWNLOAD_SERVICE);
+                        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN | DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                        //将下载任务加入下载队列，否则不会进行下载
+                        downloadManager.enqueue(request);
+                        long Id = downloadManager.enqueue(request);
+                        listener(Id);
+                        Looper.prepare();
+                        Toast.makeText(getContext(),"正在下载，请注意通知栏!",Toast.LENGTH_SHORT).show();
+                        Looper.loop();
+                    }
+                }).start();
+                break;
+        }
+    }
+    public void listener(final long Id) {
+        // 注册广播监听系统的下载完成事件。
+        IntentFilter intentFilter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                long ID = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+                if (ID == Id) {
+                    Toast.makeText(getContext(), "任务:" + Id + " 下载完成!", Toast.LENGTH_LONG).show();
+                }
+            }
+        };
+        getContext().registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
@@ -266,7 +294,6 @@ public class AudioFrequency extends Fragment{
     }
     public void play(){
         if (bookDetailsBean.getAudio().getUrl()==null){
-
         }
         if (mediaPlayer.isPlaying()){
             mediaPlayer.pause();
@@ -405,6 +432,8 @@ public class AudioFrequency extends Fragment{
                     switch (type){
                         case 100:
                             //获取音频
+                            xurl = bookDetailsBean.getAudio().getUrl();
+                            xname = bookDetailsBean.getBname();
                             mes.what= RequestStatus.AUDIO;
                             handler.sendMessage(mes);
                             break;
@@ -415,6 +444,8 @@ public class AudioFrequency extends Fragment{
                             break;
                         case 300:
                             //视频和音频
+                            xurl = bookDetailsBean.getAudio().getUrl();
+                            xname = bookDetailsBean.getBname();
                             mes.what=RequestStatus.AUDIO_AND_VIDEO;
                             handler.sendMessage(mes);
                             break;
@@ -458,6 +489,6 @@ public class AudioFrequency extends Fragment{
         }
 
         }
-    }
+}
 
 

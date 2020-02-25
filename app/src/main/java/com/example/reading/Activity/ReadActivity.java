@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -67,6 +68,7 @@ public class ReadActivity extends BaseActivity {
     private int loveStatus;
     static final int NUM_ITEMS = 2;
     private int bid;
+    private BroadcastReceiver broadcastReceiver;
     private String[] strings = new String[]{"音 频","视 频"};
     private List<Fragment> fragmentList = new ArrayList<Fragment>();
     private List<BookComment> bookComments=new ArrayList<>();

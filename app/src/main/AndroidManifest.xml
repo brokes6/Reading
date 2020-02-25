@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!-- android 7.0临时赋予访问权限 -->
+
     <application
         android:name=".MainApplication"
         android:allowBackup="true"
@@ -36,7 +36,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-        <activity android:name=".Activity.UserCommentActivity"/>
         <activity
             android:name=".Activity.Party"
             android:configChanges="orientation|screenSize|keyboardHidden"
@@ -59,18 +58,17 @@
             android:name="design_height_in_dp"
             android:value="640" />
 
-        <activity android:name=".Activity.LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".Activity.LoginActivity" />
         <activity android:name=".MainActivity" />
         <activity
             android:name=".StartupPage"
             android:theme="@style/SplashActivityTheme">
-        </activity>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
