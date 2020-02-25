@@ -351,12 +351,17 @@ public class HomeFragment extends Fragment implements CustomAdapt,View.OnClickLi
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 //在这里执行下拉刷新时的具体操作(网络请求、更新UI等)
-//                bookDetails.clear();
-//                bookDetails2.clear();
-//                festivalDetails.clear();
+                mAdapter.ClearMyAdapter();
+                mAdapter_seller.ClearMAdapter_seller();
+                festivalAdapter.ClearFestivalAdapter();
                 Toast.makeText(getContext(),"正在刷新",Toast.LENGTH_SHORT).show();
-//                analysis();
-                mAdapter_seller.notifyDataSetChanged();
+                analysis();
+                Message message=Message.obtain();
+                message.what=200;
+                handler.sendMessage(message);
+                Message message1=Message.obtain();
+                message.what=210;
+                handler.sendMessage(message1);
                 binding.refreshLayout.finishRefresh(2000);
             }
         });

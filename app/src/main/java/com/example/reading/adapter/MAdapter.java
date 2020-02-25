@@ -37,6 +37,9 @@ public class MAdapter extends RecyclerView.Adapter<MyViewHolder>{
         this.bookDetails.addAll(bookDetails);
         Log.i(TAG, "setOrganizations: 我被设置了啊"+this.bookDetails.size());
     }
+    public void ClearMyAdapter(){
+        bookDetails.clear();
+    }
 
     //创建ViewHolder
     @Override

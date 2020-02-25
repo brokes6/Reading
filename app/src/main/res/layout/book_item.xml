@@ -12,8 +12,8 @@
         <com.example.reading.util.RoundImageView
             android:id="@+id/book1_img"
             android:layout_centerVertical="true"
-            android:layout_width="100dp"
-            android:layout_height="115dp"
+            android:layout_width="90dp"
+            android:layout_height="105dp"
             app:type="round"
             android:src="@drawable/book_text" />
 
@@ -25,7 +25,5 @@
             android:layout_marginTop="5dp"
             android:layout_gravity="center"
             android:text="测试书名" />
-
-
 
 </LinearLayout>

@@ -38,6 +38,9 @@ public class FestivalAdapter extends RecyclerView.Adapter<FestivalViewHolder> {
         this.festivalDetails1.addAll(festivalDetails);
         Log.i(TAG, "节气开始设置"+this.festivalDetails1.size());
     }
+    public void ClearFestivalAdapter(){
+        festivalDetails1.clear();
+    }
     @NonNull
     @Override
     public FestivalViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

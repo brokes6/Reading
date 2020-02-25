@@ -40,6 +40,9 @@ public class MAdapter_seller extends RecyclerView.Adapter<MyViewHolder_seller>{
         this.bookDetails.addAll(bookDetails);
         Log.i(TAG, "setOrganizations: 我被设置了啊"+this.bookDetails.size());
     }
+    public void ClearMAdapter_seller(){
+        bookDetails.clear();
+    }
     //创建ViewHolder
     @Override
     public MyViewHolder_seller onCreateViewHolder(ViewGroup parent, int viewType) {
