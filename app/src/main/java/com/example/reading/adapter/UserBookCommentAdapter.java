@@ -61,8 +61,11 @@ public class UserBookCommentAdapter extends RecyclerView.Adapter<UserBookComment
         holder.time.setText(DateTimeUtil.handlerDateTime(comment.getCcreateTime().getTime()));
         holder.content.setText(comment.getContent());
         holder.bookName.setText(comment.getBname());
-        holder.description.setText(comment.getDescription());
-        holder.commentNum.setText(String.valueOf(comment.getCommentNum()));
+        if (comment.getDescription()==null){
+            holder.description.setText("此书暂无介绍~~");
+        }else{
+            holder.description.setText(comment.getDescription());
+        }
     }
 
     @Override
@@ -82,7 +85,6 @@ public class UserBookCommentAdapter extends RecyclerView.Adapter<UserBookComment
             content=itemView.findViewById(R.id.content);
             bookName=itemView.findViewById(R.id.bookName);
             description=itemView.findViewById(R.id.descrption);
-            commentNum=itemView.findViewById(R.id.commentNum);
         }
     }
 }

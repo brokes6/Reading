@@ -6,6 +6,7 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -31,11 +32,14 @@ import androidx.core.content.FileProvider;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
+import com.example.reading.Activity.AboutMe;
 import com.example.reading.Activity.History;
 import com.example.reading.Activity.LoginActivity;
+import com.example.reading.Activity.Personal;
 import com.example.reading.Activity.PostDetails;
 import com.example.reading.Activity.Set_up;
 import com.example.reading.Activity.UserCommentActivity;
+import com.example.reading.Activity.UserFeedBack;
 import com.example.reading.Bean.User;
 import com.example.reading.R;
 import com.example.reading.constant.RequestUrl;
@@ -116,6 +120,10 @@ public class MyFragment extends Fragment implements CustomAdapt,View.OnClickList
         binding.myhistory.setOnClickListener(this);
         binding.msetting.setOnClickListener(this);
         binding.commentLayout.setOnClickListener(this);
+        binding.mfeedback.setOnClickListener(this);
+        binding.personal.setOnClickListener(this);
+        binding.back.setOnClickListener(this);
+        binding.about.setOnClickListener(this);
     }
     private void initData(){
         if (userData.getUsername()==null){
@@ -148,6 +156,28 @@ public class MyFragment extends Fragment implements CustomAdapt,View.OnClickList
             case R.id.commentLayout:
                 intent=new Intent(getContext(), UserCommentActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.mfeedback:
+                intent=new Intent(getContext(), UserFeedBack.class);
+                startActivity(intent);
+                break;
+            case R.id.personal:
+                intent=new Intent(getContext(), Personal.class);
+                startActivity(intent);
+                break;
+            case R.id.back:
+                Toast.makeText(getContext(),"已退出",Toast.LENGTH_SHORT).show();
+                SharedPreferences sharedPreferences= getContext().getSharedPreferences("data", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.remove("key");
+                editor.commit();
+                Log.d(TAG, "---SharedPreferences的key已清除---");
+                Intent intent3 = new Intent("com.gesoft.admin.loginout");
+                getContext().sendBroadcast(intent3);
+                break;
+            case R.id.about:
+                Intent intent4 = new Intent(getContext(), AboutMe.class);
+                startActivity(intent4);
                 break;
         }
     }

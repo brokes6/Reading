@@ -1,6 +1,7 @@
 package com.example.reading.Fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,11 @@ import com.example.reading.adapter.UserBookCommentAdapter;
 import com.example.reading.util.UserUtil;
 import com.example.reading.web.BaseCallBack;
 import com.example.reading.web.StandardRequestMangaer;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+
 import static com.example.reading.constant.RequestUrl.*;
 
 import java.util.ArrayList;
@@ -34,6 +40,8 @@ public class UserBookCommentFragment extends Fragment {
     private UserBookCommentAdapter userBookCommentAdapter;
     private int currentPage=1;
     private List<UserBookComment> userBookComments=new ArrayList<>();
+    SmartRefreshLayout refreshLayout;
+    private static final String TAG = "UserBookCommentFragment";
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,14 +52,33 @@ public class UserBookCommentFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mView=LayoutInflater.from(getContext()).inflate(R.layout.comment_layout,container,false);
         recyclerView=mView.findViewById(R.id.recyclerView);
+        initView();
         initData();
         return mView;
     }
+    private void initView(){
+        refreshLayout = mView.findViewById(R.id.refreshLayout);
+    }
     private void initData(){
+        refreshLayout.setEnableRefresh(false);
+        //设置 Footer 为 经典样式
+        refreshLayout.setRefreshFooter(new ClassicsFooter(getContext()));
         userBookCommentAdapter=new UserBookCommentAdapter(userBookComments,getContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(userBookCommentAdapter);
         findUserBookComment();
+        refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+                ++currentPage;
+                findUserBookComment();
+                //加了这一句反而不行了。。。。吐了
+//                programAdapter.add(programBindings);
+                userBookCommentAdapter.notifyDataSetChanged();
+                refreshLayout.finishLoadMore(true);//加载完成
+                Log.d(TAG, "onLoadMore: 添加更多完成");
+            }
+        });
     }
 
     public void findUserBookComment(){
@@ -71,6 +98,7 @@ public class UserBookCommentFragment extends Fragment {
 
                     @Override
                     protected void onSuccess(Call call, Response response, List<UserBookComment>list) {
+                        Log.d(TAG, "onSuccess: ---------------------------"+list);
                         Toast.makeText(getContext(), "获得书籍读后感成功！", Toast.LENGTH_SHORT).show();
                         userBookComments.addAll(list);
                         userBookCommentAdapter.notifyDataSetChanged();

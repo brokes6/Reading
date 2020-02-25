@@ -51,8 +51,16 @@
             android:text="测试文字，测试文字，测试文字，测试文字，测试文字，测试文字,测试文字"
             android:maxLines="4"
             android:textColor="#303030"/>
-        <LinearLayout
+        <TextView
+            android:id="@+id/xian"
             android:layout_below="@id/content"
+            android:layout_marginTop="7dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#D5D5D5"/>
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_below="@id/xian"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <com.example.reading.util.RoundImageView
@@ -63,21 +71,33 @@
                 android:layout_height="105dp"
                 app:type="round"
                 android:src="@drawable/book_text" />
-            <TextView
-                android:id="@+id/bookName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#222222"
-                android:layout_marginTop="5dp"
-                android:layout_gravity="top"
-                android:text="测试书名" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/descrption"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left|center"
-                android:text="我是描述我是描述我是描述我是描述我是描述我是描述" />
+                <TextView
+                    android:id="@+id/bookName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#222222"
+                    android:textSize="16sp"
+                    android:layout_toRightOf="@id/festival_book_img"
+                    android:text="测试书名" />
+
+                <TextView
+                    android:id="@+id/descrption"
+                    android:layout_marginTop="15dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/festival_book_img"
+                    android:padding="7dp"
+                    android:textSize="14sp"
+                    android:textColor="#8F8F8F"
+                    android:layout_below="@id/festival_book_name"
+                    android:background="@drawable/fillet_background_half"
+                    android:text="测试介绍" />
+            </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
     <LinearLayout
@@ -86,25 +106,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:layout_marginRight="20dp"
-            android:orientation="horizontal">
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@mipmap/comment_black" />
-            <TextView
-                android:id="@+id/commentNum"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="5dp"
-                android:text="0"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-        </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>

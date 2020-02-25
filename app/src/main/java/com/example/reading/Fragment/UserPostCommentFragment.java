@@ -1,6 +1,7 @@
 package com.example.reading.Fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,10 @@ import com.example.reading.adapter.UserPostCommentAdapter;
 import com.example.reading.util.UserUtil;
 import com.example.reading.web.BaseCallBack;
 import com.example.reading.web.StandardRequestMangaer;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +40,8 @@ public class UserPostCommentFragment extends Fragment {
     private UserPostCommentAdapter userPostCommentAdapter;
     private int currentPage=1;
     private List<UserPostComment> userPostComments=new ArrayList<>();
+    SmartRefreshLayout refreshLayout;
+    private static final String TAG = "UserPostCommentFragment";
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,14 +52,33 @@ public class UserPostCommentFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mView=LayoutInflater.from(getContext()).inflate(R.layout.comment_layout,container,false);
         recyclerView=mView.findViewById(R.id.recyclerView);
+        initView();
         initData();
         return mView;
     }
+    private void initView(){
+        refreshLayout = mView.findViewById(R.id.refreshLayout);
+    }
     private void initData(){
+        refreshLayout.setEnableRefresh(false);
+        //设置 Footer 为 经典样式
+        refreshLayout.setRefreshFooter(new ClassicsFooter(getContext()));
         userPostCommentAdapter=new UserPostCommentAdapter(userPostComments,getContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(userPostCommentAdapter);
         findUserPostComment();
+        refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+                ++currentPage;
+                findUserPostComment();
+                //加了这一句反而不行了。。。。吐了
+//                programAdapter.add(programBindings);
+                userPostCommentAdapter.notifyDataSetChanged();
+                refreshLayout.finishLoadMore(true);//加载完成
+                Log.d(TAG, "onLoadMore: 添加更多完成");
+            }
+        });
     }
 
     public void findUserPostComment(){

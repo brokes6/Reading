@@ -26,6 +26,8 @@
         <activity android:name=".Activity.SearchActivity" />
         <activity android:name=".Activity.ShowImageActivity" />
         <activity android:name=".Activity.PostDetails" />
+        <activity android:name=".Activity.Personal"/>
+        <activity android:name=".Activity.AboutMe"/>
         <activity android:name=".Activity.addPost">
         </activity>
         <provider
