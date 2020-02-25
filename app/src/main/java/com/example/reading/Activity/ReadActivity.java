@@ -44,6 +44,7 @@ import com.example.reading.web.BaseCallBack;
 import com.example.reading.web.StandardRequestMangaer;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.weavey.loading.lib.LoadingLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,6 +93,7 @@ public class ReadActivity extends BaseActivity {
             //修改为深色，因为我们把状态栏的背景色修改为主题色白色，默认的文字及图标颜色为白色，导致看不到了。
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
+        binding.loading.setStatus(LoadingLayout.Loading);
         fragmentList.add(new AudioFrequency());
         fragmentList.add(new VideoFragment());
         initView();
@@ -180,6 +182,7 @@ public class ReadActivity extends BaseActivity {
                 }
                 bookComments.addAll(comments);
                 bookCommentAdapter.notifyDataSetChanged();
+                binding.loading.setStatus(LoadingLayout.Success);
             }
         });
     }
@@ -297,6 +300,7 @@ public class ReadActivity extends BaseActivity {
     }
 
     private void addComment(final String content){
+        binding.loading.setStatus(LoadingLayout.Loading);
         Map<String,String> params=UserUtil.createUserMap();
         params.put("cbid", String.valueOf(bid));
         params.put("content",content);
@@ -313,6 +317,7 @@ public class ReadActivity extends BaseActivity {
 
                     @Override
                     protected void onSuccess(Call call, Response response, String s) {
+                        binding.loading.setStatus(LoadingLayout.Success);
                         Toast.makeText(ReadActivity.this, s, Toast.LENGTH_SHORT).show();
                         bookCommentAdapter.addTheCommentData(new BookComment("刚刚",content,"测试","http://image.biaobaiju.com/uploads/20180803/23/1533308847-sJINRfclxg.jpeg",Integer.valueOf(s)));
                         binding.commentStr.setText(String.valueOf(Integer.valueOf(binding.commentStr.getText().toString())+1));

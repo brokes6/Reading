@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -49,6 +50,7 @@ import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
 import com.scwang.smartrefresh.layout.header.BezierRadarHeader;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.weavey.loading.lib.LoadingLayout;
 
 
 import org.json.JSONException;
@@ -90,11 +92,13 @@ public class HomeFragment extends Fragment implements CustomAdapt,View.OnClickLi
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case 200:
+                    binding.loading.setStatus(LoadingLayout.Success);
                     System.out.println("----");
                     mAdapter.notifyDataSetChanged();
                     mAdapter_seller.notifyDataSetChanged();
                     break;
                 case 210:
+                    binding.loading.setStatus(LoadingLayout.Success);
                     binding.SolarTerms.setText(Title);
                     festivalAdapter.notifyDataSetChanged();
                     break;
@@ -116,6 +120,7 @@ public class HomeFragment extends Fragment implements CustomAdapt,View.OnClickLi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.homefragment, container, false);
+        binding.loading.setStatus(LoadingLayout.Loading);
         initView();
         initData();
         analysis();
@@ -134,15 +139,17 @@ public class HomeFragment extends Fragment implements CustomAdapt,View.OnClickLi
         binding.refreshLayout.setDisableContentWhenRefresh(true);
         //MAdapter
         mAdapter=new MAdapter(getActivity());
-        LinearLayoutManager im = new LinearLayoutManager(getContext());
-        im.setOrientation(LinearLayoutManager.HORIZONTAL);
-        binding.RecommendRecycleview.setLayoutManager(im);
+//        LinearLayoutManager im = new LinearLayoutManager(getContext());
+//        im.setOrientation(LinearLayoutManager.HORIZONTAL);
+        GridLayoutManager gridLayoutManage = new GridLayoutManager(getContext(),3);
+        binding.RecommendRecycleview.setLayoutManager(gridLayoutManage);
         binding.RecommendRecycleview.setAdapter(mAdapter);
         //MAdapter_seller
         mAdapter_seller = new MAdapter_seller(getActivity());
-        LinearLayoutManager im2 = new LinearLayoutManager(getContext());
-        im2.setOrientation(LinearLayoutManager.HORIZONTAL);
-        binding.BestSellerRecycleview.setLayoutManager(im2);
+//        LinearLayoutManager im2 = new LinearLayoutManager(getContext());
+//        im2.setOrientation(LinearLayoutManager.HORIZONTAL);
+        GridLayoutManager gridLayoutManage2 = new GridLayoutManager(getContext(),3);
+        binding.BestSellerRecycleview.setLayoutManager(gridLayoutManage2);
         binding.BestSellerRecycleview.setAdapter(mAdapter_seller);
         //FestivalAdapter
         festivalAdapter = new FestivalAdapter(getActivity());
@@ -319,7 +326,7 @@ public class HomeFragment extends Fragment implements CustomAdapt,View.OnClickLi
                 String data = object.getString("data");
                 JSONObject array = new JSONObject(data);
                 String festivaldata = array.getString("festival");
-                String bookDtoList = array.getString("bookDtoList");
+                String bookDtoList = array.getString("bookVos");
                 JSONObject arrayfestival = new JSONObject(festivaldata);
                 Title = arrayfestival.getString("name");
                 Log.d(TAG, "当前节日为 "+Title);
@@ -347,14 +354,18 @@ public class HomeFragment extends Fragment implements CustomAdapt,View.OnClickLi
         binding.refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                //在这里执行下拉刷新时的具体操作(网络请求、更新UI等)
-//                bookDetails.clear();
-//                bookDetails2.clear();
-//                festivalDetails.clear();
                 Toast.makeText(getContext(),"正在刷新",Toast.LENGTH_SHORT).show();
-//                analysis();
-                mAdapter_seller.notifyDataSetChanged();
-                binding.refreshLayout.finishRefresh(2000);
+                mAdapter.ClearMyAdapter();
+                mAdapter_seller.ClearMAdapter_seller();
+                festivalAdapter.ClearFestivalAdapter();
+                analysis();
+                Message message=Message.obtain();
+                message.what=200;
+                handler.sendMessage(message);
+                Message message1=Message.obtain();
+                message.what=210;
+                handler.sendMessage(message1);
+                binding.refreshLayout.finishRefresh(true);
             }
         });
     }
