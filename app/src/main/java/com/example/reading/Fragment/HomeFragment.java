@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -134,15 +135,17 @@ public class HomeFragment extends Fragment implements CustomAdapt,View.OnClickLi
         binding.refreshLayout.setDisableContentWhenRefresh(true);
         //MAdapter
         mAdapter=new MAdapter(getActivity());
-        LinearLayoutManager im = new LinearLayoutManager(getContext());
-        im.setOrientation(LinearLayoutManager.HORIZONTAL);
-        binding.RecommendRecycleview.setLayoutManager(im);
+//        LinearLayoutManager im = new LinearLayoutManager(getContext());
+//        im.setOrientation(LinearLayoutManager.HORIZONTAL);
+        GridLayoutManager gridLayoutManage = new GridLayoutManager(getContext(),3);
+        binding.RecommendRecycleview.setLayoutManager(gridLayoutManage);
         binding.RecommendRecycleview.setAdapter(mAdapter);
         //MAdapter_seller
         mAdapter_seller = new MAdapter_seller(getActivity());
-        LinearLayoutManager im2 = new LinearLayoutManager(getContext());
-        im2.setOrientation(LinearLayoutManager.HORIZONTAL);
-        binding.BestSellerRecycleview.setLayoutManager(im2);
+//        LinearLayoutManager im2 = new LinearLayoutManager(getContext());
+//        im2.setOrientation(LinearLayoutManager.HORIZONTAL);
+        GridLayoutManager gridLayoutManage2 = new GridLayoutManager(getContext(),3);
+        binding.BestSellerRecycleview.setLayoutManager(gridLayoutManage2);
         binding.BestSellerRecycleview.setAdapter(mAdapter_seller);
         //FestivalAdapter
         festivalAdapter = new FestivalAdapter(getActivity());
@@ -319,7 +322,7 @@ public class HomeFragment extends Fragment implements CustomAdapt,View.OnClickLi
                 String data = object.getString("data");
                 JSONObject array = new JSONObject(data);
                 String festivaldata = array.getString("festival");
-                String bookDtoList = array.getString("bookDtoList");
+                String bookDtoList = array.getString("bookVos");
                 JSONObject arrayfestival = new JSONObject(festivaldata);
                 Title = arrayfestival.getString("name");
                 Log.d(TAG, "当前节日为 "+Title);
