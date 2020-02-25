@@ -50,6 +50,7 @@ import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
 import com.scwang.smartrefresh.layout.header.BezierRadarHeader;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.weavey.loading.lib.LoadingLayout;
 
 
 import org.json.JSONException;
@@ -91,11 +92,13 @@ public class HomeFragment extends Fragment implements CustomAdapt,View.OnClickLi
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case 200:
+                    binding.loading.setStatus(LoadingLayout.Success);
                     System.out.println("----");
                     mAdapter.notifyDataSetChanged();
                     mAdapter_seller.notifyDataSetChanged();
                     break;
                 case 210:
+                    binding.loading.setStatus(LoadingLayout.Success);
                     binding.SolarTerms.setText(Title);
                     festivalAdapter.notifyDataSetChanged();
                     break;
@@ -117,6 +120,7 @@ public class HomeFragment extends Fragment implements CustomAdapt,View.OnClickLi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.homefragment, container, false);
+        binding.loading.setStatus(LoadingLayout.Loading);
         initView();
         initData();
         analysis();
@@ -350,11 +354,10 @@ public class HomeFragment extends Fragment implements CustomAdapt,View.OnClickLi
         binding.refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                //在这里执行下拉刷新时的具体操作(网络请求、更新UI等)
+                Toast.makeText(getContext(),"正在刷新",Toast.LENGTH_SHORT).show();
                 mAdapter.ClearMyAdapter();
                 mAdapter_seller.ClearMAdapter_seller();
                 festivalAdapter.ClearFestivalAdapter();
-                Toast.makeText(getContext(),"正在刷新",Toast.LENGTH_SHORT).show();
                 analysis();
                 Message message=Message.obtain();
                 message.what=200;
@@ -362,7 +365,7 @@ public class HomeFragment extends Fragment implements CustomAdapt,View.OnClickLi
                 Message message1=Message.obtain();
                 message.what=210;
                 handler.sendMessage(message1);
-                binding.refreshLayout.finishRefresh(2000);
+                binding.refreshLayout.finishRefresh(true);
             }
         });
     }
