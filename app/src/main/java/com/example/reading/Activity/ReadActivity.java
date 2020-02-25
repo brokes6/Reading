@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 import com.example.reading.Bean.BookComment;
@@ -98,6 +99,7 @@ public class ReadActivity extends BaseActivity {
         fragmentList.add(new VideoFragment());
         initView();
         initData();
+        initExpandableListView();
 
     }
 
@@ -118,6 +120,21 @@ public class ReadActivity extends BaseActivity {
         binding.detailPageLvComment.setAdapter(bookCommentAdapter);
     }
 
+    private void initExpandableListView(){
+        binding.detailPageLvComment.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPosition, long l) {
+                return true;
+            }
+        });
+        binding.detailPageLvComment.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                //toast("展开第"+groupPosition+"个分组");
+
+            }
+        });
+    }
     public String getDataId(){
         Intent intent = getIntent();
         Log.d(TAG, "getDataId: 当前书籍id为:"+intent.getStringExtra("id"));

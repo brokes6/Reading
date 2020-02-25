@@ -35,6 +35,7 @@ import com.example.reading.Activity.History;
 import com.example.reading.Activity.LoginActivity;
 import com.example.reading.Activity.PostDetails;
 import com.example.reading.Activity.Set_up;
+import com.example.reading.Activity.UserCommentActivity;
 import com.example.reading.Bean.User;
 import com.example.reading.R;
 import com.example.reading.constant.RequestUrl;
@@ -79,7 +80,7 @@ public class MyFragment extends Fragment implements CustomAdapt,View.OnClickList
                     binding.userName.setText(userData.getUsername());
                     if (userData.getUimg()!=null){
                         binding.userImg.setImageURL(userData.getUimg());
-                        binding.loading.setStatus(LoadingLayout.Success);
+                        binding.myload.setStatus(LoadingLayout.Success);
                     }else{
                         binding.userImg.setImageResource(R.mipmap.userimg);
                         Log.d(TAG, "user"+"无头像");
@@ -104,7 +105,7 @@ public class MyFragment extends Fragment implements CustomAdapt,View.OnClickList
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             binding = DataBindingUtil.inflate(inflater,R.layout.myfragment,container,false);
-            binding.loading.setStatus(LoadingLayout.Loading);
+            binding.myload.setStatus(LoadingLayout.Loading);
             userData= FileCacheUtil.getUser(getContext());
             initView();
             initData();
@@ -113,8 +114,8 @@ public class MyFragment extends Fragment implements CustomAdapt,View.OnClickList
     private void initView(){
         binding.userImg.setOnClickListener(this);
         binding.myhistory.setOnClickListener(this);
-        binding.setting.setOnClickListener(this);
-
+        binding.msetting.setOnClickListener(this);
+        binding.commentLayout.setOnClickListener(this);
     }
     private void initData(){
         if (userData.getUsername()==null){
@@ -131,17 +132,22 @@ public class MyFragment extends Fragment implements CustomAdapt,View.OnClickList
 
     @Override
     public void onClick(View v) {
+        Intent intent=null;
         switch (v.getId()){
-            case R.id.setting:
-                Intent intent = new Intent(getContext(), Set_up.class);
+            case R.id.msetting:
+                intent = new Intent(getContext(), Set_up.class);
                 startActivity(intent);
                 break;
             case R.id.myhistory:
-                Intent intent1 = new Intent(getContext(), History.class);
-                startActivity(intent1);
+                intent = new Intent(getContext(), History.class);
+                startActivity( intent);
                 break;
             case R.id.user_img:
                 showTypeDialog();
+                break;
+            case R.id.commentLayout:
+                intent=new Intent(getContext(), UserCommentActivity.class);
+                startActivity(intent);
                 break;
         }
     }
@@ -154,7 +160,7 @@ public class MyFragment extends Fragment implements CustomAdapt,View.OnClickList
         tv_select_gallery.setOnClickListener(new View.OnClickListener() {// 在相册中选取
             @Override
             public void onClick(View v) {
-                binding.loading.setStatus(LoadingLayout.Loading);
+                binding.myload.setStatus(LoadingLayout.Loading);
                 if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
                 } else {
@@ -166,7 +172,7 @@ public class MyFragment extends Fragment implements CustomAdapt,View.OnClickList
         tv_select_camera.setOnClickListener(new View.OnClickListener() {// 调用照相机
             @Override
             public void onClick(View v) {
-                binding.loading.setStatus(LoadingLayout.Loading);
+                binding.myload.setStatus(LoadingLayout.Loading);
                 File outputImage =new File(getContext().getExternalCacheDir(),"output_image.jpg");
                 try {
                     if(outputImage.exists()){
@@ -347,7 +353,7 @@ public class MyFragment extends Fragment implements CustomAdapt,View.OnClickList
                 Log.i(TAG, "onSuccess: 图片路径:"+s);
                 userData.setUimg(s);
                 FileCacheUtil.updateUser(userData, getContext());
-                binding.loading.setStatus(LoadingLayout.Success);
+                binding.myload.setStatus(LoadingLayout.Success);
                 Toast.makeText(getContext(),"设置头像成功!",Toast.LENGTH_SHORT).show();
             }
 
