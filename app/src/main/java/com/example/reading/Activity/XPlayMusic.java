@@ -128,13 +128,8 @@ public class XPlayMusic extends XBaseActivity implements CustomAdapt,View.OnClic
                 }
                 duration2 = mediaPlayer.getDuration() / 1000;
                 position = mediaPlayer.getCurrentPosition();
-                binding.actPlayTimeStart.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        binding.actPlayTimeStart.setText(calculateTime(position / 1000));
-                        binding.actPlayTimeEnt.setText(calculateTime(duration2));
-                    }
-                });
+                binding.actPlayTimeStart.setText(calculateTime(position / 1000));
+                binding.actPlayTimeEnt.setText(calculateTime(duration2));
             }
         });
         thread.start();
@@ -148,12 +143,7 @@ public class XPlayMusic extends XBaseActivity implements CustomAdapt,View.OnClic
         xurl = intent.getStringExtra("url");
         title = intent.getStringExtra("name");
         binding.audioTime.setVisibility(View.GONE);
-        binding.actSuspend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                play();
-            }
-        });
+        binding.actSuspend.setOnClickListener(this);
         //绑定监听器，监听拖动到指定位置
         binding.actProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -191,6 +181,9 @@ public class XPlayMusic extends XBaseActivity implements CustomAdapt,View.OnClic
     @Override
     public void onClick(View v) {
         switch (v.getId()){
+            case R.id.act_suspend:
+                play();
+                break;
             case R.id.audio_timing:
                 //1、使用Dialog、设置style
                 final Dialog dialog = new Dialog(this,R.style.DialogTheme);
@@ -289,7 +282,7 @@ public class XPlayMusic extends XBaseActivity implements CustomAdapt,View.OnClic
         }.start();
     }
 
-    //计算播放时间（将数值转换为时间）
+    //计算播放时间
     public String calculateTime(int time){
         int minute;
         int second;
@@ -322,6 +315,7 @@ public class XPlayMusic extends XBaseActivity implements CustomAdapt,View.OnClic
         }
         return null;
     }
+
     public Drawable ToBlurredPicture(int mipmap){
         final Bitmap bitmap = BitmapFactory.decodeResource(getResources(),mipmap);
         Bitmap finalBitmap = Fuzzy_Background.with(XPlayMusic.this)

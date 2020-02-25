@@ -22,10 +22,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.reading.Activity.AllBooks;
+import com.example.reading.Activity.History;
 import com.example.reading.Activity.Party;
 import com.example.reading.Activity.SearchActivity;
 import com.example.reading.Activity.UserFeedBack;
 import com.example.reading.Activity.XiaoYouSound;
+import com.example.reading.Activity.addPost;
 import com.example.reading.Bean.BookDetails;
 import com.example.reading.Bean.RotationBean;
 import com.example.reading.R;
@@ -158,6 +160,8 @@ public class HomeFragment extends Fragment implements CustomAdapt,View.OnClickLi
         binding.AllBook.setOnClickListener(this);
         binding.xiaoyou.setOnClickListener(this);
         binding.party.setOnClickListener(this);
+        binding.history.setOnClickListener(this);
+        binding.addBox.setOnClickListener(this);
     }
     public void initBanner(){
         binding.galleryBanner
@@ -198,6 +202,13 @@ public class HomeFragment extends Fragment implements CustomAdapt,View.OnClickLi
                 Intent intent5 = new Intent(getContext(), Party.class);
                 startActivity(intent5);
                 break;
+            case R.id.history:
+                Intent intent6 = new Intent(getContext(), History.class);
+                startActivity(intent6);
+                break;
+            case R.id.add_box:
+                Intent intent7 = new Intent(getContext(), addPost.class);
+                startActivity(intent7);
         }
     }
     private void initRotationChart(){

@@ -1,13 +1,18 @@
 package com.example.reading.adapter;
 
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
+import static com.example.reading.MainApplication.getContext;
 
 public class ProgramAdapter extends RecyclerView.Adapter<ProgramViewHolder>{
     private LayoutInflater inflater;
@@ -66,6 +72,27 @@ public class ProgramAdapter extends RecyclerView.Adapter<ProgramViewHolder>{
                 mContext.startActivity(intent);
             }
         });
+        holder.download.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new Thread(new Runnable(){
+                    @Override
+                    public void run() {
+                        //创建下载任务,downloadUrl就是下载链接
+                        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(programBean1s.getUrl()));
+                        //指定下载路径和下载文件名
+                        request.setDestinationInExternalPublicDir("/download/", programBean1s.getTitle());
+                        //获取下载管理器
+                        DownloadManager downloadManager= (DownloadManager) getContext().getSystemService(Context.DOWNLOAD_SERVICE);
+                        //将下载任务加入下载队列，否则不会进行下载
+                        downloadManager.enqueue(request);
+                        Looper.prepare();
+                        Toast.makeText(getContext(),"正在下载，请注意通知栏!",Toast.LENGTH_SHORT).show();
+                        Looper.loop();
+                    }
+                }).start();
+            }
+        });
     }
 
     @Override
@@ -81,12 +108,14 @@ public class ProgramAdapter extends RecyclerView.Adapter<ProgramViewHolder>{
         notifyItemInserted(position);
     }
 
+
 }
 
 
 
-class ProgramViewHolder extends RecyclerView.ViewHolder{
 
+class ProgramViewHolder extends RecyclerView.ViewHolder{
+    ImageView download;
     TextView id,text,publish_time,playNum;
     LinearLayout whole;
 
@@ -97,6 +126,7 @@ class ProgramViewHolder extends RecyclerView.ViewHolder{
         text = itemView.findViewById(R.id.program_text);
         publish_time = itemView.findViewById(R.id.program_Publish);
         playNum  = itemView.findViewById(R.id.program_paly);
+        download = itemView.findViewById(R.id.program_download);
 
     }
 }

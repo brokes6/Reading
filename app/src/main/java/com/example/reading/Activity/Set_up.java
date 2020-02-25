@@ -47,19 +47,19 @@ public class Set_up extends BaseActivity {
                 finish();
             }
         });
-        binding.userBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(Set_up.this,"已退出",Toast.LENGTH_SHORT).show();
-                SharedPreferences sharedPreferences= getSharedPreferences("data", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.remove("key");
-                editor.commit();
-                Log.d(TAG, "---SharedPreferences的key已清除---");
-                Intent intent = new Intent("com.gesoft.admin.loginout");
-                sendBroadcast(intent);
-            }
-        });
+//        binding.userBack.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(Set_up.this,"已退出",Toast.LENGTH_SHORT).show();
+//                SharedPreferences sharedPreferences= getSharedPreferences("data", Context.MODE_PRIVATE);
+//                SharedPreferences.Editor editor = sharedPreferences.edit();
+//                editor.remove("key");
+//                editor.commit();
+//                Log.d(TAG, "---SharedPreferences的key已清除---");
+//                Intent intent = new Intent("com.gesoft.admin.loginout");
+//                sendBroadcast(intent);
+//            }
+//        });
         initView();
         setDate();
     }

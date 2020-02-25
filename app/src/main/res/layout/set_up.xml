@@ -288,6 +288,7 @@
             android:layout_height="8dp" />
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/user_back"
             android:layout_width="match_parent"
             android:layout_height="55dp"

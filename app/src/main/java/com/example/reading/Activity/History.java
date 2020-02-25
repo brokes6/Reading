@@ -26,6 +26,7 @@ import com.example.reading.util.PostHitoryUtil;
 import com.example.reading.util.RequestStatus;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.weavey.loading.lib.LoadingLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,6 +62,7 @@ public class History extends BaseActivity {
             switch (msg.what){
                 case RequestStatus.SUCCESS:
                     historyAdapter.notifyDataSetChanged();
+                    binding.loading.setStatus(LoadingLayout.Success);
                     break;
                 case RequestStatus.FAILURE:
                     Toast.makeText(History.this,"服务器未响应，请稍后在尝试！",Toast.LENGTH_SHORT).show();
@@ -73,6 +75,7 @@ public class History extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this,R.layout.history);
         userData= FileCacheUtil.getUser(getContext());
+        binding.loading.setStatus(LoadingLayout.Loading);
         ActionBar actionbar = getSupportActionBar();
         if (actionbar != null) {
             actionbar.hide();

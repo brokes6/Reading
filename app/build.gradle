@@ -100,4 +100,6 @@ dependencies {
     implementation 'org.glassfish:javax.annotation:10.0-b28' //java注解
 
     implementation 'com.github.lovetuzitong:MultiImageSelector:1.2'
+    //gif
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.15'
 }

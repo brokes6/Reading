@@ -6,6 +6,7 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -31,10 +32,11 @@ import androidx.core.content.FileProvider;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
+import com.example.reading.Activity.AboutMe;
 import com.example.reading.Activity.History;
-import com.example.reading.Activity.LoginActivity;
-import com.example.reading.Activity.PostDetails;
+import com.example.reading.Activity.Personal;
 import com.example.reading.Activity.Set_up;
+import com.example.reading.Activity.UserFeedBack;
 import com.example.reading.Bean.User;
 import com.example.reading.R;
 import com.example.reading.constant.RequestUrl;
@@ -51,8 +53,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Map;
-import me.nereo.multi_image_selector.MultiImageSelector;
-import me.nereo.multi_image_selector.MultiImageSelectorActivity;
+
 import me.jessyan.autosize.internal.CustomAdapt;
 import okhttp3.Call;
 import okhttp3.Request;
@@ -113,8 +114,11 @@ public class MyFragment extends Fragment implements CustomAdapt,View.OnClickList
     private void initView(){
         binding.userImg.setOnClickListener(this);
         binding.myhistory.setOnClickListener(this);
-        binding.setting.setOnClickListener(this);
-
+        binding.back.setOnClickListener(this);
+        binding.msetting.setOnClickListener(this);
+        binding.mfeedback.setOnClickListener(this);
+        binding.about.setOnClickListener(this);
+        binding.personal.setOnClickListener(this);
     }
     private void initData(){
         if (userData.getUsername()==null){
@@ -132,7 +136,7 @@ public class MyFragment extends Fragment implements CustomAdapt,View.OnClickList
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.setting:
+            case R.id.msetting:
                 Intent intent = new Intent(getContext(), Set_up.class);
                 startActivity(intent);
                 break;
@@ -142,6 +146,28 @@ public class MyFragment extends Fragment implements CustomAdapt,View.OnClickList
                 break;
             case R.id.user_img:
                 showTypeDialog();
+                break;
+            case R.id.mfeedback:
+                Intent intent2 = new Intent(getContext(), UserFeedBack.class);
+                startActivity(intent2);
+                break;
+            case R.id.back:
+                Toast.makeText(getContext(),"已退出",Toast.LENGTH_SHORT).show();
+                SharedPreferences sharedPreferences= getContext().getSharedPreferences("data", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.remove("key");
+                editor.commit();
+                Log.d(TAG, "---SharedPreferences的key已清除---");
+                Intent intent3 = new Intent("com.gesoft.admin.loginout");
+                getContext().sendBroadcast(intent3);
+                break;
+            case R.id.about:
+                Intent intent4 = new Intent(getContext(), AboutMe.class);
+                startActivity(intent4);
+                break;
+            case R.id.personal:
+                Intent intent5 = new Intent(getContext(), Personal.class);
+                startActivity(intent5);
                 break;
         }
     }
