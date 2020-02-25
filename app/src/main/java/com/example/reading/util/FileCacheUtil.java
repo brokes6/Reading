@@ -140,9 +140,6 @@ public class FileCacheUtil {
         }
     }
     public static <T extends Serializable> T getCache(Context context, String cacheFileName, int mode,Class<T> tClass){
-            if(data!=null){
-                return (T) data;
-            }
             FileInputStream fileInputStream=null;
             ObjectInputStream objectInputStream=null;
             File file = new File(Environment.getExternalStorageDirectory().toString() + File.separator + cacheFileName);

@@ -7,7 +7,7 @@
     </data>
 
     <com.weavey.loading.lib.LoadingLayout
-        android:id="@+id/loading"
+        android:id="@+id/myload"
         app:isFirstVisible="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -131,6 +131,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/commentLayout"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"

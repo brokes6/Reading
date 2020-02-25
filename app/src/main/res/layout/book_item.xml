@@ -26,7 +26,4 @@
             android:layout_marginTop="5dp"
             android:layout_gravity="center"
             android:text="测试书名" />
-
-
-
 </LinearLayout>

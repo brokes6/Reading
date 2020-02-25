@@ -46,7 +46,7 @@ public class CommunityFragment extends Fragment {
     private FloatingActionsMenu menu;
     private static final String TAG = "CommunityFragment";
     public static final int POSTDETAILS=1;
-    public static final int SEARCHVIEW=2;
+    public static final int ADDPOST=2;
     public static final int SHOWIMAGEACTIVITY=3;
     private List<Post> postList=new ArrayList<>();
     private View view;
@@ -109,7 +109,7 @@ public class CommunityFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent_addPost = new Intent(getActivity(), addPost.class);
                 intent_addPost.putExtra("oid",oid);
-                startActivity(intent_addPost);
+                startActivityForResult(intent_addPost,ADDPOST);
             }
         });
     }
@@ -184,6 +184,15 @@ public class CommunityFragment extends Fragment {
                     adapter.notifyItemChanged(position);
                     Log.i(TAG, "onActivityResult: 改变");
                 }
+            }
+        }else if(requestCode==ADDPOST){
+            if (data!=null){
+                String content =data.getStringExtra("content");
+                String imgurl=data.getStringExtra("imgurl");
+                Integer postId=data.getIntExtra("postId",0);
+                Post post=Post.createNowPost(getContext(),content,imgurl,postId);
+                adapter.addPost(0,post);
+                Log.i(TAG, "onActivityResult:添加成功");
             }
         }
         super.onActivityResult(requestCode, resultCode, data);

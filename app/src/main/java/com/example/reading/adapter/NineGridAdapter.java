@@ -229,4 +229,10 @@ public class NineGridAdapter extends RecyclerView.Adapter<NineGridAdapter.ViewHo
     public interface PostCallBack{
         void handlerLove();
     }
+
+    public void  addPost(int index,Post post){
+        mList.add(index,post);
+        notifyItemInserted(index);
+        notifyItemRangeChanged(index,mList.size());
+    }
 }

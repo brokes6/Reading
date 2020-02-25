@@ -2,6 +2,7 @@ package com.example.reading.Activity;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 import androidx.databinding.DataBindingUtil;
 
 import android.app.Activity;

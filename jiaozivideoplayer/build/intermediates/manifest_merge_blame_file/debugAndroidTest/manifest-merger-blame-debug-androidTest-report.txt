@@ -3,35 +3,35 @@
 3    package="cn.jzvd.test" >
 4
 5    <uses-sdk
-5-->D:\Android\Reading\jiaozivideoplayer\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger3050340798566145812.xml:5:5-74
+5-->C:\Users\ZJ\Desktop\Reading\jiaozivideoplayer\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger7608919985661656950.xml:5:5-74
 6        android:minSdkVersion="16"
-6-->D:\Android\Reading\jiaozivideoplayer\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger3050340798566145812.xml:5:15-41
+6-->C:\Users\ZJ\Desktop\Reading\jiaozivideoplayer\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger7608919985661656950.xml:5:15-41
 7        android:targetSdkVersion="28" />
-7-->D:\Android\Reading\jiaozivideoplayer\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger3050340798566145812.xml:5:42-71
+7-->C:\Users\ZJ\Desktop\Reading\jiaozivideoplayer\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger7608919985661656950.xml:5:42-71
 8
 9    <instrumentation
-9-->D:\Android\Reading\jiaozivideoplayer\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger3050340798566145812.xml:11:5-15:62
+9-->C:\Users\ZJ\Desktop\Reading\jiaozivideoplayer\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger7608919985661656950.xml:11:5-15:62
 10        android:name="android.test.InstrumentationTestRunner"
-10-->D:\Android\Reading\jiaozivideoplayer\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger3050340798566145812.xml:11:22-75
+10-->C:\Users\ZJ\Desktop\Reading\jiaozivideoplayer\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger7608919985661656950.xml:11:22-75
 11        android:functionalTest="false"
-11-->D:\Android\Reading\jiaozivideoplayer\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger3050340798566145812.xml:14:22-52
+11-->C:\Users\ZJ\Desktop\Reading\jiaozivideoplayer\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger7608919985661656950.xml:14:22-52
 12        android:handleProfiling="false"
-12-->D:\Android\Reading\jiaozivideoplayer\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger3050340798566145812.xml:13:22-53
+12-->C:\Users\ZJ\Desktop\Reading\jiaozivideoplayer\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger7608919985661656950.xml:13:22-53
 13        android:label="Tests for cn.jzvd.test"
-13-->D:\Android\Reading\jiaozivideoplayer\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger3050340798566145812.xml:15:22-60
+13-->C:\Users\ZJ\Desktop\Reading\jiaozivideoplayer\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger7608919985661656950.xml:15:22-60
 14        android:targetPackage="cn.jzvd.test" />
-14-->D:\Android\Reading\jiaozivideoplayer\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger3050340798566145812.xml:12:22-58
+14-->C:\Users\ZJ\Desktop\Reading\jiaozivideoplayer\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger7608919985661656950.xml:12:22-58
 15
 16    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-16-->[__tested_artifact__::jiaozivideoplayer] D:\Android\Reading\jiaozivideoplayer\build\intermediates\library_manifest\debug\AndroidManifest.xml:11:5-79
-16-->[__tested_artifact__::jiaozivideoplayer] D:\Android\Reading\jiaozivideoplayer\build\intermediates\library_manifest\debug\AndroidManifest.xml:11:22-76
+16-->[__tested_artifact__::jiaozivideoplayer] C:\Users\ZJ\Desktop\Reading\jiaozivideoplayer\build\intermediates\library_manifest\debug\AndroidManifest.xml:11:5-79
+16-->[__tested_artifact__::jiaozivideoplayer] C:\Users\ZJ\Desktop\Reading\jiaozivideoplayer\build\intermediates\library_manifest\debug\AndroidManifest.xml:11:22-76
 17
 18    <application android:debuggable="true" >
-18-->D:\Android\Reading\jiaozivideoplayer\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger3050340798566145812.xml:7:5-9:19
-18-->D:\Android\Reading\jiaozivideoplayer\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger3050340798566145812.xml:7:18-43
+18-->C:\Users\ZJ\Desktop\Reading\jiaozivideoplayer\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger7608919985661656950.xml:7:5-9:19
+18-->C:\Users\ZJ\Desktop\Reading\jiaozivideoplayer\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger7608919985661656950.xml:7:18-43
 19        <uses-library android:name="android.test.runner" />
-19-->D:\Android\Reading\jiaozivideoplayer\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger3050340798566145812.xml:8:9-60
-19-->D:\Android\Reading\jiaozivideoplayer\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger3050340798566145812.xml:8:23-57
+19-->C:\Users\ZJ\Desktop\Reading\jiaozivideoplayer\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger7608919985661656950.xml:8:9-60
+19-->C:\Users\ZJ\Desktop\Reading\jiaozivideoplayer\build\intermediates\tmp\manifest\androidTest\debug\manifestMerger7608919985661656950.xml:8:23-57
 20    </application>
 21
 22</manifest>

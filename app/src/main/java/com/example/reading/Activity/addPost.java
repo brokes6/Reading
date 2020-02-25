@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -42,6 +43,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.reading.Bean.LoadFileVo;
+import com.example.reading.Bean.Post;
 import com.example.reading.Bean.User;
 import com.example.reading.MainActivity;
 import com.example.reading.R;
@@ -51,6 +53,7 @@ import com.example.reading.ToolClass.ColorPickerView;
 import com.example.reading.adapter.LoadPicAdapter;
 import com.example.reading.constant.RequestUrl;
 import com.example.reading.util.FileCacheUtil;
+import com.example.reading.util.FilePathUtil;
 import com.example.reading.util.UserUtil;
 import com.example.reading.web.BaseCallBack;
 import com.example.reading.web.StandardRequestMangaer;
@@ -62,6 +65,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -77,10 +81,11 @@ import okhttp3.Response;
 import static com.example.reading.MainApplication.getContext;
 
 public class addPost extends BaseActivity implements View.OnClickListener {
-
+    public static final int TAKE_PHOTO=2;
     private static final String TAG = "addPost";
     public static final int SHOW_TOAST=3;
     public static final int SET_OK = 1;
+    private Uri takePhotoUri;
     private List<String> imageList=new ArrayList<>();
     private AlertDialog alertDialog3;
     private LoadPicAdapter adapter;
@@ -158,7 +163,7 @@ public class addPost extends BaseActivity implements View.OnClickListener {
     /********************变量**********************/
     //折叠视图的宽高
     private int mFoldedViewMeasureHeight;
-
+    private  File outputImage;
     private File file;
     private User userData;
     LoadingLayout loadingLayout;
@@ -196,6 +201,7 @@ public class addPost extends BaseActivity implements View.OnClickListener {
         initView();
         initAdapter();
         initClickListener();
+        checkHistory();
     }
     //initAdapter方法
     private void initAdapter() {
@@ -209,10 +215,8 @@ public class addPost extends BaseActivity implements View.OnClickListener {
                 if (imageList.size() > 9) {
                     Toast.makeText(addPost.this, "一次最多上传9张图片！", Toast.LENGTH_SHORT).show();
                 } else {
-                    Log.i(TAG, "click: 选择图片");
-                    selectPic(10-imageList.size());  //调用加载图片方法
+                    showTypeDialog();
                 }
-
             }
             @Override
             public void del(View view) {
@@ -229,6 +233,12 @@ public class addPost extends BaseActivity implements View.OnClickListener {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String content=mEditor.getHtml();
+                String imgurl=stringBuilder.toString();
+                if (TextUtils.isEmpty(content)&&TextUtils.isEmpty(imgurl)){
+                    finish();
+                    return;
+                }
                 // super.onBackPressed();//注释掉这行,back键不退出activity
                 AlertDialog.Builder dialog = new AlertDialog.Builder(addPost.this);
                 dialog.setTitle("提醒");
@@ -237,6 +247,10 @@ public class addPost extends BaseActivity implements View.OnClickListener {
                 dialog.setPositiveButton("是", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        Post post=new Post();
+                        post.setContent(content);
+                        post.setImgurl(imgurl);
+                        FileCacheUtil.setCache(post,addPost.this,"POST_INFO",0);
                         Toast.makeText(addPost.this,"已保存",Toast.LENGTH_SHORT).show();
                         finish();
                     }
@@ -267,9 +281,7 @@ public class addPost extends BaseActivity implements View.OnClickListener {
                     Toast.makeText(addPost.this, "内容不能为空", Toast.LENGTH_SHORT).show();
                     return;
                 }
-//                String imgurl=stringBuilder.substring(0,stringBuilder.length()-1);
-                String imgurl = userData.getUimg();
-                Log.i(TAG, "onClick: imgurl"+imgurl);
+                String imgurl=stringBuilder.substring(0,stringBuilder.length()-1);
                 uploadPost(content,imgurl);
             }
         });
@@ -616,7 +628,7 @@ public class addPost extends BaseActivity implements View.OnClickListener {
 
     public void selectPic(int size){
         MultiImageSelector.create()
-                .showCamera(true)
+                .showCamera(false)
                 .count(size)
                 .multi()
                 .start(this,1);
@@ -627,25 +639,42 @@ public class addPost extends BaseActivity implements View.OnClickListener {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode==RESULT_OK){
+            String numStr=null;
             switch (requestCode){
                 case 1:
                     imageList.remove(null);
-                    imageList.addAll(data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT));
-                    uploadImage();
+                    List<String> nowImageList=data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
+                    imageList.addAll(nowImageList);
+                    uploadImage(nowImageList);
                     Log.d(TAG, "onActivityResult: 值"+imageList);
                     adapter.notifyDataSetChanged();
-                    String numStr=String.valueOf(imageList.size())+"/9";
+                    numStr=String.valueOf(imageList.size())+"/9";
                     tvNum.setText(numStr);
                     if (imageList.size()<9){
                         Log.i(TAG, "onActivityResult: 添加新的选择");
                         imageList.add(null);
                     }
+                    break;
+                case 2:
+                    String path= outputImage.getPath();
+                    Log.i(TAG, "onActivityResult: path="+path);
+                    imageList.remove(null);
+                    imageList.add(path);
+                    uploadImage(Arrays.asList(path));
+                    adapter.notifyDataSetChanged();
+                    numStr=String.valueOf(imageList.size())+"/9";
+                    tvNum.setText(numStr);
+                    if (imageList.size()<9){
+                        Log.i(TAG, "onActivityResult: 添加新的选择");
+                        imageList.add(null);
+                    }
+                    break;
             }
         }
     }
-    private void uploadImage() {
+    private void uploadImage(List<String>list) {
         Map<String, String> params = UserUtil.createUserMap();
-        for (String path : imageList) {
+        for (String path : list) {
             File file=new File(path);
             StandardRequestMangaer.getInstance().postImage(RequestUrl.UPLOAD_IMG, new BaseCallBack<String>() {
 
@@ -687,6 +716,8 @@ public class addPost extends BaseActivity implements View.OnClickListener {
         Map<String,String> map=UserUtil.createUserMap();
         map.put("content",content);
         map.put("imgurl",imgurl);
+        Log.i(TAG, "uploadPost: content="+content);
+        Log.i(TAG, "uploadPost: imgurl="+imgurl);
         StandardRequestMangaer.getInstance()
                 .post(RequestUrl.ADD_POST, new BaseCallBack<String>(){
                     @Override
@@ -702,9 +733,11 @@ public class addPost extends BaseActivity implements View.OnClickListener {
                     @Override
                     protected void onSuccess(Call call, Response response, String s) {
                         Toast.makeText(addPost.this, "上传帖子成功！", Toast.LENGTH_SHORT).show();
-                        Intent intent=new Intent(addPost.this,PostDetails.class);
+                        Intent intent=new Intent();
                         intent.putExtra("postId",Integer.valueOf(s));
-                        startActivity(intent);
+                        intent.putExtra("content",content);
+                        intent.putExtra("imgurl",imgurl);
+                        setResult(1,intent);
                         finish();
                     }
 
@@ -723,5 +756,75 @@ public class addPost extends BaseActivity implements View.OnClickListener {
 
                     }
                 },map);
+    }
+    private void checkHistory(){
+        Post post=FileCacheUtil.getCache(this,"POST_INFO",0,Post.class);
+        if (post==null){
+            return;
+        }
+        File file=new File(Environment.getExternalStorageDirectory().toString() + File.separator + "POST_INFO");
+        file.delete();
+        String content=post.getContent();
+        String imgurl=post.getImgurl();
+        if (!TextUtils.isEmpty(content)){
+            mEditor.setHtml(content);
+        }
+        if (!TextUtils.isEmpty(imgurl)){
+            stringBuilder.append(imgurl);
+            String[] strings=imgurl.substring(0,imgurl.length()-1).split(",");
+            imageList.remove(null);
+            for (String string:strings){
+                imageList.add(string);
+            }
+            String numStr=String.valueOf(imageList.size())+"/9";
+            tvNum.setText(numStr);
+            imageList.add(null);
+            adapter.notifyDataSetChanged();
+        }
+    }
+    private void showTypeDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(addPost.this);
+        final AlertDialog dialog = builder.create();
+        final View view = View.inflate(addPost.this, R.layout.dialog_select_photo, null);
+        TextView tv_select_gallery = (TextView) view.findViewById(R.id.tv_select_gallery);
+        TextView tv_select_camera = (TextView) view.findViewById(R.id.tv_select_camera);
+        tv_select_gallery.setOnClickListener(new View.OnClickListener() {// 在相册中选取
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(addPost.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(addPost.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                } else {
+                    selectPic(10-imageList.size());  //调用加载图片方法
+                }
+                dialog.dismiss();
+            }
+        });
+        tv_select_camera.setOnClickListener(new View.OnClickListener() {// 调用照相机
+            @Override
+            public void onClick(View v) {
+                outputImage =new File(getContext().getExternalCacheDir(),"output_image.jpg");
+                try {
+                    if(outputImage.exists()){
+                        outputImage.delete();
+                    }
+                    outputImage.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if(Build.VERSION.SDK_INT>=24){
+                    takePhotoUri= FileProvider.getUriForFile(getContext(),
+                            "com.example.cameraalbumtest.fileprovider",outputImage);
+                }else{
+                    takePhotoUri=Uri.fromFile(outputImage);
+                }
+                //启动相机程序
+                Intent intent=new Intent("android.media.action.IMAGE_CAPTURE");
+                intent.putExtra(MediaStore.EXTRA_OUTPUT,takePhotoUri);
+                startActivityForResult(intent,TAKE_PHOTO);
+                dialog.dismiss();
+            }
+        });
+        dialog.setView(view);
+        dialog.show();
     }
 }
