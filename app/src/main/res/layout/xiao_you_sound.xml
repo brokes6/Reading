@@ -12,10 +12,11 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"
-            android:background="#A38585"
+            android:background="#fff"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <LinearLayout
+                android:background="@mipmap/shanshui"
                 app:layout_scrollFlags="scroll|snap"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -38,96 +39,53 @@
 
                     <ImageView
                         android:id="@+id/Xback"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:src="@mipmap/back" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="right|center"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/customerservice" />
-
-                    <ImageView
-                        android:layout_marginLeft="15dp"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@mipmap/more" />
                 </LinearLayout>
             </LinearLayout>
 
 
             <RelativeLayout
+                android:paddingLeft="20dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.example.reading.util.RoundImageView
-                    android:id="@+id/XLogin"
-                    android:layout_margin="17dp"
-                    android:layout_width="110dp"
-                    android:layout_height="110dp"
-                    app:type="round"
-                    android:src="@mipmap/testlogin" />
-
-                <TextView
-                    android:id="@+id/XTitle"
-                    android:layout_marginTop="17dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="24sp"
-                    android:text="纯音乐  "
-                    android:layout_toRightOf="@id/XLogin"
-                    android:letterSpacing="0.05"
-                    android:textColor="#fff"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:padding="3dp"
-                    android:layout_marginTop="14dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:background="@drawable/fillet_back_gray"
-                    android:text=" 音乐 "
-                    android:layout_below="@id/XTitle"
-                    android:layout_toRightOf="@id/XLogin"
-                    android:textColor="#FFFFFF" />
-
-                <TextView
-                    android:id="@+id/texttext"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="很多人在实际生活中发现，在周围有白噪声播放的情况下，容易获得放松、专注的体验，因此将白噪声用作自己的工作、睡眠的背景乐，以提高工作效率、改善睡眠质量。"
-                    android:layout_below="@id/XLogin"
-                    android:padding="17dp"
-                    android:textSize="16sp"
-                    android:lineSpacingExtra="20dp"
-                    android:textColor="#FFFFFF"
-                    android:maxLines="5" />
+                android:layout_height="290dp">
+                    <TextView
+                        android:layout_marginTop="80dp"
+                        android:id="@+id/user_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="听友：xxx 你好"
+                        android:textColor="#fff"
+                        android:textStyle="bold"
+                        android:textSize="24sp"/>
+                    <TextView
+                        android:id="@+id/text1"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="沉浸试助眠，把大自然搬到你的枕边"
+                        android:textColor="#fff"
+                        android:textSize="14sp"
+                        android:layout_below="@+id/user_name"/>
+                    <TextView
+                        android:id="@+id/text3"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="20dp"
+                        android:padding="7dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/file_background_radius_10"
+                        android:text="在周围有白噪声播放的情况下，容易获得放松、专注的体验，因此将白噪声用作自己的工作、睡眠的背景乐，以提高工作效率、改善睡眠质量。"
+                        android:textSize="14sp"
+                        android:layout_below="@+id/text1"/>
             </RelativeLayout>
-
-
-            <TextView
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#CACACA" />
-
             </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:background="@drawable/file_back_shape"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="10dp">
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tablayout_real"
                 android:layout_width="wrap_content"

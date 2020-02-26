@@ -58,7 +58,6 @@ public class ProgramAdapter extends RecyclerView.Adapter<ProgramViewHolder>{
         holder.id.setText(programBean1s.getMid());
         holder.text.setText(programBean1s.getDescription());
         holder.publish_time.setText(programBean1s.getDate());
-        holder.playNum.setText(programBean1s.getPlayNum());
         Log.d(TAG, "onBindViewHolder: -------------------"+programBean1s.getDate());
         //还差播放量，评论数,点击进入播放器
         holder.whole.setOnClickListener(new View.OnClickListener() {
@@ -116,7 +115,7 @@ public class ProgramAdapter extends RecyclerView.Adapter<ProgramViewHolder>{
 
 class ProgramViewHolder extends RecyclerView.ViewHolder{
     ImageView download;
-    TextView id,text,publish_time,playNum;
+    TextView id,text,publish_time;
     LinearLayout whole;
 
     public ProgramViewHolder(View itemView) {
@@ -125,7 +124,6 @@ class ProgramViewHolder extends RecyclerView.ViewHolder{
         id = itemView.findViewById(R.id.program_id);
         text = itemView.findViewById(R.id.program_text);
         publish_time = itemView.findViewById(R.id.program_Publish);
-        playNum  = itemView.findViewById(R.id.program_paly);
         download = itemView.findViewById(R.id.program_download);
 
     }

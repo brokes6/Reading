@@ -12,27 +12,32 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.reading.Bean.User;
 import com.example.reading.Fragment.IntroduceFragment;
 import com.example.reading.Fragment.ProgramFragment;
 import com.example.reading.R;
 import com.example.reading.ToolClass.BaseActivity;
+import com.example.reading.ToolClass.XBaseActivity;
 import com.example.reading.databinding.XiaoYouSoundBinding;
+import com.example.reading.util.FileCacheUtil;
 import com.google.android.material.appbar.AppBarLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.reading.Activity.ReadActivity.NUM_ITEMS;
+import static com.example.reading.MainApplication.getContext;
 
 /**
  * 小悠之声
  */
 public class XiaoYouSound extends BaseActivity {
-    private String[] strings = new String[]{"节目","介绍"};
+    private String[] strings = new String[]{"音乐","介绍"};
     private List<Fragment> fragmentList = new ArrayList<Fragment>();
     XiaoYouSoundBinding binding;
     AppBarLayout appBarLayout;
     int topLayoutHeight=-1;
+    private User userData;
     volatile boolean flag;
     private static final String TAG = "XiaoYouSound";
     @Override
@@ -49,6 +54,7 @@ public class XiaoYouSound extends BaseActivity {
         if (actionBar!=null){
             actionBar.hide();
         }
+        userData= FileCacheUtil.getUser(getContext());
         fragmentList.add(new ProgramFragment());
         fragmentList.add(new IntroduceFragment());
         initView();
@@ -56,7 +62,8 @@ public class XiaoYouSound extends BaseActivity {
 
     }
     public void initView(){
-
+        binding.userName.setText("听友 "+userData.getUsername()+" 你好");
+        binding.text3.getBackground().setAlpha(200);
         MyAdapter fragmentAdater = new MyAdapter(getSupportFragmentManager());
         binding.viewpager.setAdapter(fragmentAdater);
         binding.tablayoutReal.setupWithViewPager(binding.viewpager);

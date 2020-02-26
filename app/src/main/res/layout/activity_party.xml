@@ -30,6 +30,7 @@
                     app:layout_scrollFlags="scroll|snap"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingBottom="15dp"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -49,29 +50,11 @@
 
                             <ImageView
                                 android:id="@+id/Pback"
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
                                 android:src="@mipmap/back" />
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="right|center"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:src="@drawable/customerservice" />
-
-                            <ImageView
-                                android:layout_marginLeft="15dp"
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:src="@mipmap/more" />
-                        </LinearLayout>
                     </LinearLayout>
 
 
@@ -104,9 +87,9 @@
                             android:layout_marginTop="14dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             android:background="@drawable/fillet_back_gray"
-                            android:text=" 视 频 "
+                            android:text=" 视频 "
                             android:layout_below="@id/XTitle"
                             android:layout_toRightOf="@id/XLogin"
                             android:textColor="#FFFFFF" />
@@ -119,26 +102,17 @@
                             android:layout_below="@id/XLogin"
                             android:padding="17dp"
                             android:textSize="16sp"
-                            android:lineSpacingExtra="25dp"
+                            android:lineSpacingExtra="20dp"
                             android:textColor="#FFFFFF"
                             android:maxLines="5" />
                     </RelativeLayout>
 
-                    <TextView
-                        android:layout_marginTop="5dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#CACACA" />
-
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@drawable/file_back_shape"
-                    android:gravity="center"
-                    android:layout_marginTop="15dp">
+                    android:layout_height="45dp"
+                    android:background="#fff"
+                    android:gravity="center">
                         <TextView
                             android:paddingTop="5dp"
                             android:layout_width="wrap_content"
