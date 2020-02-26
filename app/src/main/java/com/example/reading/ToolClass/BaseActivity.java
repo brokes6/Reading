@@ -1,5 +1,6 @@
 package com.example.reading.ToolClass;
 
+
 import android.content.Context;
 import android.content.IntentFilter;
 import android.os.Build;
@@ -7,8 +8,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.reading.Broadcast.LoginOutBroadcastReceiver;
@@ -17,7 +16,8 @@ import com.example.reading.util.ActivityCollector;
 import com.example.reading.util.ScreenAdapterUtil;
 import com.sdx.statusbar.statusbar.StatusBarUtil;
 
-import me.jessyan.autosize.internal.CustomAdapt;
+import me.jessyan.autosize.AutoSize;
+
 
 /**
  * 创建于2019/10/30 16:35🐎
@@ -31,6 +31,8 @@ public class BaseActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         // 创建活动时，将其加入管理器中
         ActivityCollector.addActivity(this);
+        AutoSize.initCompatMultiProcess(this);
+        DisplayUtil.setCustomDensity(this, getApplication());
         if(Build.VERSION.SDK_INT>=28) {
             DisplayCutoutDemo displayCutoutDemo = new DisplayCutoutDemo(this);
             displayCutoutDemo.openFullScreenModel();
@@ -101,5 +103,7 @@ public class BaseActivity extends AppCompatActivity{
         // 销毁活动时，将其从管理器中移除
         ActivityCollector.removeActivity(this);
     }
+
+
 
 }

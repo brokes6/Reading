@@ -108,10 +108,6 @@ public class LoginActivity extends BaseActivity implements CustomAdapt {
             Logon();
         }
     };
-    /**
-     * 关于屏幕适配，需要适配的屏幕就继承CustomAdapt，然后实现两个接口就ok了
-     * 不需要的则继承CancelAdapt
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

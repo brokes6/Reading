@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.pm.ActivityInfo;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +24,7 @@ import com.example.reading.util.ActivityCollector;
 
 import java.util.Calendar;
 
+import me.jessyan.autosize.AutoSizeCompat;
 import me.jessyan.autosize.internal.CustomAdapt;
 
 public class MainActivity extends BaseActivity implements BottomNavigationBar.OnTabSelectedListener,CustomAdapt {
@@ -59,7 +61,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         /** 导航基础设置 包括按钮选中效果 导航栏背景色等 */
         bottomNavigationBar
                 .setTabSelectedListener(this)
-                .setMode(BottomNavigationBar.MODE_FIXED)
+                .setMode(BottomNavigationBar.MODE_DEFAULT)
                 /**
                  *  setMode() 内的参数有三种模式类型：
                  *  MODE_DEFAULT 自动模式：导航栏Item的个数<=3 用 MODE_FIXED 模式，否则用 MODE_SHIFTING 模式
@@ -96,7 +98,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                 bottomNavigationBar.getViewTreeObserver().removeGlobalOnLayoutListener(this);
 //                high.setHeight(bottomNavigationBar.getMeasuredHeight());
                 high.setH(bottomNavigationBar.getMeasuredHeight());
-                Log.d("测试：", bottomNavigationBar.getMeasuredHeight()+","+bottomNavigationBar.getMeasuredWidth());
             }
         });
     }
@@ -173,7 +174,13 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         }
     }
 
-
+    @Override
+    public Resources getResources() {
+        //需要升级到 v1.1.2 及以上版本才能使用 AutoSizeCompat
+        AutoSizeCompat.autoConvertDensityOfGlobal((super.getResources()));
+        AutoSizeCompat.autoConvertDensity(super.getResources(), 667, false);//如果有自定义需求就用这个方法
+        return super.getResources();
+    }
     /**
      * 设置未选中Fragment 事务
      */

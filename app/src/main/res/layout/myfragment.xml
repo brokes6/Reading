@@ -92,10 +92,10 @@
         </LinearLayout>
 
         <LinearLayout
-            android:padding="10dp"
+            android:padding="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/fillet_background"
+            android:background="@drawable/file_background_radius_10"
             android:orientation="horizontal">
             <LinearLayout
                 android:layout_width="match_parent"
@@ -194,9 +194,9 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:layout_marginLeft="5dp"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-
                     android:src="@mipmap/personalinformation" />
 
                 <TextView
@@ -215,8 +215,8 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:src="@drawable/mores" />
             </LinearLayout>
         </LinearLayout>
@@ -266,8 +266,8 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:src="@drawable/mores" />
                 </LinearLayout>
             </LinearLayout>
@@ -311,8 +311,8 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:src="@drawable/mores" />
                 </LinearLayout>
             </LinearLayout>
@@ -357,8 +357,8 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:src="@drawable/mores" />
                 </LinearLayout>
             </LinearLayout>
@@ -380,7 +380,7 @@
                 android:id="@+id/user_back"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
-                android:background="@drawable/fillet_background"
+                android:background="@drawable/file_background_radius_10"
                 android:text="退出登录"
                 android:textSize="20dp"
                 android:gravity="center"

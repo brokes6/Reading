@@ -70,6 +70,7 @@ public class CommunityFragment extends Fragment {
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+        AutoSizeConfig.getInstance().setCustomFragment(true);
         if(view==null){
         AutoSizeConfig.getInstance().setCustomFragment(true);
         view = inflater.inflate(R.layout.communityfragment, container, false);

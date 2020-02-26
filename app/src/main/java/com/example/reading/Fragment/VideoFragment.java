@@ -42,6 +42,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
+import me.jessyan.autosize.AutoSizeConfig;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
@@ -82,6 +83,7 @@ public class VideoFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        AutoSizeConfig.getInstance().setCustomFragment(true);
         binding = DataBindingUtil.inflate(inflater, R.layout.video,container,false);
         EventBus.getDefault().register(this);
         binding.loading.setStatus(LoadingLayout.Loading);

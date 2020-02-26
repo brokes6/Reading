@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import me.jessyan.autosize.AutoSizeConfig;
 import okhttp3.Call;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -50,6 +51,7 @@ public class UserBookCommentFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        AutoSizeConfig.getInstance().setCustomFragment(true);
         mView=LayoutInflater.from(getContext()).inflate(R.layout.comment_layout,container,false);
         recyclerView=mView.findViewById(R.id.recyclerView);
         initView();

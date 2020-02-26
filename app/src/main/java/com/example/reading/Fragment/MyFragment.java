@@ -56,6 +56,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Map;
+
+import me.jessyan.autosize.AutoSizeConfig;
 import me.nereo.multi_image_selector.MultiImageSelector;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 import me.jessyan.autosize.internal.CustomAdapt;
@@ -65,7 +67,7 @@ import okhttp3.Response;
 
 import static android.app.Activity.RESULT_OK;
 
-public class MyFragment extends Fragment implements CustomAdapt,View.OnClickListener {
+public class MyFragment extends Fragment implements View.OnClickListener {
     private View view;
     private User userData;
     private Bitmap bitmap ;//存放裁剪后的头像
@@ -108,6 +110,7 @@ public class MyFragment extends Fragment implements CustomAdapt,View.OnClickList
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            AutoSizeConfig.getInstance().setCustomFragment(true);
             binding = DataBindingUtil.inflate(inflater,R.layout.myfragment,container,false);
             binding.myload.setStatus(LoadingLayout.Loading);
             userData= FileCacheUtil.getUser(getContext());
@@ -399,12 +402,5 @@ public class MyFragment extends Fragment implements CustomAdapt,View.OnClickList
         },"file",file,params);
     }
     //需要改变适配尺寸的时候，在重写这两个方法
-    @Override
-    public boolean isBaseOnWidth() {
-        return false;
-    }
-    @Override
-    public float getSizeInDp() {
-        return 640;
-    }
+
 }

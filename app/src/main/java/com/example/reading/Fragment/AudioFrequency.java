@@ -55,6 +55,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import me.jessyan.autosize.AutoSizeConfig;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -194,6 +196,7 @@ public class AudioFrequency extends Fragment implements View.OnClickListener{
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        AutoSizeConfig.getInstance().setCustomFragment(true);
         binding = DataBindingUtil.inflate(inflater, R.layout.audio,container,false);
         //默认加载
         binding.loadingLayout.setStatus(LoadingLayout.Loading);

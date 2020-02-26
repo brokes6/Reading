@@ -45,9 +45,6 @@ import com.example.reading.web.StandardRequestMangaer;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
-import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
-import com.scwang.smartrefresh.layout.header.BezierRadarHeader;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.weavey.loading.lib.LoadingLayout;
@@ -62,6 +59,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
+import me.jessyan.autosize.AutoSizeConfig;
 import me.jessyan.autosize.internal.CustomAdapt;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
@@ -71,7 +69,7 @@ import wowo.kjt.library.onPageClickListener;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class HomeFragment extends Fragment implements CustomAdapt,View.OnClickListener {
+public class HomeFragment extends Fragment implements View.OnClickListener {
     HomefragmentBinding binding;
     private int phoneHeight = -1;
     String date1;
@@ -93,7 +91,6 @@ public class HomeFragment extends Fragment implements CustomAdapt,View.OnClickLi
             switch (msg.what){
                 case 200:
                     binding.loading.setStatus(LoadingLayout.Success);
-                    System.out.println("----");
                     mAdapter.notifyDataSetChanged();
                     mAdapter_seller.notifyDataSetChanged();
                     break;
@@ -119,6 +116,7 @@ public class HomeFragment extends Fragment implements CustomAdapt,View.OnClickLi
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        AutoSizeConfig.getInstance().setCustomFragment(true);
         binding = DataBindingUtil.inflate(inflater, R.layout.homefragment, container, false);
         binding.loading.setStatus(LoadingLayout.Loading);
         initView();
@@ -139,15 +137,11 @@ public class HomeFragment extends Fragment implements CustomAdapt,View.OnClickLi
         binding.refreshLayout.setDisableContentWhenRefresh(true);
         //MAdapter
         mAdapter=new MAdapter(getActivity());
-//        LinearLayoutManager im = new LinearLayoutManager(getContext());
-//        im.setOrientation(LinearLayoutManager.HORIZONTAL);
         GridLayoutManager gridLayoutManage = new GridLayoutManager(getContext(),3);
         binding.RecommendRecycleview.setLayoutManager(gridLayoutManage);
         binding.RecommendRecycleview.setAdapter(mAdapter);
         //MAdapter_seller
         mAdapter_seller = new MAdapter_seller(getActivity());
-//        LinearLayoutManager im2 = new LinearLayoutManager(getContext());
-//        im2.setOrientation(LinearLayoutManager.HORIZONTAL);
         GridLayoutManager gridLayoutManage2 = new GridLayoutManager(getContext(),3);
         binding.BestSellerRecycleview.setLayoutManager(gridLayoutManage2);
         binding.BestSellerRecycleview.setAdapter(mAdapter_seller);
@@ -370,13 +364,5 @@ public class HomeFragment extends Fragment implements CustomAdapt,View.OnClickLi
         });
     }
 
-    //需要改变适配尺寸的时候，在重写这两个方法
-    @Override
-    public boolean isBaseOnWidth() {
-        return false;
-    }
-    @Override
-    public float getSizeInDp() {
-        return 640;
-    }
+
 }
