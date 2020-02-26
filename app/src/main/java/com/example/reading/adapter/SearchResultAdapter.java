@@ -63,11 +63,11 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
                     if (result.getType().equals("BOOK")){
                         intent=new Intent(mcontext, ReadActivity.class);
                         intent.putExtra("id",String.valueOf(result.getId()));
-                        Log.d(TAG, "onClick: ---------------------------------"+result.getId());
                         mcontext.startActivity(intent);
                     }else if(result.getType().equals("POST")){
                         holder.resultType.setText("帖子");
                         intent=new Intent(mcontext, PostDetails.class);
+                        intent.putExtra("postId",result.getId());
                         mcontext.startActivity(intent);
                     }else {
                         holder.resultType.setText("用户");

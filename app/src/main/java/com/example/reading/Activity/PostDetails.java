@@ -256,6 +256,7 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
             actionbar.hide();
         }
         postId = getPostId();
+        Log.d(TAG, "onCreate: -----------------123"+getPostId());
         initView();
         click();
         initDetailsLayout();
@@ -354,7 +355,7 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
         }
         return super.onOptionsItemSelected(item);
     }
-    //重写onClick方法
+
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.detail_page_do_comment){
@@ -474,8 +475,7 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
             @Override
             protected void onEror(Call call, int statusCode) {
                 Log.i(TAG, "OnRequestBefore: 正在加载");
-                loadTextView.setText("网络好像不太好喔，请检查网络后重试");
-                loadButton.setVisibility(View.VISIBLE);
+                loadingLayout.setStatus(LoadingLayout.Error);
             }
 
             @Override

@@ -194,6 +194,7 @@ public class ReadActivity extends BaseActivity {
                 List<BookComment>comments=bookDetailsBean.getCommentVo().getComments();
                 if (comments==null||comments.size()==0){
                     //1
+                    binding.loading.setStatus(LoadingLayout.Success);
                     Log.i(TAG, "handlerComments:暂时没有更多评论");
                     return;
                 }
@@ -258,6 +259,7 @@ public class ReadActivity extends BaseActivity {
 
                     @Override
                     protected void onEror(Call call, int statusCode) {
+                        binding.loading.setStatus(LoadingLayout.Error);
                         Toast.makeText(ReadActivity.this, "请检查网络后重试", Toast.LENGTH_SHORT).show();
 
                     }
