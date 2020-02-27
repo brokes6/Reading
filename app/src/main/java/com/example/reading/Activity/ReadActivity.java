@@ -45,6 +45,7 @@ import com.example.reading.web.BaseCallBack;
 import com.example.reading.web.StandardRequestMangaer;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.weavey.loading.lib.LoadingLayout;
 
 import java.util.ArrayList;
@@ -104,6 +105,10 @@ public class ReadActivity extends BaseActivity {
     }
 
     public void initView(){
+        binding.refreshLayout.setEnableRefresh(false);
+        //设置 Footer 为 经典样式
+        binding.refreshLayout.setRefreshFooter(new ClassicsFooter(getContext()));
+
         MyAdapter fragmentAdater = new  MyAdapter(getSupportFragmentManager());
         binding.viewpager.setAdapter(fragmentAdater);
         binding.tabMode.setupWithViewPager(binding.viewpager);
@@ -195,6 +200,7 @@ public class ReadActivity extends BaseActivity {
                 if (comments==null||comments.size()==0){
                     //1
                     binding.loading.setStatus(LoadingLayout.Success);
+
                     Log.i(TAG, "handlerComments:暂时没有更多评论");
                     return;
                 }
@@ -259,7 +265,7 @@ public class ReadActivity extends BaseActivity {
 
                     @Override
                     protected void onEror(Call call, int statusCode) {
-                        binding.loading.setStatus(LoadingLayout.Error);
+                        binding.loading.setStatus(LoadingLayout.No_Network);
                         Toast.makeText(ReadActivity.this, "请检查网络后重试", Toast.LENGTH_SHORT).show();
 
                     }

@@ -24,6 +24,23 @@
 <!--                    android:layout_height="18dp"-->
 <!--                    android:src="@drawable/back"/>-->
 <!--        </LinearLayout>-->
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/refreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/main_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabMode"
             android:layout_marginLeft="15dp"
@@ -32,8 +49,7 @@
             app:tabIndicatorColor="#FF5722"
             app:tabSelectedTextColor="#000000"
             app:tabTextColor="#A3A3A3"
-            app:tabIndicatorFullWidth="false"
-            />
+            app:tabIndicatorFullWidth="false" />
         <com.example.reading.view.AutoFitViewPager
             android:id="@+id/viewpager"
             android:layout_width="match_parent"
@@ -54,6 +70,7 @@
                 android:layout_marginTop="15dp"
                 android:background="@drawable/fillet_background"
                 android:orientation="vertical">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -77,6 +94,12 @@
                         android:listSelector="@android:color/transparent"
                         android:scrollbars="none" />
             </LinearLayout>
+            </LinearLayout>
+        </com.weavey.loading.lib.LoadingLayout>
+        </LinearLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </androidx.core.widget.NestedScrollView>
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
         <LinearLayout
             android:layout_gravity="bottom"
             android:layout_width="match_parent"
@@ -144,22 +167,20 @@
                 android:id="@+id/comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
-                    <ImageView
-                        android:id="@+id/comment_picture"
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:src="@drawable/comment_white"/>
-                    <TextView
-                        android:id="@+id/commentStr"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="#9A9A9A"
-                        android:textSize="14sp"
-                        android:layout_marginLeft="10dp"
-                        android:text="0"/>
+                <ImageView
+                    android:id="@+id/comment_picture"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/comment_white"/>
+                <TextView
+                    android:id="@+id/commentStr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#9A9A9A"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="10dp"
+                    android:text="0"/>
             </LinearLayout>
         </LinearLayout>
-            </LinearLayout>
-        </com.weavey.loading.lib.LoadingLayout>
     </LinearLayout>
 </layout>
