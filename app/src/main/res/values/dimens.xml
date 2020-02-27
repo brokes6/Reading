@@ -3,6 +3,9 @@
 
     <dimen name="action_bar_default_height">48dp</dimen>
     <dimen name="afc_1dp">1dp</dimen>
+    <dimen name="afc_2dp">2dp</dimen>
+    <dimen name="afc_3dp">3dp</dimen>
+    <dimen name="afc_4dp">4dp</dimen>
     <dimen name="afc_5dp">5dp</dimen>
     <dimen name="afc_10dp">10dp</dimen>
     <dimen name="afc_12dp">12dp</dimen>

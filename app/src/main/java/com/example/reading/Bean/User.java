@@ -20,5 +20,8 @@ public class User implements Serializable {
     private String password;
     private String uimg;
     private String token;
+    private String phone_number;
+    private String email;
+    private String str;
 
 }

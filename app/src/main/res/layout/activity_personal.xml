@@ -45,14 +45,80 @@
                     android:id="@+id/pusername"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="40dp"
+                    android:layout_marginTop="@dimen/afc_25dp"
                     android:gravity="center"
                     android:text="名称"
                     android:textColor="#303030"
                     android:textSize="20sp" />
-
+                //开始
+                <LinearLayout
+                    android:id="@+id/phone_number"
+                    android:layout_marginTop="@dimen/afc_15dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="7"
+                        android:orientation="horizontal"
+                        android:gravity="left|center">
+                        <TextView
+                            android:id="@+id/number"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="手机号为:"
+                            android:textSize="15sp"
+                            android:textColor="#6B6B6B"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:gravity="center|right">
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/mores"/>
+                    </LinearLayout>
+                </LinearLayout>
+                //结束
+                //开始
+                <LinearLayout
+                    android:id="@+id/email"
+                    android:layout_marginTop="@dimen/afc_15dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="7"
+                        android:orientation="horizontal"
+                        android:gravity="left|center">
+                        <TextView
+                            android:id="@+id/email_number"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="邮箱为:"
+                            android:textSize="15sp"
+                            android:textColor="#6B6B6B"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:gravity="center|right">
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/mores"/>
+                    </LinearLayout>
+                </LinearLayout>
+                //结束
             </LinearLayout>
-
             <com.example.reading.util.RoundImageView
                 android:id="@+id/puserimg"
                 android:layout_width="110dp"

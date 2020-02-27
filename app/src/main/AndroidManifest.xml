@@ -20,16 +20,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.UserCommentActivity"/>
-        <activity android:name=".Activity.History"></activity>
+        <activity android:name=".Activity.ChangeName"></activity>
+        <activity android:name=".Activity.Changing_Mailbox" />
+        <activity android:name=".Activity.ChangePhoneNumber" />
+        <activity android:name=".Activity.UserCommentActivity" />
+        <activity android:name=".Activity.History" />
         <activity android:name=".Activity.UserFeedBack" />
         <activity android:name=".Activity.SearchActivity" />
         <activity android:name=".Activity.ShowImageActivity" />
         <activity android:name=".Activity.PostDetails" />
-        <activity android:name=".Activity.Personal"/>
-        <activity android:name=".Activity.AboutMe"/>
-        <activity android:name=".Activity.addPost">
-        </activity>
+        <activity android:name=".Activity.Personal" />
+        <activity android:name=".Activity.AboutMe" />
+        <activity android:name=".Activity.addPost" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.cameraalbumtest.fileprovider"
@@ -39,6 +42,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
         <activity
             android:name=".Activity.Party"
             android:configChanges="orientation|screenSize|keyboardHidden"
