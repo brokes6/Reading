@@ -256,7 +256,6 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
             actionbar.hide();
         }
         postId = getPostId();
-        Log.d(TAG, "onCreate: -----------------123"+getPostId());
         initView();
         click();
         initDetailsLayout();

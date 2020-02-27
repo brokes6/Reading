@@ -716,8 +716,6 @@ public class addPost extends BaseActivity implements View.OnClickListener {
         Map<String,String> map=UserUtil.createUserMap();
         map.put("content",content);
         map.put("imgurl",imgurl);
-        Log.i(TAG, "uploadPost: content="+content);
-        Log.i(TAG, "uploadPost: imgurl="+imgurl);
         StandardRequestMangaer.getInstance()
                 .post(RequestUrl.ADD_POST, new BaseCallBack<String>(){
                     @Override

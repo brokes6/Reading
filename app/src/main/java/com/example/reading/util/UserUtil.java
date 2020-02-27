@@ -5,17 +5,20 @@ import com.example.reading.Bean.User;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.example.reading.MainApplication.getContext;
+
 public class UserUtil {
+    private static User userData = FileCacheUtil.getUser(getContext());
     public static Map<String,String> createUserMap(){
         Map<String,String> map=new HashMap<>();
-        map.put("token","OKYPyuQ2adPOIE5EFFlKQEz7nH0KG%2F6TRNMge9uu7Ew%3D");
+        map.put("token",userData.getToken());
         return map;
     }
 
     public static User getUserInfo(){
         User user=new User();
-        user.setUsername("汤姆猫");
-        user.setUimg("http://117.48.205.198/xiaoyoudushu_resource/post_img/19eb36788041414490a8e8bf75fa33db.jpg");
+        user.setUsername(userData.getUsername());
+        user.setUimg(userData.getUimg());
         return user;
     }
 }
