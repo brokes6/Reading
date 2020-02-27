@@ -128,7 +128,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private void initView() {
         urlList = new ArrayList<>();
-        //向下刷新
         binding.scroll.setVerticalScrollBarEnabled(false);
         //设置 Header式
         binding.refreshLayout.setRefreshHeader(new ClassicsHeader(getContext()));
