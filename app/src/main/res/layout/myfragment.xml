@@ -23,8 +23,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#F3F3F3">
+                android:layout_height="match_parent">
 
                 <LinearLayout
                     android:layout_alignParentTop="true"
@@ -73,6 +72,7 @@
                     android:layout_marginBottom="15dp"
                     android:layout_marginLeft="15dp"
                     android:src="@mipmap/userimg"
+                    android:scaleType="fitXY"
                     app:type="circle" />
 
                 <TextView
@@ -92,6 +92,8 @@
         </LinearLayout>
 
         <LinearLayout
+            android:layout_marginLeft="@dimen/afc_10dp"
+            android:layout_marginRight="@dimen/afc_10dp"
             android:padding="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -179,11 +181,13 @@
 
         <LinearLayout
             android:id="@+id/personal"
+            android:layout_marginLeft="@dimen/afc_10dp"
+            android:layout_marginRight="@dimen/afc_10dp"
             android:layout_marginTop="10dp"
             android:padding="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#fff"
+            android:background="@drawable/file_background_radius_10"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -223,10 +227,12 @@
 
         <LinearLayout
             android:layout_marginTop="10dp"
+            android:layout_marginLeft="@dimen/afc_10dp"
+            android:layout_marginRight="@dimen/afc_10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="#fff"
+            android:background="@drawable/file_background_radius_10"
             android:padding="10dp">
 
             <LinearLayout
@@ -370,8 +376,11 @@
             android:background="#F3F3F3" />
 
         <LinearLayout
+            android:layout_marginLeft="@dimen/afc_10dp"
+            android:layout_marginRight="@dimen/afc_10dp"
             android:id="@+id/back"
-            android:padding="5dp"
+            android:paddingTop="@dimen/afc_5dp"
+            android:paddingBottom="@dimen/afc_5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">

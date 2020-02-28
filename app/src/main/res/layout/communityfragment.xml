@@ -43,7 +43,8 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@mipmap/readingbooklogin"/>
+                    android:src="@mipmap/readingbooklogin"
+                    android:scaleType="fitXY"/>
 
                 <TextView
                         android:layout_marginRight="5dp"

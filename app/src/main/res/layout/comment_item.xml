@@ -15,6 +15,7 @@
                     android:layout_width="45dp"
                     android:layout_height="45dp"
                     android:src="@mipmap/bt"
+                    android:scaleType="fitXY"
                     app:type="circle"/>
                 <TextView
                     android:id="@+id/com_username"
