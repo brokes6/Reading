@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.reading.Bean.VideoDetails;
+import com.example.reading.MainApplication;
 import com.example.reading.R;
 import com.squareup.picasso.Picasso;
 
@@ -20,6 +21,7 @@ import java.util.List;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 
 import static android.content.ContentValues.TAG;
+import static com.example.reading.MainApplication.getContext;
 
 public class VideoAdapter extends RecyclerView.Adapter<VideoAdapterHolder>{
     private LayoutInflater inflater;
@@ -52,7 +54,8 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapterHolder>{
         final VideoDetails videoDetails2 = videoDetails.get(position);
         Log.i(TAG, "Video_item_testHolder: " + videoDetails2.getTid());
         holder.vdescription.setText("介绍: "+videoDetails2.getDescription());
-        holder.jcVideoPlayerStandard.setUp(videoDetails2.getRurl(),JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL,videoDetails2.getTitle());
+        String proxyUrl = MainApplication.getProxy(getContext()).getProxyUrl(videoDetails2.getRurl());
+        holder.jcVideoPlayerStandard.setUp(proxyUrl,JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL,videoDetails2.getTitle());
         Log.d(TAG, "Video_item_testHolder: -------------------"+videoDetails2.getRurl());
         if (TextUtils.isEmpty(videoDetails2.getImg())){
             //空时

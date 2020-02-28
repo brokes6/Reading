@@ -146,7 +146,7 @@ public class AudioFrequency extends Fragment implements View.OnClickListener{
                     break;
                 case RequestStatus.VIDEO:
                     binding.loadingLayout.setStatus(LoadingLayout.Empty);
-                    EventBus.getDefault().post(bookDetailsBean.getVideo());
+                    EventBus.getDefault().post(new Video(bookDetailsBean.getVideo().getUrl(),bookDetailsBean.getVideo().getImg(),0));
                     PostHitoryUtil.saveSearchHistory(String.valueOf(bid),getActivity());
                     break;
                 case RequestStatus.AUDIO_AND_VIDEO:
@@ -154,7 +154,7 @@ public class AudioFrequency extends Fragment implements View.OnClickListener{
                     binding.BookName.setText(bookDetailsBean.getBname());
                     binding.author.setText(bookDetailsBean.getAuthor());
                     binding.authorBookimg.setImageURL(bookDetailsBean.getBimg());
-                    EventBus.getDefault().post(bookDetailsBean.getVideo());
+                    EventBus.getDefault().post(new Video(bookDetailsBean.getVideo().getUrl(),bookDetailsBean.getVideo().getImg(),0));
                     Thread thread1 = new Thread(new Runnable() {
                         @Override
                         public void run() {

@@ -4,12 +4,11 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
+import com.danikula.videocache.HttpProxyCacheServer;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-
-import cn.jpush.android.api.JPushInterface;
 
 
 /**
@@ -19,6 +18,7 @@ import cn.jpush.android.api.JPushInterface;
  */
 public class MainApplication extends Application {
     private static final String TAG = "MainApplication";
+    private HttpProxyCacheServer proxy;
     private static Context context;
     @Override
     public void onCreate() {
@@ -42,5 +42,13 @@ public class MainApplication extends Application {
                 .writeDebugLogs()                                       // 打印debug log
                 .build();
         ImageLoader.getInstance().init(config);
+    }
+    public static HttpProxyCacheServer getProxy(Context context){
+        MainApplication app = (MainApplication) context.getApplicationContext();
+        return app.proxy == null ? (app.proxy = app.newProxy()) : app.proxy;
+    }
+
+    private HttpProxyCacheServer newProxy(){
+        return new HttpProxyCacheServer(this);
     }
 }

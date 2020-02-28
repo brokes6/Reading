@@ -120,7 +120,7 @@
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@mipmap/forward" />
+                        android:src="@mipmap/record_of_praise" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -128,7 +128,7 @@
                         android:layout_marginTop="5dp"
                         android:textColor="#474747"
                         android:textSize="11sp"
-                        android:text="转发记录" />
+                        android:text="点赞记录" />
                 </LinearLayout>
 
                 <LinearLayout
