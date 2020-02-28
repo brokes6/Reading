@@ -158,7 +158,7 @@
             android:id="@+id/collection"
             android:layout_width="22dp"
             android:layout_height="22dp"
-            android:src="@drawable/shocang_text"
+            android:src="@mipmap/forward"
             android:layout_marginLeft="20dp" />
         <TextView
             android:id="@+id/collectionStr"
@@ -168,7 +168,7 @@
             android:textSize="14sp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="14dp"
-            android:text="未收藏"/>
+            android:text="转发"/>
     </LinearLayout>
         <LinearLayout
             android:layout_marginRight="10dp"

@@ -117,47 +117,9 @@
                 android:layout_marginRight="22dp"
                 android:gravity="center_vertical"
                 android:paddingLeft="18dp"/>
-            <LinearLayout
-                android:id="@+id/loveLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:id="@+id/loveNum"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:src="@drawable/thumbs_up_white"/>
-                <TextView
-                    android:id="@+id/loveNumStr"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#9A9A9A"
-                    android:textSize="14sp"
-                    android:layout_marginLeft="10dp"
-                    android:text="0"/>
-            </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/collectionLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:id="@+id/collection"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:src="@drawable/shocang_text"
-                    android:layout_marginLeft="20dp" />
-                <TextView
-                    android:id="@+id/collectionStr"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#9A9A9A"
-                    android:textSize="14sp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="14dp"
-                    android:text="未收藏"/>
-            </LinearLayout>
-
-            <LinearLayout
+                android:layout_marginLeft="@dimen/afc_10dp"
                 android:layout_marginRight="10dp"
                 android:id="@+id/comment"
                 android:layout_width="wrap_content"

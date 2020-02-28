@@ -108,8 +108,20 @@
                     android:id="@+id/user_instructions"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="同意用户须知"
-                    android:textColor="#000000" />
+                    android:text="同意"
+                    android:textColor="#474747" />
+                <TextView
+                    android:id="@+id/user_agreement"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="用户须知，"
+                    android:textColor="#000000"/>
+                <TextView
+                    android:id="@+id/privacypoiicy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="隐私政策"
+                    android:textColor="#000000"/>
             </LinearLayout>
     </LinearLayout>
 </layout>

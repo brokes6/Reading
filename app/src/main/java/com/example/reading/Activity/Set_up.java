@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,10 +20,11 @@ import androidx.databinding.DataBindingUtil;
 
 import com.example.reading.R;
 import com.example.reading.ToolClass.BaseActivity;
+import com.example.reading.ToolClass.DataCleanManager;
 import com.example.reading.databinding.SetUpBinding;
 
 
-public class Set_up extends BaseActivity {
+public class Set_up extends BaseActivity implements View.OnClickListener{
         SetUpBinding binding;
         private String cacheSize;
         private static final String TAG = "Set_up";
@@ -47,68 +49,38 @@ public class Set_up extends BaseActivity {
                 finish();
             }
         });
-//        binding.userBack.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(Set_up.this,"已退出",Toast.LENGTH_SHORT).show();
-//                SharedPreferences sharedPreferences= getSharedPreferences("data", Context.MODE_PRIVATE);
-//                SharedPreferences.Editor editor = sharedPreferences.edit();
-//                editor.remove("key");
-//                editor.commit();
-//                Log.d(TAG, "---SharedPreferences的key已清除---");
-//                Intent intent = new Intent("com.gesoft.admin.loginout");
-//                sendBroadcast(intent);
-//            }
-//        });
         initView();
         setDate();
     }
     private void initView(){
-
+            binding.clear.setOnClickListener(this);
+            binding.help.setOnClickListener(this);
+            binding.userAgreement.setOnClickListener(this);
+            binding.privacy.setOnClickListener(this);
     }
     private void setDate(){
+    }
 
-        binding.messageTishi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(Set_up.this,Error.class);
-                startActivity(intent);
-            }
-        });
-        binding.imageModel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(Set_up.this, Error.class);
-                startActivity(intent);
-            }
-        });
-        binding.clear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(Set_up.this,Error.class);
-                startActivity(intent);
-            }
-        });
-        binding.help.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(Set_up.this,Error.class);
-                startActivity(intent);
-            }
-        });
-        binding.userAgreement.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(Set_up.this,Error.class);
-                startActivity(intent);
-            }
-        });
-        binding.privacy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(Set_up.this,Error.class);
-                startActivity(intent);
-            }
-        });
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.clear:
+                DataCleanManager.clearAllCache(Set_up.this);
+                Toast.makeText(Set_up.this,"已清除",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.help:
+                Intent intent1=new Intent(Set_up.this, UserFeedBack.class);
+                startActivity(intent1);
+                break;
+            case  R.id.user_agreement:
+                Intent intent2=new Intent(Set_up.this, UserAgreement.class);
+                startActivity(intent2);
+                break;
+            case R.id.privacy:
+                Intent intent3=new Intent(Set_up.this, PrivacyPolicy.class);
+                startActivity(intent3);
+                break;
+
+        }
     }
 }

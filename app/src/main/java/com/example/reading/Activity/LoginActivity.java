@@ -216,6 +216,20 @@ public class LoginActivity extends BaseActivity implements CustomAdapt {
                 }
             }
         });
+        binding.userAgreement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this,UserAgreement.class);
+                startActivity(intent);
+            }
+        });
+        binding.privacypoiicy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this,PrivacyPolicy.class);
+                startActivity(intent);
+            }
+        });
     }
     private void initData(){
     }

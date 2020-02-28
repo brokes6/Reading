@@ -41,89 +41,8 @@
             android:background="#E7E6E6"
             android:layout_width="match_parent"
             android:layout_height="8dp" />
-        //部分1
 
-        <LinearLayout
-            android:id="@+id/message_tishi"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/border_bottom">
 
-            <LinearLayout
-                android:layout_weight="1"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_width="0dp"
-                android:layout_height="55dp">
-
-                <TextView
-                    android:paddingLeft="20dp"
-                    android:text="消息提示"
-                    android:textSize="17sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical">
-
-                <ImageView
-                    android:paddingRight="10dp"
-                    android:layout_gravity="right|center_vertical"
-                    android:src="@drawable/inside"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp" />
-            </LinearLayout>
-        </LinearLayout>
-        //部分2
-
-        <LinearLayout
-            android:id="@+id/image_model"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/border_bottom">
-
-            <LinearLayout
-                android:layout_weight="1"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_width="0dp"
-                android:layout_height="55dp">
-
-                <TextView
-                    android:paddingLeft="20dp"
-                    android:text="图片模式"
-                    android:textSize="17sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical">
-
-                <ImageView
-                    android:paddingRight="10dp"
-                    android:layout_gravity="right|center_vertical"
-                    android:src="@drawable/inside"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <TextView
-            android:background="#E7E6E6"
-            android:layout_width="match_parent"
-            android:layout_height="8dp" />
         //部分3
 
         <LinearLayout

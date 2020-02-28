@@ -118,7 +118,7 @@
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@drawable/collections" />
+                        android:src="@mipmap/forward" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -126,7 +126,7 @@
                         android:layout_marginTop="5dp"
                         android:textColor="#474747"
                         android:textSize="11sp"
-                        android:text="收藏" />
+                        android:text="转发记录" />
                 </LinearLayout>
 
                 <LinearLayout

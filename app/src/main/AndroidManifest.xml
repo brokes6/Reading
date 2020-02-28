@@ -20,6 +20,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".Activity.PrivacyPolicy"></activity>
+        <activity android:name=".Activity.UserAgreement" />
         <activity android:name=".Activity.Changing_Mailbox" />
         <activity android:name=".Activity.ChangePhoneNumber" />
         <activity android:name=".Activity.UserCommentActivity" />
