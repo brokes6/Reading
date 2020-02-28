@@ -91,6 +91,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static com.example.reading.MainApplication.getContext;
 import static com.scwang.smartrefresh.layout.internal.InternalClassics.ID_IMAGE_PROGRESS;
 import static com.scwang.smartrefresh.layout.internal.InternalClassics.ID_TEXT_TITLE;
 
@@ -125,6 +126,7 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
     private int position;
     private int currentPage=1;
     private int total=-1;
+    private User userData;
     private int mode=RequestUrl.NEW;
     LoadingLayout loadingLayout;
     private List<String> spinnerData = new LinkedList<>(Arrays.asList("时间排序", "点赞排序"));
@@ -247,6 +249,7 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setContentView(R.layout.post_details);
+        userData= FileCacheUtil.getUser(getContext());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             //修改为深色，因为我们把状态栏的背景色修改为主题色白色，默认的文字及图标颜色为白色，导致看不到了。
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
@@ -527,7 +530,7 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
                     protected void onSuccess(Call call, Response response, String s) {
                         loadingLayout.setStatus(LoadingLayout.Success);
                         Toast.makeText(PostDetails.this, s, Toast.LENGTH_SHORT).show();
-                        adapter.addTheCommentData(new PostComment("刚刚",content,"测试","http://image.biaobaiju.com/uploads/20180803/23/1533308847-sJINRfclxg.jpeg",Integer.valueOf(s)));
+                        adapter.addTheCommentData(new PostComment("刚刚",content,userData.getUsername(),userData.getUimg(),Integer.valueOf(s)));
                         commentStr.setText(String.valueOf(Integer.valueOf(commentStr.getText().toString())+1));
                     }
 

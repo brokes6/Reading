@@ -162,6 +162,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         binding.party.setOnClickListener(this);
         binding.history.setOnClickListener(this);
         binding.addBox.setOnClickListener(this);
+        binding.book.setOnClickListener(this);
     }
     public void initBanner(){
         binding.galleryBanner
@@ -189,6 +190,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 Intent intent1=new Intent(getContext(), UserFeedBack.class);
                 startActivity(intent1);
                 break;
+            case R.id.book:
             case R.id.BestSseller_AllBook:
             case R.id.AllBook:
                 Intent intent2 = new Intent(getContext(), AllBooks.class);

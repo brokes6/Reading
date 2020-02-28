@@ -1,6 +1,7 @@
 package com.example.reading.Fragment;
 
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.hardware.SensorManager;
 import android.os.Bundle;
@@ -147,6 +148,17 @@ public class VideoFragment extends Fragment {
         });
     }
 
+//    @Override
+//    public void onConfigurationChanged(Configuration newConfig) {
+//        if (binding.playerListVideo !=null) {
+//            if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+//                JCVideoPlayerStandard.hideSupportActionBar(getContext());
+//            }else{
+//                JCVideoPlayerStandard.showSupportActionBar(getContext());
+//            }
+//        }
+//        super.onConfigurationChanged(newConfig);
+//    }
 
     /**
      *2019/10/16

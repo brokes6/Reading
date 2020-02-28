@@ -91,7 +91,6 @@ public class Personal extends BaseActivity implements View.OnClickListener {
         binding.phoneNumber.setOnClickListener(this);
         binding.email.setOnClickListener(this);
         binding.puserimg.setOnClickListener(this);
-        binding.pusername.setOnClickListener(this);
     }
     private void initData(){
         binding.puserimg.setImageURL(userData.getUimg());
@@ -125,10 +124,6 @@ public class Personal extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.puserimg:
                 showTypeDialog();
-                break;
-            case R.id.pusername:
-                intent = new Intent(getContext(), ChangeName.class);
-                startActivity(intent);
                 break;
         }
     }
@@ -334,7 +329,6 @@ public class Personal extends BaseActivity implements View.OnClickListener {
     private void adduserimg(String s){
         Map<String,String> params= UserUtil.createUserMap();
         File file=new File(s);
-        Log.d(TAG, "adduserimg: ---------"+file);
         StandardRequestMangaer.getInstance().postImage(RequestUrl.ADD_USER_IMG, new BaseCallBack<String>() {
             @Override
             protected void OnRequestBefore(Request request) { }
@@ -345,6 +339,7 @@ public class Personal extends BaseActivity implements View.OnClickListener {
             @Override
             protected void onSuccess(Call call, Response response, String s) {
                 Log.i(TAG, "onSuccess: 图片路径:"+s);
+                updateUserInfo();
                 userData.setUimg(s);
                 FileCacheUtil.updateUser(userData, getContext());
                 binding.loading.setStatus(LoadingLayout.Success);
@@ -361,6 +356,44 @@ public class Personal extends BaseActivity implements View.OnClickListener {
             @Override
             protected void inProgress(int progress, long total, int id) { }
         },"file",file,params);
+    }
+    private void updateUserInfo(){
+        Map<String,String> params= UserUtil.createUserMap();
+        params.put("username",userData.getUsername());
+        params.put("uimg",userData.getUimg());
+        StandardRequestMangaer.getInstance().post(RequestUrl.CHANGE_USER_INFORMATION,new BaseCallBack<String>(){
+
+            @Override
+            protected void OnRequestBefore(Request request) {
+
+            }
+
+            @Override
+            protected void onFailure(Call call) {
+
+            }
+
+            @Override
+            protected void onSuccess(Call call, Response response, String s) {
+                Toast.makeText(getContext(),"头像上传成功!",Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            protected void onResponse(Response response) {
+
+            }
+
+            @Override
+            protected void onEror(Call call, int statusCode) {
+
+            }
+
+            @Override
+            protected void inProgress(int progress, long total, int id) {
+
+            }
+        },params);
     }
     @Override
     public void onBackPressed() {

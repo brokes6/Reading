@@ -52,9 +52,11 @@
             android:maxLines="4"
             android:textColor="#303030"/>
         <TextView
+            android:padding="@dimen/afc_5dp"
             android:layout_marginTop="@dimen/afc_20dp"
             android:layout_below="@id/content"
             android:id="@+id/postContent"
+            android:background="@drawable/fillet_background_half"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left|center"

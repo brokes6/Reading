@@ -36,5 +36,6 @@ public class RequestUrl {
     public static final int NEW=100;
     public static final String FIND_ROTATION="http://117.48.205.198/xiaoyoudushu/findSpecialPicturesByType";
     public static final String ADD_USER_IMG="http://117.48.205.198/xiaoyoudushu/uploadImg";
+    public static final String CHANGE_USER_INFORMATION="http://117.48.205.198/xiaoyoudushu/updateUserInfo?";
     public static final int POPULAR=200;
 }

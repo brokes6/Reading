@@ -1,5 +1,6 @@
 package com.example.reading.Activity;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.databinding.DataBindingUtil;
@@ -16,6 +17,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -29,7 +31,10 @@ import android.widget.Toast;
 
 import com.example.reading.Bean.BookComment;
 import com.example.reading.Bean.BookCommentVo;
+import com.example.reading.Bean.BookDetails;
+import com.example.reading.Bean.BookDetailsComment;
 import com.example.reading.Bean.PostComment;
+import com.example.reading.Bean.PostCommentVo;
 import com.example.reading.Bean.User;
 import com.example.reading.Fragment.AudioFrequency;
 import com.example.reading.Fragment.VideoFragment;
@@ -40,13 +45,22 @@ import com.example.reading.adapter.BookCommentAdapter;
 import com.example.reading.constant.RequestUrl;
 import com.example.reading.databinding.ReadbookBinding;
 import com.example.reading.util.FileCacheUtil;
+import com.example.reading.util.RequestStatus;
 import com.example.reading.util.UserUtil;
 import com.example.reading.web.BaseCallBack;
 import com.example.reading.web.StandardRequestMangaer;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.weavey.loading.lib.LoadingLayout;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,6 +93,8 @@ public class ReadActivity extends BaseActivity {
     private BookCommentAdapter bookCommentAdapter;
     private BottomSheetDialog dialog;
     private Handler handler=new Handler(Looper.getMainLooper());
+    private int Page = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,13 +117,23 @@ public class ReadActivity extends BaseActivity {
         initView();
         initData();
         initExpandableListView();
-
+        handlerComments(Page);
     }
 
     public void initView(){
         binding.refreshLayout.setEnableRefresh(false);
         //设置 Footer 为 经典样式
         binding.refreshLayout.setRefreshFooter(new ClassicsFooter(getContext()));
+        binding.refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+                Page++;
+                handlerComments(Page);
+                bookCommentAdapter.notifyDataSetChanged();
+                binding.refreshLayout.finishLoadMore(true);//加载完成
+                Log.d(TAG, "onLoadMore: 添加更多完成");
+            }
+        });
 
         MyAdapter fragmentAdater = new  MyAdapter(getSupportFragmentManager());
         binding.viewpager.setAdapter(fragmentAdater);
@@ -191,90 +217,52 @@ public class ReadActivity extends BaseActivity {
         super.onConfigurationChanged(newConfig);
     }
 
-    public void handlerComments(BookDetailsBean bookDetailsBean){
-        handler.post(new Runnable() {
+    public void handlerComments(int page){
+        Map<String,String> params=UserUtil.createUserMap();
+        params.put("bid", getDataId());
+        params.put("currentPage",String.valueOf(page));
+        StandardRequestMangaer.getInstance().get(RequestUrl.FIND_BOOK_NEW_COMMENT,new BaseCallBack<BookDetailsComment>(){
             @Override
-            public void run() {
-                handlerBookInfo(bookDetailsBean);
-                List<BookComment>comments=bookDetailsBean.getCommentVo().getComments();
-                if (comments==null||comments.size()==0){
-                    //1
-                    binding.loading.setStatus(LoadingLayout.Success);
+            protected void OnRequestBefore(Request request) {
 
-                    Log.i(TAG, "handlerComments:暂时没有更多评论");
-                    return;
-                }
-                bookComments.addAll(comments);
-                bookCommentAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            protected void onFailure(Call call) {
+                Toast.makeText(ReadActivity.this,"暂无评论",Toast.LENGTH_SHORT).show();
                 binding.loading.setStatus(LoadingLayout.Success);
             }
-        });
-    }
-    public void handlerBookInfo(BookDetailsBean bookDetailsBean){
-        binding.loveNumStr.setText(String.valueOf(bookDetailsBean.getLoveNum()));
-        binding.commentStr.setText(String.valueOf(bookDetailsBean.getCommentNum()));
-        bid=bookDetailsBean.getBid();
-        loveStatus=bookDetailsBean.getLoveStatus();
-        if(loveStatus==1){
-            binding.loveNum.setImageDrawable(getResources().getDrawable(R.mipmap.thumbs_up_wanc));
-        }else{
-            binding.loveNum.setImageDrawable(getResources().getDrawable(R.mipmap.thumbs_up_black));
-        }
-        binding.loveNum.setOnClickListener(new View.OnClickListener() {
+
             @Override
-            public void onClick(View v) {
-                if (loveStatus==1){
-                    binding.loveNum.setImageDrawable(getResources().getDrawable(R.mipmap.thumbs_up_black));
-                    loveStatus=0;
-                    binding.loveNumStr.setText(String.valueOf(Integer.valueOf(binding.loveNumStr.getText().toString())-1));
+            protected void onSuccess(Call call, Response response, BookDetailsComment bookDetailsComment) {
+                List<BookComment>comments = bookDetailsComment.getComments();
+                if (comments==null||comments.size()==0){
+                    binding.loading.setStatus(LoadingLayout.Success);
+                    Log.i(TAG, "handlerComments:暂时没有更多评论");
+                    return;
                 }else{
-                    binding.loveNum.setImageDrawable(getResources().getDrawable(R.mipmap.thumbs_up_wanc));
-                    loveStatus=1;
-                    binding.loveNumStr.setText(String.valueOf(Integer.valueOf(binding.loveNumStr.getText().toString())+1));
+                    bid = Integer.parseInt(getDataId());
+                    bookComments.addAll(comments);
+                    bookCommentAdapter.notifyDataSetChanged();
+                    binding.loading.setStatus(LoadingLayout.Success);
                 }
-                handlerLove(bookDetailsBean.getBid());
             }
-        });
-    }
 
-    private void handlerLove(int bid){
-        Map<String,String> params= UserUtil.createUserMap();
-        params.put("bid", String.valueOf(bid));
-        StandardRequestMangaer.getInstance()
-                .post(RequestUrl.HANDLER_BOOK_LOVE,new BaseCallBack<String>(){
 
-                    @Override
-                    protected void OnRequestBefore(Request request) {
+            @Override
+            protected void onResponse(Response response) {
+            }
 
-                    }
+            @Override
+            protected void onEror(Call call, int statusCode) {
 
-                    @Override
-                    protected void onFailure(Call call) {
+            }
 
-                    }
+            @Override
+            protected void inProgress(int progress, long total, int id) {
 
-                    @Override
-                    protected void onSuccess(Call call, Response response, String s) {
-                        Toast.makeText(ReadActivity.this, "操作成功！", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    protected void onResponse(Response response) {
-
-                    }
-
-                    @Override
-                    protected void onEror(Call call, int statusCode) {
-                        binding.loading.setStatus(LoadingLayout.No_Network);
-                        Toast.makeText(ReadActivity.this, "请检查网络后重试", Toast.LENGTH_SHORT).show();
-
-                    }
-
-                    @Override
-                    protected void inProgress(int progress, long total, int id) {
-
-                    }
-                },params);
+            }
+        },params);
     }
 
     private void showCommentDialog(){
@@ -338,13 +326,14 @@ public class ReadActivity extends BaseActivity {
 
                     @Override
                     protected void onFailure(Call call) {
+                        Toast.makeText(ReadActivity.this, "网络异常，无法连接至服务器", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     protected void onSuccess(Call call, Response response, String s) {
                         binding.loading.setStatus(LoadingLayout.Success);
-                        Toast.makeText(ReadActivity.this, s, Toast.LENGTH_SHORT).show();
-                        bookCommentAdapter.addTheCommentData(new BookComment("刚刚",content,"测试","http://image.biaobaiju.com/uploads/20180803/23/1533308847-sJINRfclxg.jpeg",Integer.valueOf(s)));
+                        Toast.makeText(ReadActivity.this,"评论成功", Toast.LENGTH_SHORT).show();
+                        bookCommentAdapter.addTheCommentData(new BookComment("刚刚",content,userData.getUsername(),userData.getUimg(),Integer.valueOf(s)));
                         binding.commentStr.setText(String.valueOf(Integer.valueOf(binding.commentStr.getText().toString())+1));
                     }
 

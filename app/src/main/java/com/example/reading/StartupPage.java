@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
+import androidx.appcompat.app.ActionBar;
+
 import com.example.reading.Activity.LoginActivity;
 import com.example.reading.ToolClass.Transparent;
 

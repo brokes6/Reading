@@ -15,10 +15,4 @@ public class UserUtil {
         return map;
     }
 
-    public static User getUserInfo(){
-        User user=new User();
-        user.setUsername(userData.getUsername());
-        user.setUimg(userData.getUimg());
-        return user;
-    }
 }

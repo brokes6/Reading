@@ -260,7 +260,11 @@ public class XPlayMusic extends XBaseActivity implements CustomAdapt,View.OnClic
                 @Override
                 public void run() {
                     if(!isSeekbarChaning){
-                        binding.actProgress.setProgress(mediaPlayer.getCurrentPosition());
+                        try{
+                            binding.actProgress.setProgress(mediaPlayer.getCurrentPosition());
+                        }catch (IllegalStateException e){
+                            e.printStackTrace();
+                        }
                     }
                 }
             },0,50);

@@ -13,6 +13,7 @@ import com.example.reading.Bean.User;
 import com.example.reading.Bean.UserPostComment;
 import com.example.reading.R;
 import com.example.reading.util.DateTimeUtil;
+import com.example.reading.util.FileCacheUtil;
 import com.example.reading.util.RoundImageView;
 import com.example.reading.util.UserUtil;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -21,11 +22,14 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.reading.MainApplication.getContext;
+
 public class UserPostCommentAdapter extends RecyclerView.Adapter<UserPostCommentAdapter.ViewHolder> {
     private View mView;
     private List<UserPostComment> userPostComments=new ArrayList<>();
     private Context context;
     private ImageLoader imageLoader;
+    private User userData;
     DisplayImageOptions options = new DisplayImageOptions.Builder()
             .showStubImage(R.drawable.loading)          // 设置图片下载期间显示的图片
             .showImageForEmptyUri(R.drawable.image_error)  // 设置图片Uri为空或是错误的时候显示的图片
@@ -50,14 +54,14 @@ public class UserPostCommentAdapter extends RecyclerView.Adapter<UserPostComment
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         UserPostComment comment=userPostComments.get(position);
-        User user= UserUtil.getUserInfo();
+        userData= FileCacheUtil.getUser(getContext());
         //设置图片
-        imageLoader.displayImage(user.getUimg(),holder.uimg,options);
+        imageLoader.displayImage(userData.getUimg(),holder.uimg,options);
         //设置文字
-        holder.username.setText(user.getUsername());
+        holder.username.setText(userData.getUsername());
         holder.time.setText(DateTimeUtil.handlerDateTime(comment.getCcreateTime().getTime()));
         holder.content.setText(comment.getContent());
-        holder.postContent.setText(comment.getPostContent());
+        holder.postContent.setText("文章标题："+comment.getPostContent());
         holder.commentNum.setText(String.valueOf(comment.getCommentNum()));
     }
 

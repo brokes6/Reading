@@ -314,7 +314,11 @@ public class AudioFrequency extends Fragment implements View.OnClickListener{
                 @Override
                 public void run() {
                     if(!isSeekbarChaning){
-                        binding.seekBar.setProgress(mediaPlayer.getCurrentPosition());
+                        try{
+                            binding.seekBar.setProgress(mediaPlayer.getCurrentPosition());
+                        }catch (IllegalStateException e){
+                            e.printStackTrace();
+                        }
                     }
                 }
             },0,50);
@@ -428,7 +432,7 @@ public class AudioFrequency extends Fragment implements View.OnClickListener{
                     String data = object.getString("data");
                     Gson gson=new Gson();
                     bookDetailsBean=gson.fromJson(data,new TypeToken<BookDetailsBean>(){}.getType());
-                    ((ReadActivity)getContext()).handlerComments(bookDetailsBean);
+                    Log.d(TAG, "JsonJX: ----------------------"+data);
                     int type=bookDetailsBean.getType();
                     Log.d(TAG, "JsonJX: 当前type为"+type);
                     Message mes=new Message();

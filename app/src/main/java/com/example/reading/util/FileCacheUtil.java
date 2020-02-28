@@ -17,6 +17,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
+import static com.example.reading.MainApplication.getContext;
 
 
 public class FileCacheUtil {
@@ -49,7 +50,6 @@ public class FileCacheUtil {
             //打开文件输出流，接收参数是文件名和模式
             fos = context.openFileOutput(cacheFileName,mode);
             fos.write(content.getBytes());
-            Log.d(TAG, "----------------------------------------"+"文件已存储");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -161,13 +161,7 @@ public class FileCacheUtil {
 
     }
     public static User getUser(Context context){
-//        User user=new User();
-//        user.setUsername("测试名字");
-//        user.setUimg("http://image.baidu.com/search/detail?ct=503316480&z=undefined&tn=baiduimagedetail&ipn=d&word=%E6%B1%A4%E5%A7%86%E7%8C%AB&step_word=&ie=utf-8&in=&cl=2&lm=-1&st=undefined&hd=undefined&latest=undefined&copyright=undefined&cs=2542804184,2514449195&os=3699182139,2249991242&simid=3311274204,199557181&pn=16&rn=1&di=71390&ln=1485&fr=&fmq=1582272919046_R&fm=&ic=undefined&s=undefined&se=&sme=&tab=0&width=undefined&height=undefined&face=undefined&is=0,0&istype=0&ist=&jit=&bdtype=0&spn=0&pi=0&gsm=0&objurl=http%3A%2F%2Fimg.qqzhi.com%2Fupload%2Fimg_3_4271615870D2203553003_23.jpg&rpstart=0&rpnum=0&adpicid=0&force=undefined");
-//        user.setToken("OKYPyuQ2adPOIE5EFFlKQEz7nH0KG%2F6TRNMge9uu7Ew%3D");
-//        return user;
         return FileCacheUtil.getCache(context,"USERDATA.txt",0, User.class);
-
     }
 
     public static void updateUser(User user,Context context){

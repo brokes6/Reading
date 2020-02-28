@@ -113,6 +113,7 @@ public class History extends BaseActivity {
             int index = i;
             token = userData.getToken();
             if (bookid.trim().equals("")) {
+                binding.loading.setStatus(LoadingLayout.Empty);
                 Toast.makeText(this, "你还没有浏览历史喔", Toast.LENGTH_SHORT).show();
                 Message message = new Message();
                 message.what = RequestStatus.NO_RESOURCE;
