@@ -23,6 +23,7 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+import com.weavey.loading.lib.LoadingLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,7 @@ public class UserPostCommentFragment extends Fragment {
     private UserPostCommentAdapter userPostCommentAdapter;
     private int currentPage=1;
     private List<UserPostComment> userPostComments=new ArrayList<>();
+    private LoadingLayout loading;
     SmartRefreshLayout refreshLayout;
     private static final String TAG = "UserPostCommentFragment";
     @Override
@@ -60,6 +62,8 @@ public class UserPostCommentFragment extends Fragment {
     }
     private void initView(){
         refreshLayout = mView.findViewById(R.id.refreshLayout);
+        loading = mView.findViewById(R.id.loading);
+        loading.setStatus(LoadingLayout.Loading);
     }
     private void initData(){
         refreshLayout.setEnableRefresh(false);
@@ -101,6 +105,7 @@ public class UserPostCommentFragment extends Fragment {
                     @Override
                     protected void onSuccess(Call call, Response response, List<UserPostComment>list) {
                         Toast.makeText(getContext(), "获得帖子评论成功！", Toast.LENGTH_SHORT).show();
+                        loading.setStatus(LoadingLayout.Success);
                         userPostComments.addAll(list);
                         userPostCommentAdapter.notifyDataSetChanged();
                     }

@@ -113,6 +113,7 @@ public class StandardRequestMangaer {
         if(params != null){
             Set<Map.Entry<String,String>> set=params.entrySet();
             for(Map.Entry<String,String> entry: set){
+                if (entry.getValue()==null)
                 builder.add(entry.getKey(),entry.getValue());
             }
         }

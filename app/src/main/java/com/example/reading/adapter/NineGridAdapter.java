@@ -99,7 +99,7 @@ public class NineGridAdapter extends RecyclerView.Adapter<NineGridAdapter.ViewHo
         Log.i(TAG, "onBindViewHolder: post="+post);
         String content=Html.fromHtml(post.getContent()).toString();
         String imgUrls=post.getImgurl();
-        holder.content.setText(content);//设置内容
+        holder.content.setText(Html.fromHtml(content));//设置内容
         holder.datetime.setText(DateTimeUtil.handlerDateTime(post.getPcreateTime()));//设置帖子时间
         imageLoader.displayImage(post.getUimg(),holder.uimg,options);
         holder.username.setText(post.getUsername());//设置用户名

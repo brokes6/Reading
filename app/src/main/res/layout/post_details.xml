@@ -28,7 +28,7 @@
         <ImageView
             android:layout_marginLeft="5dp"
             android:id="@+id/title_back"
-            android:padding="3dp"
+            android:padding="4dp"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_gravity="center"
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:text="返回"
             android:layout_marginLeft="10dp"
-            android:textSize="17sp"
+            android:textSize="15sp"
             android:textColor="#979797"
             android:layout_gravity="center_vertical"/>
 

@@ -1,6 +1,7 @@
 package com.example.reading.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.reading.Activity.PostDetails;
 import com.example.reading.Bean.User;
 import com.example.reading.Bean.UserPostComment;
 import com.example.reading.R;
@@ -63,6 +65,14 @@ public class UserPostCommentAdapter extends RecyclerView.Adapter<UserPostComment
         holder.content.setText(comment.getContent());
         holder.postContent.setText("文章标题："+comment.getPostContent());
         holder.commentNum.setText(String.valueOf(comment.getCommentNum()));
+        holder.postContent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(context, PostDetails.class);
+                intent.putExtra("postId",comment.getPid());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

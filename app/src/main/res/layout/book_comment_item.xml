@@ -15,6 +15,7 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:src="@mipmap/bt"
+            android:scaleType="fitXY"
             app:type="circle"/>
         <TextView
             android:id="@+id/username"
@@ -59,6 +60,7 @@
             android:layout_height="1dp"
             android:background="#D5D5D5"/>
         <LinearLayout
+            android:id="@+id/book"
             android:layout_marginTop="5dp"
             android:layout_below="@id/xian"
             android:layout_width="match_parent"

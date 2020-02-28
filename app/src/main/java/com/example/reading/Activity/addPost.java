@@ -281,8 +281,13 @@ public class addPost extends BaseActivity implements View.OnClickListener {
                     Toast.makeText(addPost.this, "内容不能为空", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                String imgurl=stringBuilder.substring(0,stringBuilder.length()-1);
-                uploadPost(content,imgurl);
+                if (TextUtils.isEmpty(stringBuilder.substring(0,stringBuilder.length()))){
+                    String imgurl=null;
+                    uploadPost(content,imgurl);
+                }else{
+                    String imgurl=stringBuilder.substring(0,stringBuilder.length()-1);
+                    uploadPost(content,imgurl);
+                }
             }
         });
         initEditor();

@@ -23,6 +23,7 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+import com.weavey.loading.lib.LoadingLayout;
 
 import static com.example.reading.constant.RequestUrl.*;
 
@@ -42,6 +43,7 @@ public class UserBookCommentFragment extends Fragment {
     private int currentPage=1;
     private List<UserBookComment> userBookComments=new ArrayList<>();
     SmartRefreshLayout refreshLayout;
+    private LoadingLayout loading;
     private static final String TAG = "UserBookCommentFragment";
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,6 +62,9 @@ public class UserBookCommentFragment extends Fragment {
     }
     private void initView(){
         refreshLayout = mView.findViewById(R.id.refreshLayout);
+        loading = mView.findViewById(R.id.loading);
+        loading.setStatus(LoadingLayout.Loading);
+
     }
     private void initData(){
         refreshLayout.setEnableRefresh(false);
@@ -100,7 +105,7 @@ public class UserBookCommentFragment extends Fragment {
 
                     @Override
                     protected void onSuccess(Call call, Response response, List<UserBookComment>list) {
-                        Log.d(TAG, "onSuccess: ---------------------------"+list);
+                        loading.setStatus(LoadingLayout.Success);
                         Toast.makeText(getContext(), "获得书籍读后感成功！", Toast.LENGTH_SHORT).show();
                         userBookComments.addAll(list);
                         userBookCommentAdapter.notifyDataSetChanged();

@@ -1,15 +1,20 @@
 package com.example.reading.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.reading.Activity.PostDetails;
+import com.example.reading.Activity.ReadActivity;
 import com.example.reading.Bean.User;
 import com.example.reading.Bean.UserBookComment;
 import com.example.reading.R;
@@ -32,6 +37,7 @@ public class UserBookCommentAdapter extends RecyclerView.Adapter<UserBookComment
     private Context context;
     private ImageLoader imageLoader;
     private User userData;
+    private static final String TAG = "UserBookCommentAdapter";
     DisplayImageOptions options = new DisplayImageOptions.Builder()
             .showStubImage(R.drawable.loading)          // 设置图片下载期间显示的图片
             .showImageForEmptyUri(R.drawable.image_error)  // 设置图片Uri为空或是错误的时候显示的图片
@@ -70,6 +76,14 @@ public class UserBookCommentAdapter extends RecyclerView.Adapter<UserBookComment
         }else{
             holder.description.setText(comment.getDescription());
         }
+        holder.book.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(context, ReadActivity.class);
+                intent.putExtra("id",String.valueOf(comment.getBid()));
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -80,6 +94,7 @@ public class UserBookCommentAdapter extends RecyclerView.Adapter<UserBookComment
     public static class ViewHolder extends RecyclerView.ViewHolder{
         private RoundImageView uimg,bookImg;
         private TextView username,time,content,bookName,description,commentNum;
+        private LinearLayout book;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             uimg=itemView.findViewById(R.id.userimg);
@@ -89,6 +104,7 @@ public class UserBookCommentAdapter extends RecyclerView.Adapter<UserBookComment
             content=itemView.findViewById(R.id.content);
             bookName=itemView.findViewById(R.id.bookName);
             description=itemView.findViewById(R.id.descrption);
+            book = itemView.findViewById(R.id.book);
         }
     }
 }
