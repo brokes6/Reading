@@ -111,6 +111,7 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
+                    android:id="@+id/Record_of_praise"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -184,7 +185,7 @@
             android:layout_marginLeft="@dimen/afc_10dp"
             android:layout_marginRight="@dimen/afc_10dp"
             android:layout_marginTop="10dp"
-            android:padding="15dp"
+            android:padding="@dimen/afc_10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/file_background_radius_10"
@@ -198,7 +199,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginLeft="@dimen/afc_10dp"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@mipmap/personalinformation" />
@@ -277,51 +278,8 @@
                         android:src="@drawable/mores" />
                 </LinearLayout>
             </LinearLayout>
-
-            <include layout="@layout/interval" />
             //结束
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center|left"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_marginLeft="10dp"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/invitation" />
-
-                    <TextView
-                        android:layout_marginLeft="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="#474747"
-                        android:text="邀请记录" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center|right"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/mores" />
-                </LinearLayout>
-            </LinearLayout>
 
             <include layout="@layout/interval" />
             //结束
@@ -369,6 +327,54 @@
                 </LinearLayout>
             </LinearLayout>
             //结束
+        </LinearLayout>
+        //结束
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="#F3F3F3" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/afc_10dp"
+            android:layout_marginLeft="@dimen/afc_10dp"
+            android:layout_marginRight="@dimen/afc_10dp"
+            android:background="@drawable/file_background_radius_10"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|left"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_marginLeft="@dimen/afc_10dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/invitation" />
+
+                <TextView
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#474747"
+                    android:text="邀请记录" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|right"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/mores" />
+            </LinearLayout>
         </LinearLayout>
         <View
             android:layout_width="match_parent"

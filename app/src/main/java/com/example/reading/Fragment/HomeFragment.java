@@ -99,6 +99,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     binding.SolarTerms.setText(Title);
                     festivalAdapter.notifyDataSetChanged();
                     break;
+                case 500:
+                    Toast.makeText(getContext(),"轮播图获取失败，请稍后尝试!",Toast.LENGTH_SHORT).show();
+                    break;
             }
         }
     };
@@ -226,7 +229,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
             @Override
             protected void onFailure(Call call) {
-                Toast.makeText(getContext(),"轮播图获取失败，请稍后尝试!",Toast.LENGTH_SHORT).show();
+                Message message=Message.obtain();
+                message.what=500;
+                handler.sendMessage(message);
             }
 
             @Override

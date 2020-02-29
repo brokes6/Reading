@@ -107,7 +107,7 @@ public class NineGridAdapter extends RecyclerView.Adapter<NineGridAdapter.ViewHo
         holder.loveStatus=post.getLoveStatus();
         holder.talkNumStr.setText(String.valueOf(post.getCommentNum()));
         holder.loveNumStr.setText(String.valueOf(post.getLoveNum()));
-        if (TextUtils.isEmpty(imgUrls)){
+        if (TextUtils.isEmpty(imgUrls)||"null".equals(imgUrls)){
             holder.layout.setVisibility(View.GONE);
         }else {
             holder.layout.setUrlList(Arrays.asList(imgUrls.split(",")));

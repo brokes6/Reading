@@ -37,6 +37,7 @@ import com.example.reading.Activity.History;
 import com.example.reading.Activity.LoginActivity;
 import com.example.reading.Activity.Personal;
 import com.example.reading.Activity.PostDetails;
+import com.example.reading.Activity.Record_praise;
 import com.example.reading.Activity.Set_up;
 import com.example.reading.Activity.UserCommentActivity;
 import com.example.reading.Activity.UserFeedBack;
@@ -128,6 +129,7 @@ public class MyFragment extends Fragment implements View.OnClickListener {
         binding.personal.setOnClickListener(this);
         binding.back.setOnClickListener(this);
         binding.about.setOnClickListener(this);
+        binding.RecordOfPraise.setOnClickListener(this);
     }
     private void initData(){
         if (userData.getUsername()==null){
@@ -175,12 +177,16 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                 editor.remove("key");
                 editor.commit();
                 Log.d(TAG, "---SharedPreferences的key已清除---");
-                Intent intent3 = new Intent("com.gesoft.admin.loginout");
-                getContext().sendBroadcast(intent3);
+                intent = new Intent("com.gesoft.admin.loginout");
+                getContext().sendBroadcast(intent);
                 break;
             case R.id.about:
-                Intent intent4 = new Intent(getContext(), AboutMe.class);
-                startActivity(intent4);
+                intent = new Intent(getContext(), AboutMe.class);
+                startActivity(intent);
+                break;
+            case R.id.Record_of_praise:
+                intent = new Intent(getContext(), Record_praise.class);
+                startActivity(intent);
                 break;
         }
     }

@@ -436,7 +436,7 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
                 commentStr.setText(String.valueOf(postDetailsBean.getCommentNum()));
                 dateTime.setText(DateTimeUtil.handlerDateTime(postDetailsBean.getPcreateTime()));
                 String imgUrls=postDetailsBean.getImgurl();
-                if (!TextUtils.isEmpty(imgUrls)){
+                if (!TextUtils.isEmpty(imgUrls)||"null".equals(imgUrls)){
                     standardNineGridLayout.setUrlList(Arrays.asList(imgUrls.split(",")));
                     standardNineGridLayout.setVisibility(View.VISIBLE);
                 }else {

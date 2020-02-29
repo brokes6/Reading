@@ -719,8 +719,12 @@ public class addPost extends BaseActivity implements View.OnClickListener {
     }
     private void uploadPost(String content,String imgurl){
         Map<String,String> map=UserUtil.createUserMap();
-        map.put("content",content);
-        map.put("imgurl",imgurl);
+        if (TextUtils.isEmpty(imgurl)){
+            map.put("content",content);
+        }else{
+            map.put("content",content);
+            map.put("imgurl",imgurl);
+        }
         StandardRequestMangaer.getInstance()
                 .post(RequestUrl.ADD_POST, new BaseCallBack<String>(){
                     @Override
@@ -730,12 +734,12 @@ public class addPost extends BaseActivity implements View.OnClickListener {
 
                     @Override
                     protected void onFailure(Call call) {
-                        Toast.makeText(addPost.this, "上传帖子失败了", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(addPost.this, "网络连接异常，请稍后尝试", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     protected void onSuccess(Call call, Response response, String s) {
-                        Toast.makeText(addPost.this, "上传帖子成功！", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(addPost.this, "发表成功！", Toast.LENGTH_SHORT).show();
                         Intent intent=new Intent();
                         intent.putExtra("postId",Integer.valueOf(s));
                         intent.putExtra("content",content);

@@ -317,8 +317,8 @@ public class ReadActivity extends BaseActivity {
         Map<String,String> params=UserUtil.createUserMap();
         params.put("cbid", String.valueOf(bid));
         params.put("content",content);
-        StandardRequestMangaer.getInstance()
-                .post(RequestUrl.ADD_BOOK_COMMENT,new BaseCallBack<String>(){
+        Log.d(TAG, "addComment: ---------------"+params);
+        StandardRequestMangaer.getInstance().post(RequestUrl.ADD_BOOK_COMMENT,new BaseCallBack<String>(){
 
                     @Override
                     protected void OnRequestBefore(Request request) {
@@ -326,6 +326,7 @@ public class ReadActivity extends BaseActivity {
 
                     @Override
                     protected void onFailure(Call call) {
+                        binding.loading.setStatus(LoadingLayout.Error);
                         Toast.makeText(ReadActivity.this, "网络异常，无法连接至服务器", Toast.LENGTH_SHORT).show();
                     }
 

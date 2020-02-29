@@ -3,10 +3,12 @@ package com.example.reading.Fragment;
 import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.PlaybackParams;
 import android.net.Uri;
@@ -90,6 +92,9 @@ public class AudioFrequency extends Fragment implements View.OnClickListener{
     ReadActivity activity;
     String url = "http://117.48.205.198/xiaoyoudushu/findBookById?";
     String Aurl;
+    //音频焦点
+    private AudioManager mAudioManager;
+    //结束
     public ArrayList<Map<String, Object>> list = new ArrayList<>();
     private Handler handler=new Handler(){
         @Override
@@ -285,6 +290,7 @@ public class AudioFrequency extends Fragment implements View.OnClickListener{
         getContext().registerReceiver(broadcastReceiver, intentFilter);
     }
 
+
     @Override
     public void onDestroy() {
         if(timer!=null)
@@ -292,18 +298,19 @@ public class AudioFrequency extends Fragment implements View.OnClickListener{
         if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.release();
+            mAudioManager.abandonAudioFocus(mAudioFocusChange);
         }
         super.onDestroy();
     }
     public void play(){
-        if (bookDetailsBean.getAudio().getUrl()==null){
-        }
         if (mediaPlayer.isPlaying()){
             mediaPlayer.pause();
             binding.xpaly.setImageResource(R.mipmap.xpause);
             binding.xplayText.setText("播放");
             Toast.makeText(getContext(),"停止播放",Toast.LENGTH_SHORT).show();
         }else{
+            mAudioManager = (AudioManager)getContext().getSystemService(Context.AUDIO_SERVICE);
+            mAudioManager.requestAudioFocus(mAudioFocusChange , AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN);
             mediaPlayer.start();
             binding.xpaly.setImageResource(R.mipmap.xxplay);
             binding.xplayText.setText("暂停");
@@ -476,6 +483,55 @@ public class AudioFrequency extends Fragment implements View.OnClickListener{
         }
 
     }
+
+    private AudioManager.OnAudioFocusChangeListener mAudioFocusChange = new AudioManager.OnAudioFocusChangeListener() {
+                @Override
+                public void onAudioFocusChange(int focusChange) {
+                    switch (focusChange){
+                        case AudioManager.AUDIOFOCUS_GAIN:
+                            //当其他应用申请焦点之后又释放焦点会触发此回调
+                            //可重新播放音乐
+                            Log.d(TAG, "AUDIOFOCUS_GAIN");
+                            mediaPlayer.start();
+                            break;
+                        case AudioManager.AUDIOFOCUS_LOSS:
+                            //长时间丢失焦点,当其他应用申请的焦点为 AUDIOFOCUS_GAIN 时，
+                            //会触发此回调事件，例如播放 QQ 音乐，网易云音乐等
+                            //通常需要暂停音乐播放，若没有暂停播放就会出现和其他音乐同时输出声音
+                            Log.d(TAG, "AUDIOFOCUS_LOSS");
+                            stop();
+                            //释放焦点，该方法可根据需要来决定是否调用
+                            //若焦点释放掉之后，将不会再自动获得
+                            mAudioManager.abandonAudioFocus(mAudioFocusChange);
+                            break;
+                        case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+                            //短暂性丢失焦点，当其他应用申请 AUDIOFOCUS_GAIN_TRANSIENT 或
+                            //AUDIOFOCUS_GAIN_TRANSIENT_EXCLUSIVE 时，
+                            //会触发此回调事件，例如播放短视频，拨打电话等。
+                            //通常需要暂停音乐播放
+                            mediaPlayer.pause();
+                            binding.xpaly.setImageResource(R.mipmap.xpause);
+                            Log.d(TAG, "AUDIOFOCUS_LOSS_TRANSIENT");
+                            break;
+                        case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                            //短暂性丢失焦点并作降音处理
+                            Log.d(TAG, "AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK");
+                            break;
+                    }
+                }
+            };
+    private void stop() {
+        if (mediaPlayer != null) {//mediaplayer 是MediaPlayer的 instance
+            mediaPlayer.stop();
+            try {
+                mediaPlayer.prepare();//stop后下次重新播放要首先进入prepared状态
+                mediaPlayer.seekTo(0);//须将播放时间设置到0；这样才能在下次播放是重新开始，否则会继续上次播放
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
 
 
