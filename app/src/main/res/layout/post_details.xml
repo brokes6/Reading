@@ -150,27 +150,9 @@
             android:layout_marginLeft="10dp"
             android:text="32"/>
         </LinearLayout>
+
         <LinearLayout
-            android:id="@+id/collectionLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/collection"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:src="@mipmap/forward"
-            android:layout_marginLeft="20dp" />
-        <TextView
-            android:id="@+id/collectionStr"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#9A9A9A"
-            android:textSize="14sp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="14dp"
-            android:text="转发"/>
-    </LinearLayout>
-        <LinearLayout
+            android:layout_marginLeft="@dimen/afc_10dp"
             android:layout_marginRight="10dp"
             android:id="@+id/comment"
             android:layout_width="wrap_content"

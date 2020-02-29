@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/comment_big"
+    android:layout_marginTop="@dimen/afc_10dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:background="@drawable/file_background_radius_10"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/afc_10dp">
+        <TextView
+            android:padding="@dimen/afc_5dp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="您给标题为"/>
+        <TextView
+            android:layout_gravity="center"
+            android:id="@+id/comment"
+            android:padding="@dimen/afc_5dp"
+            android:background="@drawable/file_back_light_grey"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="标题"/>
+        <TextView
+            android:padding="@dimen/afc_5dp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="点了个赞"/>
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@mipmap/thumbs_up_wanc"/>
+</LinearLayout>

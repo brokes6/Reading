@@ -178,8 +178,6 @@ public class NineGridAdapter extends RecyclerView.Adapter<NineGridAdapter.ViewHo
             loveNumStr=itemView.findViewById(R.id.loveNumStr);
 //            collectionStr=itemView.findViewById(R.id.collectionStr);
             talkNumStr=itemView.findViewById(R.id.talkNumStr);
-            collection=itemView.findViewById(R.id.collection);
-            collectionStr=itemView.findViewById(R.id.collectionStr);
         }
 
     }

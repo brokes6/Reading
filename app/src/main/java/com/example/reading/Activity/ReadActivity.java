@@ -27,6 +27,7 @@ import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
@@ -99,6 +100,17 @@ public class ReadActivity extends BaseActivity {
     private GestureDetector detector;
     private Handler handler=new Handler(Looper.getMainLooper());
     private int Page = 1;
+    String commentNum;
+    Handler handler1 = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case 100:
+                    binding.commentStr.setText(commentNum);
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,7 +147,7 @@ public class ReadActivity extends BaseActivity {
                 Page++;
                 handlerComments(Page);
                 bookCommentAdapter.notifyDataSetChanged();
-                binding.refreshLayout.finishLoadMore(true);//加载完成
+                binding.refreshLayout.finishLoadMore(1000);//加载完成
                 Log.d(TAG, "onLoadMore: 添加更多完成");
             }
         });
@@ -245,6 +257,12 @@ public class ReadActivity extends BaseActivity {
             }
         });
         binding.detailPageLvComment.setLongClickable(true);
+    }
+    public void setCommentNum(BookDetailsBean bookDetailsBean){
+        commentNum = String.valueOf(bookDetailsBean.getCommentNum());
+        Message mes=new Message();
+        mes.what= 100;
+        handler1.sendMessage(mes);
     }
     public String getDataId(){
         Intent intent = getIntent();
@@ -398,8 +416,8 @@ public class ReadActivity extends BaseActivity {
         Map<String,String> params=UserUtil.createUserMap();
         params.put("cbid", String.valueOf(bid));
         params.put("content",content);
-        StandardRequestMangaer.getInstance()
-                .post(RequestUrl.ADD_BOOK_COMMENT,new BaseCallBack<String>(){
+        Log.d(TAG, "addComment: ---------------"+params);
+        StandardRequestMangaer.getInstance().post(RequestUrl.ADD_BOOK_COMMENT,new BaseCallBack<String>(){
 
                     @Override
                     protected void OnRequestBefore(Request request) {
@@ -407,6 +425,7 @@ public class ReadActivity extends BaseActivity {
 
                     @Override
                     protected void onFailure(Call call) {
+                        binding.loading.setStatus(LoadingLayout.Error);
                         Toast.makeText(ReadActivity.this, "网络异常，无法连接至服务器", Toast.LENGTH_SHORT).show();
                     }
 

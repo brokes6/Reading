@@ -55,7 +55,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="15sp"
-                        android:text="读书是学习，摘抄是整理，写作是创造。　 ——吴晗"/>
+                        android:maxLines="1"
+                        android:text="读书是学习,写作是创造。　 ——吴晗"/>
                     <TextView
                         android:layout_marginRight="5dp"
                         android:layout_marginTop="3dp"
