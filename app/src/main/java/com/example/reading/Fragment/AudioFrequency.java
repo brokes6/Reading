@@ -298,6 +298,8 @@ public class AudioFrequency extends Fragment implements View.OnClickListener{
         if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.release();
+        }
+        if (mAudioManager!=null){
             mAudioManager.abandonAudioFocus(mAudioFocusChange);
         }
         super.onDestroy();

@@ -64,7 +64,6 @@ public class UserPostCommentAdapter extends RecyclerView.Adapter<UserPostComment
         holder.time.setText(DateTimeUtil.handlerDateTime(comment.getCcreateTime().getTime()));
         holder.content.setText(comment.getContent());
         holder.postContent.setText("文章标题："+comment.getPostContent());
-        holder.commentNum.setText(String.valueOf(comment.getCommentNum()));
         holder.postContent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,7 +89,6 @@ public class UserPostCommentAdapter extends RecyclerView.Adapter<UserPostComment
             time=itemView.findViewById(R.id.time);
             content=itemView.findViewById(R.id.content);
             postContent=itemView.findViewById(R.id.postContent);
-            commentNum=itemView.findViewById(R.id.commentNum);
         }
     }
 }

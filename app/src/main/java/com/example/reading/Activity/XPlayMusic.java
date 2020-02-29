@@ -32,6 +32,8 @@ import com.example.reading.ToolClass.XBaseActivity;
 import com.example.reading.databinding.XplayMusicBinding;
 import com.example.reading.util.FastBlurUtil;
 import com.example.reading.util.RequestStatus;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.qzs.android.fuzzybackgroundlibrary.Fuzzy_Background;
 import com.weavey.loading.lib.LoadingLayout;
 
@@ -82,7 +84,9 @@ public class XPlayMusic extends XBaseActivity implements CustomAdapt,View.OnClic
                         binding.MusicalBackground.setBackground(ToBlurredPicture(R.mipmap.bt));
                     }else{
                         binding.actBookDetailTitleId.setText(title);
-                        binding.playImg.setImageURL(ximg);
+                        //设置图片
+                        imageLoader.displayImage(ximg,binding.playImg,options);
+//                        binding.playImg.setImageURL(ximg);
                         binding.playImg.setStrokeWidth(5);
                     }
                     break;
@@ -94,6 +98,14 @@ public class XPlayMusic extends XBaseActivity implements CustomAdapt,View.OnClic
             }
         }
     };
+    private ImageLoader imageLoader;
+    DisplayImageOptions options = new DisplayImageOptions.Builder()
+            .showStubImage(R.drawable.loading)          // 设置图片下载期间显示的图片
+            .showImageForEmptyUri(R.drawable.image_error)  // 设置图片Uri为空或是错误的时候显示的图片
+            .showImageOnFail(R.drawable.image_error)       // 设置图片加载或解码过程中发生错误显示的图片
+            .cacheInMemory(true)                        // 设置下载的图片是否缓存在内存中
+            .cacheOnDisk(true)                          // 设置下载的图片是否缓存在SD卡中
+            .build();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +156,7 @@ public class XPlayMusic extends XBaseActivity implements CustomAdapt,View.OnClic
     }
 
     public void initView(){
+        imageLoader= ImageLoader.getInstance();
         Intent intent = getIntent();
         ximg = intent.getStringExtra("img");
         Log.d(TAG, "initView: 返回的图片为"+ximg);
@@ -407,6 +420,8 @@ public class XPlayMusic extends XBaseActivity implements CustomAdapt,View.OnClic
             mediaPlayer.reset();
             mediaPlayer.release();
             mCircleAnimator.end();
+        }
+        if (mAudioManager!=null){
             mAudioManager.abandonAudioFocus(mAudioFocusChange);
         }
         super.onDestroy();

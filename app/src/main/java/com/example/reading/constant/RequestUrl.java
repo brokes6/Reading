@@ -32,6 +32,7 @@ public class RequestUrl {
     public static final String FIND_USER_BOOK_COMMENT="http://117.48.205.198/xiaoyoudushu/findUserBookComment";
 
     public static final String FIND_USER_POST_COMMENT="http://117.48.205.198/xiaoyoudushu/findUserPostComment";
+    public static final String FIND_USER_COMMENT="http://117.48.205.198/xiaoyoudushu/findUserLovePost";
     public static final String SEARCH="http://117.48.205.198/xiaoyoudushu/search";
     public static final int NEW=100;
     public static final String FIND_ROTATION="http://117.48.205.198/xiaoyoudushu/findSpecialPicturesByType";

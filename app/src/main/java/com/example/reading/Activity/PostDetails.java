@@ -140,8 +140,6 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
                     postUserId=post.getPuid();
                     Log.i(TAG, "handleMessage:  postUserId="+postUserId);
                     String imgUrls=post.getImgurl();
-/*                    loveStatus=post.getStatus();
-                    collectionStatus=post.getCollection();*/
                     username.setText(post.getUsername());
                     userImg.setImageURL(post.getUimg());
                     dateTime.setText(DateTimeUtil.handlerDateTime(post.getPcreateTime()));
@@ -275,9 +273,6 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
         messageLayout=findViewById(R.id.messageLayout);
         contentLayout=findViewById(R.id.contentLayout);
         commentLayout=findViewById(R.id.detail_page_comment_container);
-        collectionLayout=findViewById(R.id.collectionLayout);
-        collectionStr=findViewById(R.id.collectionStr);
-        collection=findViewById(R.id.collection);
         expandableListView =findViewById(R.id.detail_page_lv_comment);
         bt_comment =findViewById(R.id.detail_page_do_comment);
         bt_comment.setOnClickListener(this);
