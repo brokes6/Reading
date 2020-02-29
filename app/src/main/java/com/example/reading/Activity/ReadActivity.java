@@ -24,6 +24,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
@@ -94,6 +95,17 @@ public class ReadActivity extends BaseActivity {
     private BottomSheetDialog dialog;
     private Handler handler=new Handler(Looper.getMainLooper());
     private int Page = 1;
+    String commentNum;
+    Handler handler1 = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case 100:
+                    binding.commentStr.setText(commentNum);
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,7 +142,7 @@ public class ReadActivity extends BaseActivity {
                 Page++;
                 handlerComments(Page);
                 bookCommentAdapter.notifyDataSetChanged();
-                binding.refreshLayout.finishLoadMore(true);//加载完成
+                binding.refreshLayout.finishLoadMore(1000);//加载完成
                 Log.d(TAG, "onLoadMore: 添加更多完成");
             }
         });
@@ -165,6 +177,12 @@ public class ReadActivity extends BaseActivity {
 
             }
         });
+    }
+    public void setCommentNum(BookDetailsBean bookDetailsBean){
+        commentNum = String.valueOf(bookDetailsBean.getCommentNum());
+        Message mes=new Message();
+        mes.what= 100;
+        handler1.sendMessage(mes);
     }
     public String getDataId(){
         Intent intent = getIntent();

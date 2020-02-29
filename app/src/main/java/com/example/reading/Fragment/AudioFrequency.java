@@ -443,6 +443,7 @@ public class AudioFrequency extends Fragment implements View.OnClickListener{
                     bookDetailsBean=gson.fromJson(data,new TypeToken<BookDetailsBean>(){}.getType());
                     Log.d(TAG, "JsonJX: ----------------------"+data);
                     int type=bookDetailsBean.getType();
+                    ((ReadActivity)getContext()).setCommentNum(bookDetailsBean);
                     Log.d(TAG, "JsonJX: 当前type为"+type);
                     Message mes=new Message();
                     switch (type){
