@@ -43,7 +43,7 @@ public abstract class NineGridLayout extends ViewGroup implements View.OnClickLi
     private boolean mIsShowAll = false;
     private boolean mIsFirst = true;
     private List<String> mUrlList = new ArrayList<>();
-
+    private List<String> standardImgUrls=new ArrayList<>();
     public NineGridLayout(Context context) {
         super(context);
         init(context);
@@ -97,7 +97,7 @@ public abstract class NineGridLayout extends ViewGroup implements View.OnClickLi
         mIsShowAll = isShowAll;
     }
 
-    public void setUrlList(List<String> urlList) {
+    public void setUrlList(List<String> urlList,List<String>standardImgUrls) {
         if (getListSize(urlList) == 0) {
             setVisibility(GONE);
             return;
@@ -106,7 +106,7 @@ public abstract class NineGridLayout extends ViewGroup implements View.OnClickLi
 
         mUrlList.clear();
         mUrlList.addAll(urlList);
-
+        this.standardImgUrls.addAll(standardImgUrls);
         if (!mIsFirst) {
             notifyDataSetChanged();
         }
@@ -195,7 +195,7 @@ public abstract class NineGridLayout extends ViewGroup implements View.OnClickLi
                     @Override
                     public void onClick(View v) {
                         NineGridLayout.this.onClick(v);
-                        onClickImage(i, url, mUrlList);
+                        onClickImage(i, url,standardImgUrls);
                     }
                 });
                 Log.i(TAG, "createImageView: jpeg格式来的");
@@ -207,7 +207,7 @@ public abstract class NineGridLayout extends ViewGroup implements View.OnClickLi
                     @Override
                     public void onClick(View v) {
                         NineGridLayout.this.onClick(v);
-                        onClickImage(i,url,mUrlList);
+                        onClickImage(i,url,standardImgUrls);
                     }
                 });
                 return gifImageView;

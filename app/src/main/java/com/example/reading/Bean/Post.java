@@ -5,6 +5,7 @@ import android.content.Context;
 import com.example.reading.util.FileCacheUtil;
 
 import java.io.Serializable;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -28,8 +29,10 @@ public class Post implements Serializable {
     private int commentNum;
     private int forwardNum;
     private int loveStatus;
-
+    private List<String> smallImgUrls;
+    private List<String> imgUrls;
     public static Post createNowPost(Context context,String content, String imgurl,int postId){
+
         Post post=new Post();
         post.setPid(postId);
         post.setContent(content);

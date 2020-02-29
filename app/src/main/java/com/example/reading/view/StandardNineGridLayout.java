@@ -35,7 +35,6 @@ import java.util.List;
 public class StandardNineGridLayout extends NineGridLayout {
     private static final String TAG = "NineGridTestLayout";
     protected static final int MAX_W_H_RATIO = 3;
-    private List<String> detailsImgUrls;
     private ShowImageInfo info;
     private NineGridAdapter.ViewHolder viewHolder;
     private OnClickListener listener;
@@ -98,16 +97,10 @@ public class StandardNineGridLayout extends NineGridLayout {
 
     @Override
     protected void onClickImage(int i, String url, List<String> urlList) {
-        if(detailsImgUrls==null){
-            detailsImgUrls=new ArrayList<>();
-            for(String str:urlList){
-                int index=str.lastIndexOf(".");
-                str=str.substring(0,index-5)+str.substring(index);
-                Log.i(TAG, "onClickImage: str="+str);
-                detailsImgUrls.add(str);
-            }
-        }
         Log.i(TAG, "onClickImage: info"+info);
+        if (urlList==null||urlList.size()==0){
+            return;
+        }
         EventBus.getDefault().postSticky(urlList);
         //帖子详情-----
         Intent intent = new Intent(getContext(), ShowImageActivity.class);

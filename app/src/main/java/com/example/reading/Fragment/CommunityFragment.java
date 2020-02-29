@@ -2,6 +2,7 @@ package com.example.reading.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +14,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.reading.Activity.Party;
 import com.example.reading.Activity.addPost;
 import com.example.reading.Bean.Post;
 import com.example.reading.R;
 import com.example.reading.adapter.NineGridAdapter;
 import com.example.reading.constant.RequestUrl;
+import com.example.reading.util.DateTimeUtil;
 import com.example.reading.util.UserUtil;
 import com.example.reading.web.BaseCallBack;
 import com.example.reading.web.StandardRequestMangaer;
@@ -29,6 +32,7 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.weavey.loading.lib.LoadingLayout;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -92,14 +96,29 @@ public class CommunityFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter=new NineGridAdapter(this);
         recyclerView.setAdapter(adapter);
+        recyclerView.setItemViewCacheSize(20);
+        recyclerView.setDrawingCacheEnabled(true);
+        recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    if (getActivity() != null){
+                        Glide.with(getActivity()).resumeRequests();//恢复Glide加载图片
+                    }
+                }else {
+                    if (getActivity() != null){
+                        Glide.with(getActivity()).pauseRequests();//禁止Glide加载图片
+                    }
+                }
+            }
+        });
+
         //上拉刷新事件监听
         smartRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-                ++Page;
-                findPostByPage(Page);
-                adapter.notifyDataSetChanged();
-                smartRefreshLayout.finishLoadMore(true);//加载完成
+                findPostByPage(integer.get());
                 Log.d(TAG, "onLoadMore: 添加更多完成");
             }
         });
@@ -132,16 +151,27 @@ public class CommunityFragment extends Fragment {
             @Override
             protected void onFailure(Call call) {
                 Toast.makeText(getContext(), "没有更多数据拉~~~", Toast.LENGTH_SHORT).show();
+                smartRefreshLayout.finishLoadMore(true);
+
             }
 
             @Override
             protected void onSuccess(Call call, Response response, List<Post> posts) {
                 postList.addAll(posts);
-                adapter.setList(postList);
-                adapter.notifyDataSetChanged();
+                for (Post post:posts){
+                    post.setContent(Html.fromHtml(post.getContent()).toString());
+                    post.setPcreateTime(DateTimeUtil.handlerDateTime(post.getPcreateTime()));
+                    post.setImgUrls(UserUtil.handlerStandardPostImg(post.getImgurl()));
+                    post.setSmallImgUrls(UserUtil.handlerSmallPostImg(post.getImgurl()));
+                    Log.e(TAG, "onSuccess:"+post.getImgUrls());
+                }
+
+                adapter.setList(posts);
                 Log.i(TAG, "onSuccess: 获得帖子数据成功！");
                 integer.incrementAndGet();
                 loading.setStatus(LoadingLayout.Success);
+                smartRefreshLayout.finishLoadMore(true);
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -151,6 +181,7 @@ public class CommunityFragment extends Fragment {
 
             @Override
             protected void onEror(Call call, int statusCode) {
+                smartRefreshLayout.finishLoadMore(true);
 
             }
 

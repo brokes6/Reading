@@ -134,64 +134,6 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
-                case PostTemplateInterface.HANDLER_DATA:
-                    final Post post = (Post) msg.obj;
-                    String str=Html.fromHtml(post.getContent()).toString();
-                    postUserId=post.getPuid();
-                    Log.i(TAG, "handleMessage:  postUserId="+postUserId);
-                    String imgUrls=post.getImgurl();
-/*                    loveStatus=post.getStatus();
-                    collectionStatus=post.getCollection();*/
-                    username.setText(post.getUsername());
-                    userImg.setImageURL(post.getUimg());
-                    dateTime.setText(DateTimeUtil.handlerDateTime(post.getPcreateTime()));
-                    content.setText(str);
-                    commentStr.setText(String.valueOf(post.getCommentNum()));
-                    if(imgUrls==null||imgUrls.trim().equals("")){
-                        standardNineGridLayout.setVisibility(View.GONE);
-                    }else {
-                        standardNineGridLayout.setUrlList(Arrays.asList(imgUrls.split(",")));
-                    }
-                    loveNumStr.setText(String.valueOf(post.getLoveNum()));
-                    collectionLayout.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            /*handlerCollection();*/
-                            if (collectionStatus==1){
-                                collection.setImageDrawable(getResources().getDrawable(R.mipmap.shocang));
-                                collectionStatus=0;
-                                collectionStr.setText("未收藏");
-                                Toast.makeText(PostDetails.this, "取消收藏成功！", Toast.LENGTH_SHORT).show();
-                            }else{
-                                collection.setImageDrawable(getResources().getDrawable(R.mipmap.shocangwanc));
-                                collectionStatus=1;
-                                collectionStr.setText("已收藏");
-                                Toast.makeText(PostDetails.this, "收藏成功！", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                    if(loveStatus==1){
-                        loveNum.setImageDrawable(getResources().getDrawable(R.mipmap.thumbs_up_wanc));
-                    }else{
-                        loveNum.setImageDrawable(getResources().getDrawable(R.mipmap.thumbs_up_black));
-                    }
-                    if(collectionStatus==1){
-                        collection.setImageDrawable(getResources().getDrawable(R.mipmap.shocangwanc));
-                        collectionStr.setText("已收藏");
-                    }else{
-                        collection.setImageDrawable(getResources().getDrawable(R.mipmap.shocang));
-                        collectionStr.setText("未收藏");
-                    }
-                    loadingLayout.setStatus(LoadingLayout.Success);
-                    standardNineGridLayout.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-/*
-                            standardNineGridLayout.setInfo(post.getContent(),String.valueOf(post.getLoveCount()),String.valueOf(post.getCommentCount()),post.getStatus(),post.getCollection(),post.getPid(),null);
-*/
-                        }
-                    });
-                    PostHitoryUtil.saveSearchHistory(String.valueOf(postId),PostDetails.this);break;
                 case PostTemplateInterface.CANCEL_PROGRESS:
                     //
                     progressBar.setVisibility(View.GONE);
@@ -436,8 +378,10 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
                 commentStr.setText(String.valueOf(postDetailsBean.getCommentNum()));
                 dateTime.setText(DateTimeUtil.handlerDateTime(postDetailsBean.getPcreateTime()));
                 String imgUrls=postDetailsBean.getImgurl();
-                if (!TextUtils.isEmpty(imgUrls)){
-                    standardNineGridLayout.setUrlList(Arrays.asList(imgUrls.split(",")));
+                List<String> standardImgList=UserUtil.handlerStandardPostImg(imgUrls);
+                List<String> smallImgList=UserUtil.handlerSmallPostImg(imgUrls);
+                if (standardImgList!=null&&standardImgList.size()!=0){
+                    standardNineGridLayout.setUrlList(smallImgList,standardImgList);
                     standardNineGridLayout.setVisibility(View.VISIBLE);
                 }else {
                     standardNineGridLayout.setVisibility(View.GONE);

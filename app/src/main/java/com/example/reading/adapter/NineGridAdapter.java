@@ -87,30 +87,32 @@ public class NineGridAdapter extends RecyclerView.Adapter<NineGridAdapter.ViewHo
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        long date=System.currentTimeMillis();
         convertView = inflater.inflate(R.layout.comment_item, parent, false);
         ViewHolder viewHolder = new ViewHolder(convertView);
+        Log.e(TAG, "onCreateViewHolder: 共耗时"+(System.currentTimeMillis()-date)/1000.0+"秒");
         return viewHolder;
     }
 
     @Override
     //将从服务器获取的值设置上去
     public void onBindViewHolder(final ViewHolder holder, final int position) {
+        long date=System.currentTimeMillis();
         final Post post=mList.get(position);
-        Log.i(TAG, "onBindViewHolder: post="+post);
-        String content=Html.fromHtml(post.getContent()).toString();
+        Log.e(TAG, "onBindViewHolder: "+post.getImgUrls());
         String imgUrls=post.getImgurl();
-        holder.content.setText(Html.fromHtml(content));//设置内容
-        holder.datetime.setText(DateTimeUtil.handlerDateTime(post.getPcreateTime()));//设置帖子时间
+        holder.content.setText(post.getContent());//设置内容
+        holder.datetime.setText(post.getPcreateTime());//设置帖子时间
         imageLoader.displayImage(post.getUimg(),holder.uimg,options);
         holder.username.setText(post.getUsername());//设置用户名
         holder.postId=post.getPid();//
         holder.loveStatus=post.getLoveStatus();
         holder.talkNumStr.setText(String.valueOf(post.getCommentNum()));
         holder.loveNumStr.setText(String.valueOf(post.getLoveNum()));
-        if (TextUtils.isEmpty(imgUrls)){
+        if (TextUtils.isEmpty(imgUrls)||"null".equals(imgUrls)){
             holder.layout.setVisibility(View.GONE);
         }else {
-            holder.layout.setUrlList(Arrays.asList(imgUrls.split(",")));
+            holder.layout.setUrlList(post.getSmallImgUrls(),post.getImgUrls());
         }
         holder.loveNum.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,6 +148,7 @@ public class NineGridAdapter extends RecyclerView.Adapter<NineGridAdapter.ViewHo
                 fragment.startActivityForResult(intent, CommunityFragment.POSTDETAILS);
             }
         });
+        Log.e(TAG, position+"onBindViewHolder: 共耗时"+(System.currentTimeMillis()-date)/1000.0+"秒");
     }
 
     @Override

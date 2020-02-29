@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.BroadcastReceiver;
 import android.content.Intent;
@@ -22,7 +23,9 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -78,6 +81,7 @@ import static com.example.reading.MainApplication.getContext;
  * 阅读书籍页面
  */
 public class ReadActivity extends BaseActivity {
+    protected static final float FLIP_DISTANCE = 50;
     private static final String TAG = "ReadActivity";
     Fragment fragment1;
     AudioFrequency audioFrequency =new AudioFrequency();
@@ -92,6 +96,7 @@ public class ReadActivity extends BaseActivity {
     private User userData;
     private BookCommentAdapter bookCommentAdapter;
     private BottomSheetDialog dialog;
+    private GestureDetector detector;
     private Handler handler=new Handler(Looper.getMainLooper());
     private int Page = 1;
 
@@ -137,6 +142,23 @@ public class ReadActivity extends BaseActivity {
 
         MyAdapter fragmentAdater = new  MyAdapter(getSupportFragmentManager());
         binding.viewpager.setAdapter(fragmentAdater);
+        binding.viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                Log.i(TAG, "onPageScrolled: position="+position);
+                Log.i(TAG, "onPageScrolled: position="+positionOffset);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         binding.tabMode.setupWithViewPager(binding.viewpager);
         binding.detailPageDoComment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,7 +166,58 @@ public class ReadActivity extends BaseActivity {
                 showCommentDialog();
             }
         });
+        detector=new GestureDetector(this, new GestureDetector.OnGestureListener() {
+            @Override
+            public boolean onDown(MotionEvent e) {
+                return true;
+            }
 
+            @Override
+            public void onShowPress(MotionEvent e) {
+
+            }
+
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                return false;
+            }
+
+            @Override
+            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+                return false;
+            }
+
+            @Override
+            public void onLongPress(MotionEvent e) {
+
+            }
+
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+
+                float minMove = 120; // 最小滑动距离
+                float minVelocity = 0; // 最小滑动速度
+                float beginX = e1.getX();
+                float endX = e2.getX();
+                float beginY = e1.getY();
+                float endY = e2.getY();
+
+                if (beginX - endX > minMove && Math.abs(velocityX) > minVelocity) { // 左滑
+                    int index=binding.viewpager.getCurrentItem();
+                    if (index==0){
+                        /*binding.viewpager.setCurrentItem(0);*/
+                    }
+                    return true;
+                } else if (endX - beginX > minMove && Math.abs(velocityX) > minVelocity) { // 右滑
+                    int index=binding.viewpager.getCurrentItem();
+                    if (index==1){
+                        /*binding.viewpager.setCurrentItem(1);*/
+                    }
+                    return true;
+                }
+             return false;
+            }
+        });
     }
     public void initData(){
         bookCommentAdapter=new BookCommentAdapter(ReadActivity.this,bookComments);
@@ -165,6 +238,13 @@ public class ReadActivity extends BaseActivity {
 
             }
         });
+        binding.detailPageLvComment.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return detector.onTouchEvent(event);
+            }
+        });
+        binding.detailPageLvComment.setLongClickable(true);
     }
     public String getDataId(){
         Intent intent = getIntent();
@@ -180,6 +260,7 @@ public class ReadActivity extends BaseActivity {
 
 
     public class MyAdapter extends FragmentPagerAdapter {
+
         public MyAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -352,5 +433,10 @@ public class ReadActivity extends BaseActivity {
 
                     }
                 },params);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return detector.onTouchEvent(event);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.reading.Activity;
+/*package com.example.reading.Activity;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -30,4 +30,4 @@ public class Record_praise extends BaseActivity {
     private void initView(){
 
     }
-}
+}*/
