@@ -111,6 +111,7 @@ public class BookCommentAdapter extends BaseExpandableListAdapter {
         imageLoader.displayImage(bean.getUimg(),groupHolder.logo,options);
         groupHolder.tv_name.setText(bean.getUsername());
         groupHolder.tv_time.setText(DateTimeUtil.handlerDateTime(bean.getCcreateTime()));
+        Log.d(TAG, "getGroupView: ------------------"+DateTimeUtil.handlerDateTime(bean.getCcreateTime()));
         groupHolder.tv_content.setText(bean.getContent());
         groupHolder.status=bean.getLoveStatus();
         groupHolder.loveNum.setText(String.valueOf(bean.getLoveCount()));

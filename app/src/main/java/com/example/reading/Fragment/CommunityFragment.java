@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.bumptech.glide.Glide;
 import com.example.reading.Activity.Party;
@@ -27,6 +28,7 @@ import com.example.reading.web.BaseCallBack;
 import com.example.reading.web.StandardRequestMangaer;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.api.ScrollBoundaryDecider;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.weavey.loading.lib.LoadingLayout;
@@ -83,7 +85,6 @@ public class CommunityFragment extends Fragment {
         }
         return view;
     }
-    //为什么呢
     private void initView(){
         loading = view.findViewById(R.id.loading);
         loading.setStatus(LoadingLayout.Loading);
@@ -96,6 +97,7 @@ public class CommunityFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter=new NineGridAdapter(this);
         recyclerView.setAdapter(adapter);
+        recyclerView.setHasFixedSize(true);
         recyclerView.setItemViewCacheSize(20);
         recyclerView.setDrawingCacheEnabled(true);
         recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
@@ -119,7 +121,38 @@ public class CommunityFragment extends Fragment {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
                 findPostByPage(integer.get());
+                refreshLayout.autoLoadMore();
                 Log.d(TAG, "onLoadMore: 添加更多完成");
+                refreshLayout.finishLoadMore();
+            }
+        });
+        smartRefreshLayout.setScrollBoundaryDecider(new ScrollBoundaryDecider() {
+            @Override
+            public boolean canRefresh(View content) {
+                if (recyclerView == null) return false;
+                if (recyclerView.computeVerticalScrollOffset()==0)
+                    return true;
+                return false;
+            }
+            @Override
+            public boolean canLoadMore(View content) {
+                if (recyclerView == null) return false;
+                //获取recyclerView的高度
+                recyclerView.getHeight();
+                //整个View控件的高度
+                int scrollRange = recyclerView.computeVerticalScrollRange();
+                //当前屏幕之前滑过的距离
+                int scrollOffset = recyclerView.computeVerticalScrollOffset();
+                //当前屏幕显示的区域高度
+                int scrollExtent = recyclerView.computeVerticalScrollExtent();
+                int height = recyclerView.getHeight();
+                if(height>scrollRange){
+                    return false;
+                }
+                if (scrollRange <=scrollOffset+scrollExtent){
+                    return true;
+                }
+                return false;
             }
         });
         //悬浮按钮
@@ -135,7 +168,6 @@ public class CommunityFragment extends Fragment {
     }
     private void initData(){
         findPostByPage(Page);
-
     }
 
     private void findPostByPage(int page){
@@ -150,28 +182,26 @@ public class CommunityFragment extends Fragment {
 
             @Override
             protected void onFailure(Call call) {
+                loading.setStatus(LoadingLayout.Success);
                 Toast.makeText(getContext(), "没有更多数据拉~~~", Toast.LENGTH_SHORT).show();
                 smartRefreshLayout.finishLoadMore(true);
-
             }
 
             @Override
             protected void onSuccess(Call call, Response response, List<Post> posts) {
                 postList.addAll(posts);
                 for (Post post:posts){
-                    post.setContent(Html.fromHtml(post.getContent()).toString());
+                    post.setContent(post.getContent().toString());
                     post.setPcreateTime(DateTimeUtil.handlerDateTime(post.getPcreateTime()));
                     post.setImgUrls(UserUtil.handlerStandardPostImg(post.getImgurl()));
                     post.setSmallImgUrls(UserUtil.handlerSmallPostImg(post.getImgurl()));
                     Log.e(TAG, "onSuccess:"+post.getImgUrls());
                 }
-
                 adapter.setList(posts);
                 Log.i(TAG, "onSuccess: 获得帖子数据成功！");
                 integer.incrementAndGet();
                 loading.setStatus(LoadingLayout.Success);
                 smartRefreshLayout.finishLoadMore(true);
-                adapter.notifyDataSetChanged();
             }
 
             @Override

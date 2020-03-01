@@ -721,9 +721,11 @@ public class addPost extends BaseActivity implements View.OnClickListener {
         Map<String,String> map=UserUtil.createUserMap();
         if (TextUtils.isEmpty(imgurl)){
             map.put("content",content);
+            Log.d(TAG, "uploadPost: ----------------------查看文字"+map);
         }else{
             map.put("content",content);
             map.put("imgurl",imgurl);
+            Log.d(TAG, "uploadPost: ----------------------查看文字"+map);
         }
         StandardRequestMangaer.getInstance()
                 .post(RequestUrl.ADD_POST, new BaseCallBack<String>(){

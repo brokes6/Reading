@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.text.Html;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -55,6 +56,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static android.text.Html.fromHtml;
+
 /**
  * Created by HMY on 2016/8/6
  */
@@ -83,6 +86,8 @@ public class NineGridAdapter extends RecyclerView.Adapter<NineGridAdapter.ViewHo
     }
     public void setList(List<Post> list) {
         mList.addAll(list);
+//        notifyDataSetChanged();
+        notifyItemRangeChanged(0,mList.size());
     }
 
     @Override
@@ -101,7 +106,9 @@ public class NineGridAdapter extends RecyclerView.Adapter<NineGridAdapter.ViewHo
         final Post post=mList.get(position);
         Log.e(TAG, "onBindViewHolder: "+post.getImgUrls());
         String imgUrls=post.getImgurl();
-        holder.content.setText(post.getContent());//设置内容
+        Log.d(TAG, "onBindViewHolder: -----------------------接收查看文字"+post.getContent());
+        Spanned spanned = Html.fromHtml(post.getContent());
+        holder.content.setText(spanned+"...");//设置内容
         holder.datetime.setText(post.getPcreateTime());//设置帖子时间
         imageLoader.displayImage(post.getUimg(),holder.uimg,options);
         holder.username.setText(post.getUsername());//设置用户名
@@ -113,6 +120,7 @@ public class NineGridAdapter extends RecyclerView.Adapter<NineGridAdapter.ViewHo
             holder.layout.setVisibility(View.GONE);
         }else {
             holder.layout.setUrlList(post.getSmallImgUrls(),post.getImgUrls());
+            Log.d(TAG, "onBindViewHolder: --------------------"+post.getImgUrls());
         }
         holder.loveNum.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,6 +189,7 @@ public class NineGridAdapter extends RecyclerView.Adapter<NineGridAdapter.ViewHo
         }
 
     }
+
 
     private int getListSize(List<Post> list) {
         if (list == null || list.size() == 0) {

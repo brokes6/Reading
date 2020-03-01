@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.reading.Bean.VideoDetails;
 import com.example.reading.R;
 import com.example.reading.ToolClass.BaseActivity;
+import com.example.reading.ToolClass.XBaseActivity;
 import com.example.reading.adapter.VideoAdapter;
 import com.example.reading.adapter.video_item;
 import com.example.reading.databinding.ActivityPartyBinding;
@@ -48,7 +49,7 @@ import okhttp3.Response;
  * 小悠之声
  */
 
-public class Party extends BaseActivity {
+public class Party extends XBaseActivity {
     private static final String TAG = "Party";
     ActivityPartyBinding binding;
     public ArrayList<Map<String, Object>> list = new ArrayList<>();
@@ -86,6 +87,10 @@ public class Party extends BaseActivity {
         //设置竖屏
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         binding = DataBindingUtil.setContentView(this,R.layout.activity_party);
+        ActionBar actionbar = getSupportActionBar();
+        if (actionbar != null) {
+            actionbar.hide();
+        }
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             //修改为深色，因为我们把状态栏的背景色修改为主题色白色，默认的文字及图标颜色为白色，导致看不到了。
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);

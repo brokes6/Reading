@@ -51,7 +51,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
-                    android:text="测试文字，测试文字，测试文字，测试文字，测试文字，测试文字,测试文字"
+                    android:text="测试文字"
                     android:maxLines="4"
                     android:textColor="#303030"/>
                 //放置图片

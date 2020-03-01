@@ -102,4 +102,7 @@ dependencies {
     implementation 'com.github.lovetuzitong:MultiImageSelector:1.2'
     //gif
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.15'
+    //gif
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.10'
+    //解析富文本
 }

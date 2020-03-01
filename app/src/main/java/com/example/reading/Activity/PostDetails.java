@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
 import android.text.Html;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -217,9 +218,6 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
         messageLayout=findViewById(R.id.messageLayout);
         contentLayout=findViewById(R.id.contentLayout);
         commentLayout=findViewById(R.id.detail_page_comment_container);
-        collectionLayout=findViewById(R.id.collectionLayout);
-        collectionStr=findViewById(R.id.collectionStr);
-        collection=findViewById(R.id.collection);
         expandableListView =findViewById(R.id.detail_page_lv_comment);
         bt_comment =findViewById(R.id.detail_page_do_comment);
         bt_comment.setOnClickListener(this);
@@ -373,7 +371,8 @@ public class PostDetails extends BaseActivity implements View.OnClickListener{
                 Log.i(TAG, "onSuccess: 获得帖子详细信息成功！"+postDetailsBean);
                 Glide.with(PostDetails.this).load(postDetailsBean.getUimg()).into(userImg);
                 username.setText(postDetailsBean.getUsername());
-                content.setText(postDetailsBean.getContent());
+                Spanned spanned = Html.fromHtml(postDetailsBean.getContent());
+                content.setText(spanned);
                 loveNumStr.setText(String.valueOf(postDetailsBean.getLoveNum()));
                 commentStr.setText(String.valueOf(postDetailsBean.getCommentNum()));
                 dateTime.setText(DateTimeUtil.handlerDateTime(postDetailsBean.getPcreateTime()));

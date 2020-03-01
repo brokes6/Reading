@@ -45,6 +45,7 @@ import com.example.reading.Fragment.VideoFragment;
 import com.example.reading.R;
 import com.example.reading.ToolClass.BaseActivity;
 import com.example.reading.Bean.BookDetailsBean;
+import com.example.reading.ToolClass.XBaseActivity;
 import com.example.reading.adapter.BookCommentAdapter;
 import com.example.reading.constant.RequestUrl;
 import com.example.reading.databinding.ReadbookBinding;
@@ -81,7 +82,7 @@ import static com.example.reading.MainApplication.getContext;
 /**
  * 阅读书籍页面
  */
-public class ReadActivity extends BaseActivity {
+public class ReadActivity extends XBaseActivity {
     protected static final float FLIP_DISTANCE = 50;
     private static final String TAG = "ReadActivity";
     Fragment fragment1;
@@ -414,7 +415,7 @@ public class ReadActivity extends BaseActivity {
     private void addComment(final String content){
         binding.loading.setStatus(LoadingLayout.Loading);
         Map<String,String> params=UserUtil.createUserMap();
-        params.put("cbid", String.valueOf(bid));
+        params.put("cbid", String.valueOf(getDataId()));
         params.put("content",content);
         Log.d(TAG, "addComment: ---------------"+params);
         StandardRequestMangaer.getInstance().post(RequestUrl.ADD_BOOK_COMMENT,new BaseCallBack<String>(){

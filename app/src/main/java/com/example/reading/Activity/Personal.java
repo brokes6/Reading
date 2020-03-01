@@ -339,9 +339,9 @@ public class Personal extends BaseActivity implements View.OnClickListener {
             @Override
             protected void onSuccess(Call call, Response response, String s) {
                 Log.i(TAG, "onSuccess: 图片路径:"+s);
-                updateUserInfo();
                 userData.setUimg(s);
                 FileCacheUtil.updateUser(userData, getContext());
+                updateUserInfo();
                 binding.loading.setStatus(LoadingLayout.Success);
                 Toast.makeText(getContext(),"设置头像成功!",Toast.LENGTH_SHORT).show();
             }
@@ -361,6 +361,7 @@ public class Personal extends BaseActivity implements View.OnClickListener {
         Map<String,String> params= UserUtil.createUserMap();
         params.put("username",userData.getUsername());
         params.put("uimg",userData.getUimg());
+        Log.d(TAG, "updateUserInfo: --------------------------"+params);
         StandardRequestMangaer.getInstance().post(RequestUrl.CHANGE_USER_INFORMATION,new BaseCallBack<String>(){
 
             @Override

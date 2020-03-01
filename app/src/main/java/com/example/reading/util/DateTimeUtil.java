@@ -32,12 +32,14 @@ public class DateTimeUtil {
         return strTime;
     }
     public static String handlerDateTime(String str){
-        if(str.equals("刚刚"))
+        if(str.equals("刚刚")){
             return str;
-        try {
-            return handlerDateTime(simpleDateFormat.parse(str).getTime());
-        } catch (ParseException e) {
-            e.printStackTrace();
+        }else{
+            try {
+                return handlerDateTime(simpleDateFormat.parse(str).getTime());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
         return "";
     }

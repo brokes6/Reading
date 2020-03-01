@@ -91,6 +91,7 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                         binding.myload.setStatus(LoadingLayout.Success);
                     }else{
                         binding.userImg.setImageResource(R.mipmap.userimg);
+                        binding.myload.setStatus(LoadingLayout.Success);
                         Log.d(TAG, "user"+"无头像");
                     }
                     break;
