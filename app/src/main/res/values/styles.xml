@@ -10,7 +10,7 @@
         <!--启动页面效果-->
     <style name="SplashActivityTheme" parent="android:Theme.Holo.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="android:windowBackground">@drawable/sta</item>
+        <item name="android:windowBackground">@mipmap/sta</item>
     </style>
     <style name="BottomSheetEdit" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="android:windowIsFloating">false</item>

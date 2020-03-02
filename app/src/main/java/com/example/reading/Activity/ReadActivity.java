@@ -238,6 +238,7 @@ public class ReadActivity extends XBaseActivity {
     }
 
     private void initExpandableListView(){
+        binding.detailPageLvComment.setGroupIndicator(null);
         binding.detailPageLvComment.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPosition, long l) {

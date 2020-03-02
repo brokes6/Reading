@@ -2,6 +2,8 @@ package com.example.reading.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,7 +57,8 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
             }else {
                 holder.resultType.setText("用户");
             }
-            holder.result.setText(result.getContent());
+            Spanned spanned = Html.fromHtml(result.getContent());
+            holder.result.setText(spanned);
             holder.totalLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

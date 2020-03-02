@@ -99,7 +99,7 @@ public class UserPostCommentFragment extends Fragment {
 
                     @Override
                     protected void onFailure(Call call) {
-
+                        loading.setStatus(LoadingLayout.Success);
                     }
 
                     @Override

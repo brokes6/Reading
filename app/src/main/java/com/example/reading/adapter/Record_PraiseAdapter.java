@@ -2,6 +2,8 @@ package com.example.reading.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +45,8 @@ public class Record_PraiseAdapter extends RecyclerView.Adapter<Record_PraiseAdap
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         UserPostComment comment=userComments.get(position);
-        holder.comment.setText(comment.getContent());
+        Spanned spanned = Html.fromHtml(comment.getContent());
+        holder.comment.setText(spanned+"...");
         holder.comment_big.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

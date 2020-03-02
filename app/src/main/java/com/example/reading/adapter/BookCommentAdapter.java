@@ -16,6 +16,7 @@ import com.example.reading.Picture.MyImageView;
 import com.example.reading.R;
 import com.example.reading.constant.RequestUrl;
 import com.example.reading.util.DateTimeUtil;
+import com.example.reading.util.RoundImageView;
 import com.example.reading.util.UserUtil;
 import com.example.reading.web.BaseCallBack;
 import com.example.reading.web.StandardRequestMangaer;
@@ -154,7 +155,7 @@ public class BookCommentAdapter extends BaseExpandableListAdapter {
     }
 
     private class GroupHolder{
-        private MyImageView logo;
+        private RoundImageView logo;
         private TextView tv_name, tv_content, tv_time,loveNum,floorTextView;
         private ImageView iv_like;
         private int status;

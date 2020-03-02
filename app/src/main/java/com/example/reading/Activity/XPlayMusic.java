@@ -220,7 +220,6 @@ public class XPlayMusic extends XBaseActivity implements CustomAdapt,View.OnClic
                 dialog.findViewById(R.id.time5).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        play();
                         countDown(300000);
                         dialog.dismiss();
                     }
@@ -228,7 +227,6 @@ public class XPlayMusic extends XBaseActivity implements CustomAdapt,View.OnClic
                 dialog.findViewById(R.id.time10).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        play();
                         countDown(600000);
                         dialog.dismiss();
                     }
@@ -236,7 +234,6 @@ public class XPlayMusic extends XBaseActivity implements CustomAdapt,View.OnClic
                 dialog.findViewById(R.id.time20).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        play();
                         countDown(1200000);
                         dialog.dismiss();
                     }
@@ -244,7 +241,6 @@ public class XPlayMusic extends XBaseActivity implements CustomAdapt,View.OnClic
                 dialog.findViewById(R.id.time30).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        play();
                         countDown(1800000);
                         dialog.dismiss();
                     }
@@ -252,6 +248,7 @@ public class XPlayMusic extends XBaseActivity implements CustomAdapt,View.OnClic
                 dialog.findViewById(R.id.time_cancel).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         dialog.dismiss();
                     }
                 });

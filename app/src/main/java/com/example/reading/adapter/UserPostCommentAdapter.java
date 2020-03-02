@@ -2,6 +2,8 @@ package com.example.reading.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,10 +62,11 @@ public class UserPostCommentAdapter extends RecyclerView.Adapter<UserPostComment
         //设置图片
         imageLoader.displayImage(userData.getUimg(),holder.uimg,options);
         //设置文字
+        Spanned spanned = Html.fromHtml(comment.getPostContent());
         holder.username.setText(userData.getUsername());
         holder.time.setText(DateTimeUtil.handlerDateTime(comment.getCcreateTime().getTime()));
         holder.content.setText(comment.getContent());
-        holder.postContent.setText("文章标题："+comment.getPostContent());
+        holder.postContent.setText("文章标题："+spanned+"...");
         holder.postContent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
